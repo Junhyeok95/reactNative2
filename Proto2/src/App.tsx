@@ -1,32 +1,26 @@
 import 'react-native-gesture-handler';
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import Styled from 'styled-components/native';
-
-const View = Styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-const Text = Styled.Text`
-  font-size: 32px;
-`;
+import {UserContextProvider} from '~/Contexts/User';
+import {DrivingDataProvider} from '~/Contexts/DrivingData';
+import Navigator from '~/Screens/Navigator';
 
 interface Props {}
 
 const App = ({ }: Props) => {
 
   useEffect(() => {
-    console.log("App useEffect");
+    console.log("App.tsx useEffect");
   }, []);
 
   return (
-    <>
-      <View>
-        <Text>
-          Hello
-        </Text>
-      </View>
-    </>
+    <Fragment>
+      <UserContextProvider>
+        <DrivingDataProvider>
+          <Navigator />
+        </DrivingDataProvider>
+      </UserContextProvider>
+    </Fragment>
   );
 };
 
