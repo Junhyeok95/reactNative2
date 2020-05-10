@@ -7,6 +7,8 @@ type LoginStackNaviParamList = {
 type MainFirstStackNavi = {
   Driving: undefined;
   MapStackNavi: undefined;
+  MainThirdStackNavi: undefined | any;
+  MapTabNavi: undefined | any;
 };
 
 type MainSecondStackNavi = {

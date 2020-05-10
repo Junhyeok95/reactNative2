@@ -44,8 +44,8 @@ const CRUDButtonContainer = Styled.View`
   position: absolute;
   right: 12px;
   bottom: 24px;
-  padding: 8px 16px;
-  border-radius: 24px;
+  padding: 4px;
+  border-radius: 12px;
 `;
 
 type NavigationProp = StackNavigationProp<MainSecondStackNavi, 'Profile'>;
@@ -104,10 +104,11 @@ const Profile = ({navigation}: Props) => {
       
       {/* <Button label="Open Full Modal" onPress={() => navigation.navigate('FullModal')} /> */}
       <CRUDButtonContainer>
-        <Button style={{flex:1}} color='#FFFFFF' label="CRUD" onPress={() => {
+        <Button style={{flex:1, padding:8}} color='#000' label="업데이트" onPress={() => {
           navigation.navigate("InfoList", {
             id: 123,
-            memo: 'abc',
+            // memo: 'abc',
+            memo: ['abc',],
             list: ['회원정보','비상연락망','의료 정보','손해보험사']
           });
         }} />

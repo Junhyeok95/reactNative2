@@ -80,7 +80,11 @@ const MapMarker = ({navigation}: DrawerProp) => {
     return () => {
 
     }
-  },[]); 
+  },[]);
+
+  // useEffect(() => {
+  //   return () => {}
+  // },[ ___ ]);
 
   return (
     <>

@@ -26,3 +26,8 @@ npm i -S lottie-react-native lottie-ios@3.1.3
 ```
 
 ### 생각중 -> sqlite-storage, animatable, linear-gradient, firebase, push-notification
+```
+android -> app -> build.gradle
+apply from: "../../node_modules/react-native/react.gradle" // 중복주의
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+```

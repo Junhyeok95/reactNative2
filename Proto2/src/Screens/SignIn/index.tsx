@@ -19,7 +19,7 @@ const Container = Styled.KeyboardAvoidingView`
 `;
 const View = Styled.View`
   height: 50%;
-  width: 50%;
+  width: 100%;
   justify-content: center;
   align-items: center;
 `;
@@ -61,7 +61,7 @@ const SignIn = ({navigation}: Props) => {
           />
           <FormContainer>
           <Input
-            style={{ marginBottom: 8 }}
+            style={{flex:1, backgorunColr:"#F00", marginBottom: 8 }}
             placeholder={'이메일'}
             keyboardType={'email-address'}
           />
@@ -72,17 +72,34 @@ const SignIn = ({navigation}: Props) => {
           />
           <Button
             // label="Sign In"
-            style={{ marginBottom: 8 }}
+            style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
             label="로그인"
-            onPress={() => login('WDJ@YJU', 'password')} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
+            onPress={ async () =>{
+              let URI = 'http://btrya23.iptime.org:8000/app';
+              try {
+                let response = await fetch(URI, {
+                  headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json',
+                  },
+                });
+                let responseJsonData = await response.json();
+                console.log(responseJsonData);
+              } catch (e) {
+                console.log(e);
+              }
+              login('WDJ@YJU', 'password');
+            }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
             />
           <ButtonContainer>
             <Button
+              style={{ backgroundColor:"#DDDDDD" }}
               label="회원가입"
               onPress={() => navigation.navigate('SignUp')}
             />
             <ButtonMargin />
             <Button
+              style={{ backgroundColor:"#DDDDDD" }}
               label="비밀번호 재설정"
               onPress={() => navigation.navigate('ResetPassword')}
             />

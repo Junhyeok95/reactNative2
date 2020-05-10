@@ -14,6 +14,8 @@ const Container = Styled.View`
   border-color: #000000;
 `;
 const InputField = Styled.TextInput`
+  flex: 1;
+  width: 100%;
   color: #292929;
   margin: 0px;
   padding: 0px;
