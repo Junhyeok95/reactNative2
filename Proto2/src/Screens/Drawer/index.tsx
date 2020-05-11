@@ -33,7 +33,7 @@ interface Props {
 }
 
 const Drawer = ({props}: Props) => {
-  const {logout} = useContext<IUserContext>(UserContext);
+  const {logout, logout2} = useContext<IUserContext>(UserContext);
   return (
     <>
       <DrawerContentScrollView {...props}>
@@ -53,7 +53,9 @@ const Drawer = ({props}: Props) => {
             )}
             label="로그아웃"
             onPress={() => {
+              console.log("> Drawer logout");
               logout();
+              logout2();
             }}
           />
         </Footer>

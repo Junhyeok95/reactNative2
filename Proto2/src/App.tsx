@@ -10,7 +10,7 @@ interface Props {}
 const App = ({ }: Props) => {
 
   useEffect(() => {
-    console.log("App.tsx useEffect");
+    console.log("===== ===== START ===== =====");
   }, []);
 
   return (

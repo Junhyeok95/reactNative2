@@ -351,10 +351,12 @@ const RootNavi = () => {
 };
 
 export default () => {
-  const {userInfo} = useContext<IUserContext>(UserContext);
+  const {userInfo, userInfo2} = useContext<IUserContext>(UserContext);
+  // console.log("> userInfo2");
+  // console.log(userInfo2);
   return (
     <NavigationContainer>
-      {userInfo ? <RootNavi /> : <LoginStackNavi />}
+      {userInfo2 ? <RootNavi /> : <LoginStackNavi />}
     </NavigationContainer>
   );
 };
