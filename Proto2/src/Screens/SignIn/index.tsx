@@ -75,20 +75,49 @@ const SignIn = ({navigation}: Props) => {
             style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
             label="로그인"
             onPress={ async () =>{
-              let URI = 'http://btrya23.iptime.org:8000/app';
+              // let URI = 'http://btrya23.iptime.org:8000/wdjapp';
+              // try {
+              //   let response = await fetch(URI, {
+              //     method: 'GET',
+              //     headers:{
+              //       'Accept':'application/json',
+              //       'Content-Type':'application/json',
+              //     },
+              //   });
+              //   let responseJsonData = await response.json();
+              //   console.log(responseJsonData);
+              // } catch (e) {
+              //   console.log(e);
+              // }
+              login('WDJ@YJU', 'password');
+            }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
+            />
+            <Button
+            // label="Sign In"
+            style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
+            label="로그인"
+            onPress={ async () =>{
+              let URI = 'http://btrya23.iptime.org:8000/wdjapp';
               try {
                 let response = await fetch(URI, {
+                  method: 'POST',
                   headers:{
                     'Accept':'application/json',
                     'Content-Type':'application/json',
                   },
+                  body: JSON.stringify({
+                    data2: 'data2',
+                    key2: 'key2',
+                    name2: 'name2',
+                    email2: 'email2',
+                  })
                 });
                 let responseJsonData = await response.json();
                 console.log(responseJsonData);
               } catch (e) {
                 console.log(e);
               }
-              login('WDJ@YJU', 'password');
+              // login('WDJ@YJU', 'password');
             }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
             />
           <ButtonContainer>

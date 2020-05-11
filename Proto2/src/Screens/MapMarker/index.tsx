@@ -9,7 +9,6 @@ import IconButton from '~/Components/IconButton';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
 const Footer = Styled.View`
-  height: 10%;
   position: absolute;
   bottom: 8px;
   left: 16px;
@@ -20,6 +19,7 @@ const SaveContainer = Styled.View`
   padding: 8px;
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
+  background-color: #0888;
 `;
 const Save = Styled.View`
   width: 50px;
@@ -35,6 +35,17 @@ const SaveName = Styled.Text`
   background-color: #FFF;
   font-weight: 600;
 `;
+const TopView = Styled.View`
+  position: absolute;
+  background-color: #0F0C;
+  top: 60px;
+  left: 24px;
+  border: 1px;
+  padding: 8px;
+`;
+const Text = Styled.Text`
+  font-size: 16px;
+`;
 
 interface IGeolocation {
   latitude: number;
@@ -46,45 +57,68 @@ interface DrawerProp {
   navigation: TypeDrawerProp;
 }
 
-
-
-
-
 const MapMarker = ({navigation}: DrawerProp) => {
+  const saveLocations2 = require('./saveLocations2.json');
+  let saveData = [];
+  for(let i=0; i<saveLocations2.length; i++){
+    let arr = saveLocations2[i].routes[0].geometry.coordinates.map((item: any[]) =>{ return {latitude: item[1], longitude: item[0]}});
+    saveData.push(arr);
+  }
   const [markerList, setMarkerList] = useState<Array<String>>(["1","2","3","4","5","6","7","8"]);
   const [location, setLocation] = useState<IGeolocation>({
     latitude: 35.896311,
     longitude: 128.622051,
   });
+  
+  const [poly, setPoly] = useState<number>(-1);
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
-
-  const saveLocations = require('./saveLocations.json');
-  // console.log('---------------------------------------');
-  // const [coords, ...list] = saveLocations;
-  // console.log(coords);
-
-
+  const [locationsArr, setLocationsArr] = useState<Array<any>>(saveData);
+  const [time, setTime] = useState<any>();
+  
+  // const saveLocations = require('./saveLocations.json');
+  // let jsonData = saveLocations2[0].routes[0].geometry.coordinates.map((item: any[]) =>{
+  //   return {latitude: item[1], longitude: item[0]}});
+  // console.log(jsonData);
+  
   useEffect(() => {
+    
     console.log("--- --- MapMarker Mount");
-    let arr = [];
-    for(let i=0; i<saveLocations.length; i++){
-      let coords = saveLocations[i].coords;
-      arr.push(coords);
-      console.log(arr);
-    }
-    console.log(arr);
-    setLocations(arr);
-    console.log("locations");
-    console.log(locations);
-
+    let id = setInterval(() => {
+      let now = new Date();
+      // console.log(now.getHours());
+      // console.log(now.getMinutes());
+      // console.log(now.getSeconds());
+      setTime(now.getHours()+" : "+now.getMinutes()+" : "+now.getSeconds());
+    }, 1000);
     return () => {
+      console.log("--- --- MapData return");
+      clearInterval(id);
+    };
 
-    }
   },[]);
 
   // useEffect(() => {
   //   return () => {}
   // },[ ___ ]);
+
+  const renderItem = ({ item, index }:any) => {
+    let num = 0;
+    num = index;
+    return (
+      <SaveContainer>
+        <TouchableOpacity onPress={(index)=>setPoly(num)}>
+          <Save>
+            <Icon2
+              name="map"
+              color={'#000000'}
+              size={30}
+            />
+          </Save>
+          <SaveName numberOfLines={1}>{index}</SaveName>
+        </TouchableOpacity>
+      </SaveContainer>
+    );
+  }
 
   return (
     <>
@@ -100,11 +134,11 @@ const MapMarker = ({navigation}: DrawerProp) => {
           longitudeDelta: 0.03,
         }}
       >
-        <Polyline
-          coordinates={locations}
+        {poly >= 0 && <Polyline
+          coordinates={locationsArr[poly]}
           strokeWidth={3}
-          strokeColor="#00f" 
-        />
+          strokeColor="#00f"
+        />}
       </MapView>
       <IconButton
         style={{position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#FFFFFF", borderWidth:3, borderRadius:30, paddingTop:2}}
@@ -114,28 +148,29 @@ const MapMarker = ({navigation}: DrawerProp) => {
       />
       <Footer>
         <FlatList
-        data={markerList}
+        data={locationsArr}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => {
           return `myMarker-${index}`;
         }}
-        renderItem={({item, index}) => (
-          <SaveContainer>
-            <TouchableOpacity>
-              <Save>
-                <Icon2
-                  name="map"
-                  color={'#000000'}
-                  size={30}
-                />
-              </Save>
-              <SaveName numberOfLines={1}>{item}</SaveName>
-            </TouchableOpacity>
-          </SaveContainer>
-        )}
+        renderItem={renderItem}
       />
       </Footer>
+      <TopView>
+        <Text style={{flex:1, paddingLeft:8, paddingRight:8, padding:4, backgroundColor:"#FFF"}}>
+          time : {time}
+        </Text>
+        <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
+          급정거 :
+        </Text>
+        <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
+          급가속 :
+        </Text>
+        <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
+          졸음 :
+        </Text>
+      </TopView>
     </>
   );
 };

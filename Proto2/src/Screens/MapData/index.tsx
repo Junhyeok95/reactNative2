@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import MapView, {PROVIDER_GOOGLE, Marker, } from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {DrawerActions} from '@react-navigation/native';
 
@@ -13,35 +13,31 @@ import {
   NativeModules, NativeEventEmitter,} from 'react-native';
 
 import {DrivingDataContext} from '~/Contexts/DrivingData';
+import Geolocation from 'react-native-geolocation-service';
 
 const RightView = Styled.View`
   position: absolute;
   background-color: #0F0C;
   overflow: hidden;
-  width: 200px;
   right: 24px;
   bottom: 24px;
   border: 1px;
   padding: 8px;
   justify-content: center;
 `;
-const LeftView = Styled.View`
-  position: absolute;
-  background-color: #0F0C;
-  width: 75px;
-  height: 125px;
-  left: 24px;
-  bottom: 24px;
-  border: 1px;
-  padding: 8px;
-`;
 const TopView = Styled.View`
   position: absolute;
   background-color: #0F0C;
-  width: 200px;
-  height: 100px;
-  top:60px;
+  top: 60px;
   left: 24px;
+  border: 1px;
+  padding: 8px;
+`;
+const LeftView = Styled.View`
+  position: absolute;
+  background-color: #0F0C;
+  left: 24px;
+  bottom: 24px;
   border: 1px;
   padding: 8px;
 `;
@@ -54,7 +50,6 @@ interface IGeolocation {
   longitude: number;
 }
 interface ICoordinate {
-  altitude: number;
   latitude: number;
   longitude: number;
   speed: number;
@@ -71,11 +66,11 @@ const MapData = ({navigation}: DrawerProp) => {
   // 안드로이드 위치권한 요청
   const androidPermissionLocation = () => {
     if (Platform.OS === 'android' && Platform.Version >= 23) {
-      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => { // check
+      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => { // check
         if (result) {
           console.log("android LOCATION check OK");
         } else {
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => { // request
+          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => { // request
             if (result) {
               console.log("android LOCATION request Ok");
             } else {
@@ -92,14 +87,17 @@ const MapData = ({navigation}: DrawerProp) => {
   const {testArr, testFun} = useContext(DrivingDataContext);
   const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
 
-  const [driving, setDriving] = useState<boolean>(false);
-  const [device, setDevice] = useState<boolean>(false);
-  const [speed, setSpeed] = useState<number>(0);
 
+  const [onMap, setOnMap] = useState<boolean>(false);
+  const [marginTop, setMarginTop] = useState<number>(1);
+
+
+  const [speed, setSpeed] = useState<number>(0);
+  const [onSave, setOnSave] = useState<boolean>(false);
+  const [driving, setDriving] = useState<boolean>(false);
   const [time, setTime] = useState<any>();
 
   const [coordinate, setCoordinate] = useState<ICoordinate>({
-    altitude: 0.0000,
     latitude: 0.0000,
     longitude: 0.0000,
     speed: 0.0000,
@@ -111,8 +109,25 @@ const MapData = ({navigation}: DrawerProp) => {
     longitude: 128.622051,
   });
 
+  const [locations, setLocations] = useState<Array<IGeolocation>>([]);
+
   useEffect(() => {
     androidPermissionLocation();
+
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        setLocation({
+          latitude,
+          longitude,
+        });
+      },
+      error => {
+        console.log(error.code, error.message);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+
     console.log("--- --- MapData Mount");
     let id = setInterval(() => {
       let now = new Date();
@@ -140,19 +155,23 @@ const MapData = ({navigation}: DrawerProp) => {
     <>
       <MapView
         provider={PROVIDER_GOOGLE}
-        style={{flex: 1}}
+        style={{flex: 1, marginTop}}
         loadingEnabled={true}
 
         showsUserLocation={true}
-        userLocationAnnotationTitle={" 필요합니다 "}
-        showsMyLocationButton={true}
-        showsPointsOfInterest={true}
-        showsCompass={true}
-        showsScale={true}
-        showsBuildings={true}
-        showsTraffic={true}
+        
+        showsMyLocationButton={false}
+        showsPointsOfInterest={false}
+        showsCompass={false}
+        showsScale={false}
+        showsBuildings={false}
+        showsTraffic={false}
         showsIndoors={true}
-        showsIndoorLevelPicker={true}
+
+        onMapReady={() => {
+          setMarginTop(0);
+          setOnMap(true);
+        }}
 
         initialRegion={{
           latitude: location.latitude,
@@ -160,6 +179,7 @@ const MapData = ({navigation}: DrawerProp) => {
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         }}
+
         onRegionChange={region => {
           setLocation({
             latitude: region.latitude,
@@ -174,14 +194,22 @@ const MapData = ({navigation}: DrawerProp) => {
         }}
         onUserLocationChange={ e => {
           setCoordinate({
-            altitude: e.nativeEvent.coordinate.altitude,
             latitude: e.nativeEvent.coordinate.latitude,
             longitude: e.nativeEvent.coordinate.longitude,
             speed: e.nativeEvent.coordinate.speed,
             timestamp: e.nativeEvent.coordinate.timestamp,
           });
+          if(onSave){
+            const {latitude, longitude} = e.nativeEvent.coordinate;
+            setLocations([...locations, {latitude, longitude}]);
+          }
         }}
       >
+        {onSave && (<Polyline
+          coordinates={locations}
+          strokeWidth={3}
+          strokeColor="#00F" 
+        />)}
       </MapView>
       <IconButton
         style={{position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#0008", borderRadius:30, paddingTop:2}}
@@ -190,38 +218,41 @@ const MapData = ({navigation}: DrawerProp) => {
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
       />
       <RightView>
-        <Text>고도 altitude : {coordinate.altitude.toFixed(4)}</Text>
-        <Text>위도 latitude : {coordinate.latitude.toFixed(4)}</Text>
-        <Text>경도 longitude : {coordinate.longitude.toFixed(4)}</Text>
-        <Text>속도 speed : {coordinate.speed.toFixed(2)}</Text>
-        <Text>----- timestamp -----</Text>
-        <Text>{coordinate.timestamp}</Text>
+        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>위도 : {coordinate.latitude.toFixed(4)}</Text>
+        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>경도 : {coordinate.longitude.toFixed(4)}</Text>
+        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>속도 : {coordinate.speed.toFixed(1)}</Text>
+        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
       </RightView>
       <LeftView>
-        {/* <Button
-          label="보기"
-          style={{backgroundColor:"#FFF", marginBottom:8}}
-          onPress={()=>{
-        }}/>
         <Button
-          label="기록"
-          style={{backgroundColor:"#FFF", marginBottom:8}}
+          label="초기화"
+          style={{backgroundColor:"#FFF", padding:8, marginBottom:12}}
           onPress={()=>{
-        }}/> */}
+            setLocations([]);
+          }}/>
         <Button
-          label={device?"start\n"+" on":"start\n"+" off"}
-          style={{backgroundColor:"#FFF"}}
+          label={onSave?"중지":"기록"}
+          style={{backgroundColor:"#FFF", padding:8, marginBottom:12}}
           onPress={()=>{
-            setDevice(!device);
-        }}/>
-        
+            if(onSave){
+              console.log("운전 기록 중지");
+            }
+            setOnSave(!onSave);
+          }}/>
+        <Button
+          label={driving?"운전 종료":"운전 시작"}
+          style={driving?{backgroundColor:"#00F", color:"#FFFFFF", padding:8}:{backgroundColor:"#FFF", padding:8}}
+          color={driving?"#FFFFFF":"#000000"}
+          onPress={()=>{
+            if(driving){
+              Alert.alert('운전을 종료합니다');
+            }
+            setDriving(!driving);
+          }}/>
       </LeftView>
       <TopView>
-        <Text 
-          style={{flex:1, padding:8, backgroundColor:"#FFF"}}
-        >
-          Time      {time}
-          {"\n"}testArr /  {"cnt "+testDrawer[0]+" 좌 "+testDrawer[3]+" 우 "+testDrawer[4]}
+        <Text style={{flex:1, paddingLeft:8, paddingRight:8, padding:4, backgroundColor:"#FFF"}}>
+          time : {time}
         </Text>
       </TopView>
     </>
