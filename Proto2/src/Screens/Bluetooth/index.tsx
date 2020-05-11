@@ -5,7 +5,6 @@ import List from '~/Screens/Bluetooth/List';
 
 const Container = Styled.View`
   flex: 1;
-  align-items: center;
 `;
 
 const Bluetooth = () => {

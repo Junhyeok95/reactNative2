@@ -19,7 +19,7 @@ const SaveContainer = Styled.View`
   padding: 8px;
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
-  background-color: #0888;
+  background-color: #FFF7;
 `;
 const Save = Styled.View`
   width: 50px;
@@ -74,6 +74,10 @@ const MapMarker = ({navigation}: DrawerProp) => {
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   const [locationsArr, setLocationsArr] = useState<Array<any>>(saveData);
   const [time, setTime] = useState<any>();
+
+  const [p1, setP1] = useState<number>(0);
+  const [p2, setP2] = useState<number>(0);
+  const [p3, setP3] = useState<number>(0);
   
   // const saveLocations = require('./saveLocations.json');
   // let jsonData = saveLocations2[0].routes[0].geometry.coordinates.map((item: any[]) =>{
@@ -106,7 +110,13 @@ const MapMarker = ({navigation}: DrawerProp) => {
     num = index;
     return (
       <SaveContainer>
-        <TouchableOpacity onPress={(index)=>setPoly(num)}>
+        <TouchableOpacity
+        style={index<3?{borderColor:"#00F", borderWidth:3}:index<7?{borderColor:"#0AA", borderWidth:3}:index<12?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
+          setPoly(num);
+          setP1(Math.floor(Math.random() * 15) + 1);
+          setP2(Math.floor(Math.random() * 15) + 1);
+          setP3(Math.floor(Math.random() * 5) + 1);
+        }}>
           <Save>
             <Icon2
               name="map"
@@ -162,13 +172,13 @@ const MapMarker = ({navigation}: DrawerProp) => {
           time : {time}
         </Text>
         <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
-          급정거 :
+          급정거 : {p1}
         </Text>
         <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
-          급가속 :
+          급가속 : {p2}
         </Text>
         <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
-          졸음 :
+          졸음 : {p3}
         </Text>
       </TopView>
     </>

@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Platform} from 'react-native';
+import {Platform, Linking, Alert} from 'react-native';
 import Styled from 'styled-components/native';
 import {UserContext} from '~/Contexts/User';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -49,50 +49,56 @@ interface Props {
 
 const SignIn = ({navigation}: Props) => {
   const {login} = useContext<IUserContext>(UserContext);
+  let loginNum = 0;
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
         <View>
           <Icon
-            style={{marginBottom: 8}}
+            style={{margin: 36}}
             name="account-circle"
             color={'#888'}
             size={200}
           />
           <FormContainer>
-          <Input
-            style={{flex:1, backgorunColr:"#F00", marginBottom: 8 }}
-            placeholder={'이메일'}
-            keyboardType={'email-address'}
-          />
-          <Input
-            style={{ marginBottom: 8 }}
-            secureTextEntry={true}
-            placeholder={'비밀번호'}
-          />
-          <Button
-            // label="Sign In"
-            style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
-            label="로그인"
-            onPress={ async () =>{
-              // let URI = 'http://btrya23.iptime.org:8000/wdjapp';
-              // try {
-              //   let response = await fetch(URI, {
-              //     method: 'GET',
-              //     headers:{
-              //       'Accept':'application/json',
-              //       'Content-Type':'application/json',
-              //     },
-              //   });
-              //   let responseJsonData = await response.json();
-              //   console.log(responseJsonData);
-              // } catch (e) {
-              //   console.log(e);
-              // }
-              login('WDJ@YJU', 'password');
-            }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
+            <Input
+              style={{flex:1, backgorunColr:"#F00", marginBottom: 8}}
+              placeholder={'이메일'}
+              keyboardType={'email-address'}
+            />
+            <Input
+              style={{ marginBottom: 8 }}
+              secureTextEntry={true}
+              placeholder={'비밀번호'}
             />
             <Button
+              // label="Sign In"
+              style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
+              label="로그인"
+              onPress={ async () =>{
+                // let URI = 'http://btrya23.iptime.org:8000/wdjapp';
+                // try {
+                //   let response = await fetch(URI, {
+                //     method: 'GET',
+                //     headers:{
+                //       'Accept':'application/json',
+                //       'Content-Type':'application/json',
+                //     },
+                //   });
+                //   let responseJsonData = await response.json();
+                //   console.log(responseJsonData);
+                // } catch (e) {
+                //   console.log(e);
+                // }
+                if(loginNum==0){
+                  Alert.alert("비밀번호가 틀립니다");
+                  loginNum++;
+                } else{
+                  login('WDJ@YJU', 'password');
+                }
+              }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
+            />
+            {/* <Button
             // label="Sign In"
             style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
             label="로그인"
@@ -119,21 +125,23 @@ const SignIn = ({navigation}: Props) => {
               }
               // login('WDJ@YJU', 'password');
             }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
-            />
-          <ButtonContainer>
-            <Button
-              style={{ backgroundColor:"#DDDDDD" }}
-              label="회원가입"
-              onPress={() => navigation.navigate('SignUp')}
-            />
-            <ButtonMargin />
-            <Button
-              style={{ backgroundColor:"#DDDDDD" }}
-              label="비밀번호 재설정"
-              onPress={() => navigation.navigate('ResetPassword')}
-            />
-          </ButtonContainer>
-        </FormContainer>
+            /> */}
+            <ButtonContainer>
+              <Button
+                style={{ backgroundColor:"#DDDDDD" }}
+                label="회원가입"
+                // onPress={() => navigation.navigate('SignUp')}
+                onPress={() => Linking.openURL('http://btrya23.iptime.org:8000/auth/signup')}
+              />
+              {/* <ButtonMargin />
+              <Button
+                style={{ backgroundColor:"#DDDDDD" }}
+                label="비밀번호 재설정"
+                // onPress={() => navigation.navigate('ResetPassword')}
+                onPress={() => Linking.openURL('https://yju.ac.kr')}
+              /> */}
+            </ButtonContainer>
+          </FormContainer>
         </View>
       </Container>
     </TouchableWithoutFeedback>

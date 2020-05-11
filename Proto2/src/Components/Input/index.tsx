@@ -4,7 +4,6 @@ import Styled from 'styled-components/native';
 const Container = Styled.View`
   flex: 1;
   width: 100%;
-  justify-content: center;
   align-items: center;
   padding-left: 8px;
   padding-right: 8px;
@@ -51,7 +50,7 @@ return (
       // onfocus() // 포커스 얻으면 실행
       // onSubmitEditing() 완료시 호출
       // onchange 교체시 호출
-      multiline={true}
+      multiline={false}
       selectionColor="#292929" // 내용을 복사하거나 붙여 넣기 위해 사용하는 색상
       secureTextEntry={secureTextEntry} // 입력 내용을 숨길지 여부를 설정
       keyboardType={keyboardType ? keyboardType : 'default'} // 입력 타입을 설정

@@ -14,29 +14,34 @@ import {Buffer} from 'buffer';
 import Button from '~/Components/Button';
 
 import {DrivingDataContext} from '~/Contexts/DrivingData';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import LottieView from 'lottie-react-native';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Container = Styled.View`
   flex: 1;
-  width: 90%;
   background-color: #8CD3C5;
 `;
-const View = Styled.View``;
+const View = Styled.View`
+  flex: 1;
+`;
+const RowView = Styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
 const FlatListContainer = Styled(FlatList)``;
 
 const EmptyItem = Styled.View``;
 const TouchableHighlight = Styled.TouchableHighlight``;
 
 const Text = Styled.Text`
-  padding: 8px;
-  margin: 4px;
-  background-color: #EEE;
-  border: 1px;
-  border-radius: 10px;
+  padding: 4px;
+  margin: 2px;
+  background-color: #FFFFFF;
   border-color: #00F;
-  font-size: 24px;
   text-align: center;
 `;
 
@@ -54,7 +59,7 @@ const TestText = Styled.Text`
   margin: 2px;
   text-align: center;
   background-color: #FFF;
-  font-size: 32px;
+  font-size: 24px;
   flex:1;
 `;
 
@@ -117,7 +122,7 @@ const List = ({  }: Props) => {
 
   ////////// ////////// ////////// ////////// //////////
 
-  const {testArr, testFun} = useContext(DrivingDataContext);
+  const {testArr, testFun, linkInfo, linkInfoFun} = useContext(DrivingDataContext);
 
   const [scanning, setScanning] = useState<boolean>(false);
   const [peripherals, setPeripherals] = useState(new Map());
@@ -217,61 +222,27 @@ const List = ({  }: Props) => {
     }
   };
 
-  
-  let myarr = [0, 0,0, 0,0, 0,0 ];
-    // 카운트 , 왼눈 뜬, 오른 뜬 , 왼눈 감, 오눈 감 , 시선체크, 시선미체크
-    // 3-왼눈 4-오눈 5-시선
 
   // 4. Emitter addListener 변경
   const HandleUpdateValueForCharacteristic = (data:any) => {
     try {
       if (data){
 
-        console.log("context Test");
-
-        console.log(data.value);
-        // let updateArrCheck = data.value;
-        // myarr[0] += 1
-        // if(updateArrCheck[3] == 1){
-        //   myarr[1] += 1
-        // }
-        // if(updateArrCheck[3] == 2){
-        //   myarr[3] += 1
-        // }
-        // if(updateArrCheck[4] == 1){
-        //   myarr[2] += 1
-        // }
-        // if(updateArrCheck[4] == 2){
-        //   myarr[4] += 1
-        // }
-        // if(updateArrCheck[5] > 5){
-        //   myarr[5] += 1
-        // }
-        // if(updateArrCheck[5] < 5){
-        //   myarr[6] += 1
-        // }
-        // console.log(myarr);
-
-
         let str = JSON.stringify(data.value);
         setRestring(str);
-
-        // let arr = testArr;
-        // for(let i = 0 ; i < arr.length ; i++){
-        //   arr[i] = data.value[i]
-        // }
-        // testFun(arr); // 저장
-        
-        // console.log(arr);
-        // console.log("context Test");
-
+        let arr = linkInfo;
+        for(let i = 0 ; i < arr.length ; i++){
+          arr[i] = data.value[i]
+        }
+        linkInfoFun(arr); // 저장
+        console.log(arr);
 
         /*
           임시 테스트 규칙
-          0 ->
-          1 ->
-          2 ->
-          3 ->
+          0 -> 신고
+          1 -> y
+          2 -> p
+          3 -> r
           4 ->
           5 ->
           6 ->
@@ -316,12 +287,13 @@ const List = ({  }: Props) => {
   const _connectBtn = (peripheral:any) => {
     if (peripheral){
       if (peripheral.connected){
-        // BleManager.stopNotification(raspId, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
-        //   console.log('> stopNotification ' + raspId);
-        // }).catch((error) => { // stopNotification
-        //   console.log('> stopNotification error', error);
-        // });
+        BleManager.stopNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
+          console.log('> stopNotification ' + peripheral.id);
+        }).catch((error) => { // stopNotification
+          console.log('> stopNotification error', error);
+        });
         setRaspId('');
+        setRestring('');
         BleManager.disconnect(peripheral.id);
         console.log('> disconnect 1');
       } else {
@@ -342,14 +314,14 @@ const List = ({  }: Props) => {
               console.log("### retrieveServices");
               console.log(peripheralInfo);
 
-              // setTimeout(() => { // 2 setTimeout
-              //   BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
-              //     console.log('### Started notification on ' + peripheral.id);
-              //   }).catch((error) => { // startNotification
-              //     console.log('Notification error', error);
-              //   });
-              // }, 300); // 2 setTimeout
-
+              setTimeout(() => { // 2 setTimeout
+                BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
+                  console.log('### Started notification on ' + peripheral.id);
+                }).catch((error) => { // startNotification
+                  console.log('Notification error', error);
+                });
+              }, 1000); // 2 setTimeout
+              
             });
           }, 500);
 
@@ -361,15 +333,34 @@ const List = ({  }: Props) => {
     }
   };
 
-  const renderEmpty = () => <EmptyItem><Text style={{textAlign: 'center'}}>NO List</Text></EmptyItem>
+  const renderEmpty = () => {
+    return (
+      <LottieView
+        style={{flex:1}}
+        resizeMode={'cover'}
+        source={require('~/Assets/Lottie/blue2.json')}
+        autoPlay
+        loop
+        imageAssetsFolder={'images'}
+      />
+    );
+  }
   const renderItem = ({ item, index }:any) => {
-    const color = item.connected ? '#00BFFF' : '#F5FFFA';
+    const color = item.connected ? '#0BF7' : '#F5FFFA';
     return (
       <TouchableHighlight onPress={() => { _connectBtn(item) }}>
-        <View style={{margin: 8, backgroundColor: color}}>
-          <Text style={{fontSize: 12, textAlign: 'center', color: '#333333', padding: 4}}>{item.name}</Text>
-          <Text style={{fontSize: 8, textAlign: 'center', color: '#333333', padding: 2}}>{item.id}</Text>
-        </View>
+        <RowView style={{paddingLeft:4, paddingRight:4, margin: 8, backgroundColor: color}}>
+          <Icon
+            style={{paddingLeft:32, paddingRight:16}}
+            name="devices"
+            color={'#888'}
+            size={72}
+          />
+          <View style={item.name=="KURUMAMORI"?{borderWidth:1, borderColor:"#00F"}:{}}>
+            <Text style={{fontSize: 16, textAlign: 'center', color: '#333333', padding: 4}}>{item.name}</Text>
+            <Text style={{fontSize: 12, textAlign: 'center', color: '#333333', padding: 2}}>{item.id}</Text>
+          </View>
+        </RowView>
       </TouchableHighlight>
     );
   }
@@ -388,8 +379,9 @@ const List = ({  }: Props) => {
         data={list}
         ListEmptyComponent={renderEmpty} // data 배열이 없을 경우 표시되는 컴포넌트
         renderItem={renderItem}
+        contentContainerStyle={list.length === 0 && { flex: 1 }}
       />
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <Button
           style={{ flex: 1 }}
           label="clear"
@@ -488,7 +480,7 @@ const List = ({  }: Props) => {
             }
           }}  
         />
-      </ButtonContainer>
+      </ButtonContainer> */}
       <DataContainer>
         <TestText>{restring}</TestText>
       </DataContainer>

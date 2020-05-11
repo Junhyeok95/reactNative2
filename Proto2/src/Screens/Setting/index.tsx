@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import LottieView from 'lottie-react-native';
 
 const Container = Styled.View`
   flex: 1;
@@ -35,6 +36,13 @@ const Text = Styled.Text`
   padding-left: 8px;
   padding-right: 8px;
 `;
+const View = Styled.View`
+  flex: 1;
+  background-color: #00F3;
+  width: 75%;
+  margin: 8px;
+`;
+
 const BR:string = '\n';
 
 type NavigationProp = StackNavigationProp<MainFourthStackNavi, 'Setting'>;
@@ -74,6 +82,16 @@ const Setting = ({navigation}: Props) => {
           최신버전 1. 2. 9
         </Text>
       </BackContainer>
+      <View>
+        <LottieView
+            style={{flex:1, backgroundColor:'#8CD3C5'}}
+            resizeMode={'contain'}
+            source={require('~/Assets/Lottie/dev1.json')}
+            autoPlay
+            loop
+            imageAssetsFolder={'images'}
+          />
+      </View>
     </Container>
   );
 };

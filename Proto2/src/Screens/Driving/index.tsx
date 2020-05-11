@@ -16,7 +16,7 @@ const Text = Styled.Text`
 
 const View = Styled.View`
   background-color: #00F3;
-  height: 50%;
+  height: 40%;
   width: 70%;
   margin: 16px;
 `;
@@ -56,44 +56,47 @@ const Driving = ({navigation}: Props) => {
     console.log("--- --- Driving");
   },[]);
   return (
-      <Container>
-        <View>
-          <LottieView
-            style={{flex:1}}
-            resizeMode={'cover'}
-            source={require('~/Assets/Lottie/set1.json')}
-            autoPlay
-            loop
-            imageAssetsFolder={'images'}
-          />
-        </View>
-        <Text>
-          운전기록이 없습니다
-        </Text>
-        <DeviceButtonContainer style={{backgroundColor: device?'#00F':'#555'}}>
-          <Button
-            style={{flex:1, padding:8}}
-            label={device?'페어링':'신호없음'}
-            onPress={() => {
-              setDevice(!device);
-              if(device){
-                // navigation.navigate('MainThirdStackNavi');
-              } else {
-                // navigation.navigate('MainThirdStackNavi');
-              }
-            }}
+    <Container>
+      {/* <Text>
+        오늘의 운전점수
+      </Text> */}
+      <View>
+        <LottieView
+          style={{flex:1, backgroundColor:'#8CD3C5'}}
+          resizeMode={'contain'}
+          source={require('~/Assets/Lottie/nodata2.json')}
+          autoPlay
+          loop
+          imageAssetsFolder={'images'}
         />
-        </DeviceButtonContainer>
-        <DrivingButtonContainer style={{backgroundColor: driving?'#00F':'#555'}}>
-          <Button
-            style={{flex:1, padding:8}}
-            label="운전 시작"
-            onPress={() => {
-              navigation.navigate('MapTabNavi');
-            }}
-          />
-        </DrivingButtonContainer>
-      </Container>
+      </View>
+      <Text>
+        운전기록이 없습니다
+      </Text>
+      <DeviceButtonContainer style={{backgroundColor: device?'#00F':'#555'}}>
+        <Button
+          style={{flex:1, padding:8}}
+          label={device?'페어링':'신호없음'}
+          onPress={() => {
+            setDevice(!device);
+            if(device){
+              // navigation.navigate('MainThirdStackNavi');
+            } else {
+              // navigation.navigate('MainThirdStackNavi');
+            }
+          }}
+      />
+      </DeviceButtonContainer>
+      <DrivingButtonContainer style={{backgroundColor: driving?'#00F':'#555'}}>
+        <Button
+          style={{flex:1, padding:8}}
+          label="운전 시작"
+          onPress={() => {
+            navigation.navigate('MapTabNavi');
+          }}
+        />
+      </DrivingButtonContainer>
+    </Container>
   );
 };
 

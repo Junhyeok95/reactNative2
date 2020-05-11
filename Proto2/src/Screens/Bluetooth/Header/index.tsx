@@ -2,8 +2,8 @@ import React from 'react';
 import Styled from 'styled-components/native';
 
 const Container = Styled.View`
-  width: 90%;
-  background-color: #AAA;
+  width: 100%;
+  background-color: #CCCC;
   align-items: center;
   padding: 8px;
 `;

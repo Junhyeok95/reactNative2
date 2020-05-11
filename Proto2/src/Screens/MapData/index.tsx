@@ -62,7 +62,6 @@ interface DrawerProp {
 }
 
 const MapData = ({navigation}: DrawerProp) => {
-
   // 안드로이드 위치권한 요청
   const androidPermissionLocation = () => {
     if (Platform.OS === 'android' && Platform.Version >= 23) {
@@ -80,17 +79,29 @@ const MapData = ({navigation}: DrawerProp) => {
         }
       });
     } else if (Platform.OS === 'ios') {
-      Alert.alert('PermissionLocation, Android only');
+      // Alert.alert('PermissionLocation, Android only');
     }
   };
 
-  const {testArr, testFun} = useContext(DrivingDataContext);
-  const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
+  const face = (num:number) :string => {
+    if(num==0) return "X";
+    if(num==10) return "정면";
+    if(num==20) return "왼쪽";
+    if(num==30) return "오른쪽";
+    return "";
+  }
+  const eyePoint = (num:number) :string => {
+    if(num==0) return "X";
+    if(num==1) return "On";
+    if(num==2) return "Off";
+    return "";
+  }
 
+  const {testArr, testFun, linkInfo, linkInfoFun} = useContext(DrivingDataContext);
+  const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
 
   const [onMap, setOnMap] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
-
 
   const [speed, setSpeed] = useState<number>(0);
   const [onSave, setOnSave] = useState<boolean>(false);
@@ -141,15 +152,6 @@ const MapData = ({navigation}: DrawerProp) => {
       clearInterval(id);
     };
   },[]);
-
-
-// interface ICoordinate {
-//   altitude: number;
-//   latitude: number;
-//   longitude: number;
-//   speed: number;
-//   timestamp: number;
-// }
 
   return (
     <>
@@ -245,15 +247,30 @@ const MapData = ({navigation}: DrawerProp) => {
           color={driving?"#FFFFFF":"#000000"}
           onPress={()=>{
             if(driving){
-              Alert.alert('운전을 종료합니다');
+              Alert.alert('운전을 종료합니다\n\n운전 시간 : 35분\n 급정거 : 7회 \n 급가속 4회 \n 졸음 1회');
+            } else {
+              Alert.alert('운전을 시작합니다');
             }
             setDriving(!driving);
           }}/>
       </LeftView>
       <TopView>
-        <Text style={{flex:1, paddingLeft:8, paddingRight:8, padding:4, backgroundColor:"#FFF"}}>
+        <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
           time : {time}
         </Text>
+        {driving && (
+          <>
+            <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
+              시선 방향 : {linkInfo[4]==-1?"X":face(linkInfo[4])}
+            </Text>
+            <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
+              좌 : {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])}   우 : {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
+            </Text>
+            <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
+              y:{linkInfo[1]==-1?"X":linkInfo[1]}    p:{linkInfo[2]==-1?"X":linkInfo[2]}    r:{linkInfo[3]==-1?"X":linkInfo[3]}
+            </Text>
+          </>
+        )}
       </TopView>
     </>
   );

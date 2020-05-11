@@ -14,6 +14,7 @@ interface IDrivingData {
   testArr: Array<number>
   testFun: (data: any) => void,
   drivingSave: (data?: IDrivingSaveData) => void,
+  linkInfoFun: (data: any) => void,
 }
 
 const DrivingDataContext = createContext<IDrivingData>({ // 초기값
@@ -24,6 +25,7 @@ const DrivingDataContext = createContext<IDrivingData>({ // 초기값
   testArr: [],
   testFun: (data: any) => {},
   drivingSave: (data?: IDrivingSaveData) => {},
+  linkInfoFun: (data: any) => {},
 });
 
 const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이걸로 초기화됨
@@ -33,7 +35,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // [ 속도, 위도, 경도, 링크상태, 운전상태, 날짜 ] -> 6개
   const [defaultInfo, setDefaultInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1]);
   // 라즈베리 + 아두이노 정보 -> 14개
-  // [ 신고버튼상태, 롤, 피치, 요, 시선방향, 좌눈, 우눈, 화면x, 화면y, 왼좌표x, 왼좌표y, 우좌표x, 우좌표y , 카운터 ] // 화면, 좌표는 1/3 된 값
+  // [ 신고버튼상태, 요, 피치, 롤, 시선방향, 좌눈, 우눈, 화면x, 화면y, 왼좌표x, 왼좌표y, 우좌표x, 우좌표y , 카운터 ] // 화면, 좌표는 1/3 된 값
   const [linkInfo, setLinkInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1 ,-1]);
   // 토탈 체크 정보 -> 10개
   // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 가속상태, 가속횟수, 감속상태, 감속횟수, 졸음상태, 졸음횟수 ]
@@ -47,10 +49,14 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // console.log(Array.isArray(testArr));
   // console.log("          !!!!!!!!!!!!!!!!!! testArr Test");
 
-
   const testFun = (data:any) :void => {
     setTestArr(data);
     console.log("testFun 으로 데이타 저장 성공");
+  }
+
+  const linkInfoFun = (data:any) :void => {
+    linkInfoFun(data);
+    console.log("linkInfoFun 으로 데이타 저장 성공");
   }
 
   const getCacheData = async (key: string) => { // 활용해서 운전기록뭉치 (날짜 : {기록 : {위도, 경도} , 포인트 : {내용}  })
@@ -102,6 +108,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
         testArr,
         drivingSave,
         testFun,
+        linkInfoFun,
       }}>
       {children}
     </DrivingDataContext.Provider>
