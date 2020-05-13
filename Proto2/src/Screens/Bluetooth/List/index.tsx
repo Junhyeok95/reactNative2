@@ -63,22 +63,22 @@ const TestText = Styled.Text`
   flex:1;
 `;
 
-const URI = '';
+// const URI = '';
 
-const json = async () => {
-  try {
-    let response = await fetch(URI);
-    console.log("1");
-    // console.log("response", response);
-    let responseJsonData = await response.json();
-    console.log("2");
-    console.log("responseJsonData", responseJsonData);
-    console.log("3");
-    return responseJsonData;
-  } catch (e) {
-    console.log(e);
-  }
-}
+// const json = async () => {
+//   try {
+//     let response = await fetch(URI);
+//     console.log("1");
+//     // console.log("response", response);
+//     let responseJsonData = await response.json();
+//     console.log("2");
+//     console.log("responseJsonData", responseJsonData);
+//     console.log("3");
+//     return responseJsonData;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
 
 interface Props {}
 

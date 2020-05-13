@@ -33,16 +33,13 @@ const UserContextProvider = ({children}: Props) => {
 
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
   const login = (email: string, password: string): void => {
-    // Use Eamil and Passowrd for login API
-    // Get token and UserInfo via Login API
-    AsyncStorage.setItem('token', 'let data = JSON.stringify()').then((data) => {
-      console.log("> login ");
-      console.log(data);
-      // let json = JSON.parse(data)
+    let TEST_JSON_DATA = { name : 'WDJ', email : 'YJU.AC.KR', key : '-1'};
+    console.log(JSON.stringify(TEST_JSON_DATA));
+    AsyncStorage.setItem('login2', JSON.stringify(TEST_JSON_DATA)).then((data) => {
       setUserInfo2({
-        name: 'WDJ',
-        email: 'YJU.AC.KR',
-        key: '-1'
+        name: TEST_JSON_DATA.name,
+        email: TEST_JSON_DATA.email,
+        key: TEST_JSON_DATA.key
       });
     });
   };
@@ -62,8 +59,6 @@ const UserContextProvider = ({children}: Props) => {
     })
     .then(response => response.json())
     .then(json => {
-      console.log(">> json");
-      console.log(json);
       let data = JSON.stringify(json);
       if(json.id){
         AsyncStorage.setItem('login2', data).then((data) => {
@@ -90,7 +85,8 @@ const UserContextProvider = ({children}: Props) => {
     //     if (value) {
     //       setUserInfo({
     //         name: 'WDJ',
-    //         email: 'YJU.AC.KR',
+    //         email: 'WDJ@YJU.AC.KR',
+    //         key: '-1'
     //       });
     //     }
     //   })
@@ -109,25 +105,27 @@ const UserContextProvider = ({children}: Props) => {
             key: userInfoAsyncStorage.id
           });
         } else {
+          console.log("> getUserInfo2 else 발생");
         }
       })
       .catch(() => {
-        console.log("1! catch getUserInfo2 에러");
+        console.log("> catch getUserInfo2 에러");
         setUserInfo2(undefined);
       });
   };
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
   const logout = (): void => {
     // AsyncStorage.removeItem('token');
+    // setUserInfo2(undefined);
     // setUserInfo(undefined);
   };
   const logout2 = (): void => {
     AsyncStorage.removeItem('login2');
+    setUserInfo(undefined);
     setUserInfo2(undefined);
   };
 
   useEffect(() => {
-    // getUserInfo();
     getUserInfo2();
   }, []);
 

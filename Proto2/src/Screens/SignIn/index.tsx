@@ -13,19 +13,29 @@ import Input from '~/Components/Input';
 const TouchableWithoutFeedback = Styled.TouchableWithoutFeedback``;
 const Container = Styled.KeyboardAvoidingView`
   flex: 1;
-  background-color: #8CD3C5;
+  background-color: #FFFFFF;
   justify-content: center;
   align-items: center;
 `;
+// border-width: 10px;
+// border-top-width: 50px;
+// border-bottom-width: 50px;
+// border-color: #002EF0CC;
 const View = Styled.View`
-  height: 50%;
   width: 100%;
-  justify-content: center;
   align-items: center;
 `;
-const Text = Styled.Text`
-  font-size: 48px;
-  color: #000;
+const TextRowView = Styled.View`
+  flex-direction: row;
+`;
+
+const KrumamoText = Styled.Text`
+  font-size: 60px;
+  color: #000000;
+`;
+const Ri9Text = Styled.Text`
+  font-size: 60px;
+  color: #FF0000;
 `;
 const FormContainer = Styled.View`
   width: 80%;
@@ -40,6 +50,28 @@ const ButtonContainer = Styled.View`
 const ButtonMargin = Styled.View`
   width: 16px;
 `;
+
+const TopView = Styled.View`
+  position: absolute;
+  top: 48px;
+  left: 16px;
+`;
+const TouchableOpacityView = Styled.View`
+`;
+const TouchableOpacity = Styled.TouchableOpacity`
+  padding: 8px;
+  border: 1px;
+`;
+const TouchableOpacity2 = Styled.TouchableOpacity`
+  padding: 8px;
+  border: 1px;
+`;
+const Label = Styled.Text`
+  font-size: 16px;
+  text-align: center;
+  color: #000000;
+`;
+
 type NavigationProp = StackNavigationProp<LoginStackNaviParamList, 'SignIn'>;
 
 interface Props {
@@ -57,13 +89,13 @@ const SignIn = ({navigation}: Props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
         <View>
-          <Text>
-            くるまもり9
-          </Text>
+          <TextRowView>
+            <KrumamoText> クルマモ</KrumamoText><Ri9Text>リ9 </Ri9Text>
+          </TextRowView>
           <Icon
             style={{margin: 36}}
             name="account-circle"
-            color={'#888'}
+            color={'#0009'}
             size={200}
           />
           <FormContainer>
@@ -84,72 +116,16 @@ const SignIn = ({navigation}: Props) => {
               style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
               label="로그인"
               onPress={()=>{
-              // login('WDJ@YJU', 'password');
-
                 if(inputEmail.trim() && inputPassword.trim()){
                   let inputE = inputEmail.trim();
                   let inputP = inputPassword.trim();
                   login2(inputE, inputP);
                 }else{
-                  console.log(">>null");
                   Alert.alert("내용을 잘못입력했습니다");
                 }
               }}
-                // async () =>{
-                //   let URI = 'http://btrya23.iptime.org:8000/wdjapp';
-                //   try {
-                //     let response = await fetch(URI, {
-                //       method: 'GET',
-                //       headers:{
-                        // 'Accept':'application/json',
-                        // 'Content-Type':'application/json',
-                //       },
-                //     });
-                //     let responseJsonData = await response.json();
-                //     console.log(responseJsonData);
-                //     Alert.alert(responseJsonData.toString());
-                //   } catch (e) {
-                //     console.log(e);
-                //     Alert.alert(e.toString());
-                //   }
-
-                // // if(loginNum==0){
-                // //   Alert.alert("비밀번호가 틀립니다");
-                // //   loginNum++;
-                // // } else{
-                //   // }
-                // }}
-                
               // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
             />
-            {/* <Button
-            // label="Sign In"
-            style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
-            label="로그인"
-            onPress={ async () =>{
-              let URI = 'http://btrya23.iptime.org:8000/wdjapp';
-              try {
-                let response = await fetch(URI, {
-                  method: 'POST',
-                  headers:{
-                    'Accept':'application/json',
-                    'Content-Type':'application/json',
-                  },
-                  body: JSON.stringify({
-                    data2: 'data2',
-                    key2: 'key2',
-                    name2: 'name2',
-                    email2: 'email2',
-                  })
-                });
-                let responseJsonData = await response.json();
-                console.log(responseJsonData);
-              } catch (e) {
-                console.log(e);
-              }
-              // login('WDJ@YJU', 'password');
-            }} // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
-            /> */}
             <ButtonContainer>
               <Button
                 style={{ backgroundColor:"#DDDDDD" }}
@@ -167,6 +143,20 @@ const SignIn = ({navigation}: Props) => {
             </ButtonContainer>
           </FormContainer>
         </View>
+        <TopView>
+          <TouchableOpacityView>
+            <TouchableOpacity>
+              <Label>
+                URL
+              </Label>
+            </TouchableOpacity>
+            <TouchableOpacity2 onPress={()=>login('WDJ@YJU', 'password')}>
+              <Label>
+                MASTER
+              </Label>
+            </TouchableOpacity2>
+          </TouchableOpacityView>
+        </TopView>
       </Container>
     </TouchableWithoutFeedback>
   );

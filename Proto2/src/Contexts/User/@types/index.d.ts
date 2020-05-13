@@ -1,6 +1,7 @@
 interface IUserInfo {
-  name: string;
-  email: string;
+  name: string | any;
+  email: string | any;
+  key: string | any;
 }
 interface IUserInfo2 {
   name: string | any;
