@@ -122,7 +122,7 @@ const List = ({  }: Props) => {
 
   ////////// ////////// ////////// ////////// //////////
 
-  const {testArr, testFun, linkInfo, linkInfoFun} = useContext(DrivingDataContext);
+  const {linkInfo, setLinkInfo} = useContext(DrivingDataContext);
 
   const [scanning, setScanning] = useState<boolean>(false);
   const [peripherals, setPeripherals] = useState(new Map());
@@ -144,29 +144,19 @@ const List = ({  }: Props) => {
 
 
   useEffect(()=>{
-    // let id = setInterval(() => {
-    //   json();
-    // }, 1000);
-
     console.log('> List useEffect');
-
     if (Platform.OS === 'android') {
       androidPermissionBluetooth();
       androidPermissionLocation();
     }
-
     AppState.addEventListener("change", HandleAppStateChange);
     BleManager.start({showAlert: false}); // StartOptions 가능, showAlert->ios
-
     const HandlerDiscoverPeripheral = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', HandleDiscoverPeripheral );
     const HandlerStop = bleManagerEmitter.addListener('BleManagerStopScan', HandleStopScan );
     const HandlerDisconnectedPeripheral = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', HandleDisconnectedPeripheral );
     const HandlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', HandleUpdateValueForCharacteristic );
 
     return() => {
-
-      // clearInterval(id);
-
       HandlerDiscoverPeripheral.remove();
       HandlerStop.remove();
       HandlerDisconnectedPeripheral.remove();
@@ -189,7 +179,6 @@ const List = ({  }: Props) => {
     }
     setAppState(nextAppState);
   };
-
   // 1. Emitter addListener 장치 검색
   const HandleDiscoverPeripheral = (peripheral:any) => {
     console.log('> 장치 검색 성공 : ', peripheral.id);
@@ -200,19 +189,16 @@ const List = ({  }: Props) => {
     _peripherals.set(peripheral.id, peripheral);
     setPeripherals( new Map(_peripherals) );
   };
-
   // 2. Emitter addListener 장치 검색 취소 BleManagerStopScan 중지되면 실행
   const HandleStopScan = () => {
     console.log('> Scanning Stop');
     setScanning(false);
   };
-
   // 3. Emitter addListener 연결 취소 됬을 경우
   const HandleDisconnectedPeripheral = (data:any) => {
     setRaspId('');
     console.log('> disconnect 2');
     console.log('> 연결 취소 : ' + data.peripheral);
-
     let _peripherals = peripherals;
     let _peripheral = _peripherals.get(data.peripheral);
     if (_peripheral) {
@@ -221,8 +207,6 @@ const List = ({  }: Props) => {
       setPeripherals(new Map(_peripherals));
     }
   };
-
-
   // 4. Emitter addListener 변경
   const HandleUpdateValueForCharacteristic = (data:any) => {
     try {
@@ -234,22 +218,18 @@ const List = ({  }: Props) => {
         for(let i = 0 ; i < arr.length ; i++){
           arr[i] = data.value[i]
         }
-        linkInfoFun(arr); // 저장
+        setLinkInfo(arr); // 저장
         console.log(arr);
-
         /*
           임시 테스트 규칙
           0 -> 신고
           1 -> y
           2 -> p
           3 -> r
-          4 ->
-          5 ->
-          6 ->
-          7 ->
-          8 ->
-          9 ->
-          10 ->
+          4 -> 시선방향
+          5 -> 좌눈
+          6 -> 우눈
+          14 -> 카운트
         */
       }
     } catch (error) {

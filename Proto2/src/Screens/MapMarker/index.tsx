@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import {Platform, Alert, FlatList} from "react-native";
@@ -56,8 +56,12 @@ type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
 interface DrawerProp {
   navigation: TypeDrawerProp;
 }
+import {DrivingDataContext} from '~/Contexts/DrivingData';
 
 const MapMarker = ({navigation}: DrawerProp) => {
+
+  const {defaultInfo, setDefaultInfo} = useContext(DrivingDataContext);
+
   const saveLocations2 = require('./saveLocations2.json');
   let saveData = [];
   for(let i=0; i<saveLocations2.length; i++){
@@ -95,7 +99,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
       setTime(now.getHours()+" : "+now.getMinutes()+" : "+now.getSeconds());
     }, 1000);
     return () => {
-      console.log("--- --- MapData return");
+      console.log("--- --- MapMarker return");
       clearInterval(id);
     };
 

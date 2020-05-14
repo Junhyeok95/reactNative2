@@ -24,6 +24,10 @@ npm i -S react-native-splash-screen
 npm i -D @bam.tech/react-native-make
 npm i -S lottie-react-native lottie-ios@3.1.3
 ```
+###  icon, splash
+```
+npm i -S react-native-sound 
+```
 
 ### 생각중 -> sqlite-storage, animatable, linear-gradient, firebase, push-notification
 ```

@@ -97,7 +97,7 @@ const MapData = ({navigation}: DrawerProp) => {
     return "";
   }
 
-  const {testArr, testFun, linkInfo, linkInfoFun} = useContext(DrivingDataContext);
+  const {linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
   const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
 
   const [onMap, setOnMap] = useState<boolean>(false);
@@ -146,12 +146,32 @@ const MapData = ({navigation}: DrawerProp) => {
       // console.log(now.getMinutes());
       // console.log(now.getSeconds());
       setTime(now.getHours()+" : "+now.getMinutes()+" : "+now.getSeconds());
+      let c = checkInfo_0();
+      if(c){
+        console.log("-> linkInfo ", linkInfo);
+        console.log("-> defaultInfo ", defaultInfo);
+        console.log("-> checkInfo ", checkInfo);
+        linkInfo_3();
+      }
     }, 1000);
     return () => {
       console.log("--- --- MapData return");
       clearInterval(id);
     };
   },[]);
+
+  let checkInfo_0 = () :boolean => {
+    if (checkInfo[0] == -1 || checkInfo[0] == 0) {
+      return false;
+    } else if (checkInfo[0] == 1) {
+      return true;
+    }
+    return false;
+  };
+  let linkInfo_3 = ():void => {
+    if( linkInfo[3] < 50 || 150 < linkInfo[3] )
+    console.log("기울기 경고 경고");
+  } 
 
   return (
     <>
@@ -248,8 +268,10 @@ const MapData = ({navigation}: DrawerProp) => {
           onPress={()=>{
             if(driving){
               Alert.alert('운전을 종료합니다\n\n운전 시간 : 35분\n 급정거 : 7회 \n 급가속 4회 \n 졸음 1회');
+              checkInfo[0] = 0;
             } else {
               Alert.alert('운전을 시작합니다');
+              checkInfo[0] = 1;
             }
             setDriving(!driving);
           }}/>
