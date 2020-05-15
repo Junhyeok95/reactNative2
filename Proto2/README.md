@@ -26,7 +26,7 @@ npm i -S lottie-react-native lottie-ios@3.1.3
 ```
 ###  icon, splash
 ```
-npm i -S react-native-sound 
+npm i -S react-native-sound react-native-status-bar-height
 ```
 
 ### 생각중 -> sqlite-storage, animatable, linear-gradient, firebase, push-notification
