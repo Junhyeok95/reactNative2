@@ -47,6 +47,17 @@ const Text = Styled.Text`
   font-size: 16px;
 `;
 
+const TopViewTEST = Styled.View`
+  position: absolute;
+  background-color: #00fC;
+  top: 120px;
+  right: 24px;
+  width: 50px;
+  height: 50px;
+  border: 2px;
+  padding: 2px;
+`;
+
 interface IGeolocation {
   latitude: number;
   longitude: number;
@@ -185,6 +196,11 @@ const MapMarker = ({navigation}: DrawerProp) => {
           졸음 : {p3}
         </Text>
       </TopView>
+      <TopViewTEST>
+        <TouchableOpacity style={{flex:1}}>
+
+        </TouchableOpacity>
+      </TopViewTEST>
     </>
   );
 };

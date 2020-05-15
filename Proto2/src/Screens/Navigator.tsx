@@ -22,6 +22,7 @@ import Setting from './Setting';
 
 import MapData from './MapData';
 import MapMarker from './MapMarker';
+import MapTest from './MapTest';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -171,7 +172,7 @@ const MainThirdStackNavi = ({navigation}: DrawerProp) => {
       }}
     >
       <Stack.Screen
-        name="Setting"
+        name="Bluetooth"
         component={Bluetooth}
         options={{
           headerTitle:"クルマモリ9",
@@ -264,14 +265,14 @@ const MainTabNavi = () => {
 const MapTabNavi = () => {
   return (
     <Tab.Navigator
-      initialRouteName={"MapFirstStackNavi"}
+      initialRouteName={"MapData"}
       shifting={true}
       activeColor={'#000000'}
       inactiveColor={'#AAAAAA'}
       barStyle={{backgroundColor: '#FFFFFF'}}
     >
       <Tab.Screen
-        name={"MapFirstStackNavi"}
+        name={"MapData"}
         component={MapData}
         options={{
           tabBarLabel: '지도',
@@ -279,11 +280,19 @@ const MapTabNavi = () => {
         }}
       />
       <Tab.Screen
-        name={"MapSecondStackNavi"}
+        name={"MapMarker"}
         component={MapMarker}
         options={{
           tabBarLabel: '통계',
           tabBarIcon: 'chart-bar',
+        }}
+      />
+      <Tab.Screen
+        name={"MapTest"}
+        component={MapTest}
+        options={{
+          tabBarLabel: '테스트',
+          tabBarIcon: '',
         }}
       />
     </Tab.Navigator>

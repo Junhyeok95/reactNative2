@@ -14,6 +14,25 @@ import {
 
 import {DrivingDataContext} from '~/Contexts/DrivingData';
 import Geolocation from 'react-native-geolocation-service';
+import Sound from 'react-native-sound';
+
+const audioList = [
+  {
+    title: 'fast',
+    isRequire: true,
+    url: require('./fast_detect.mp3')
+  },
+  {
+    title: 'sleep',
+    isRequire: true,
+    url: require('./sleep_detect.mp3')
+  },
+  {
+    title: 'slow',
+    isRequire: true,
+    url: require('./slow_detect.mp3')
+  },
+]
 
 const RightView = Styled.View`
   position: absolute;
@@ -43,6 +62,40 @@ const LeftView = Styled.View`
 `;
 const Text = Styled.Text`
   font-size: 16px;
+`;
+
+const TouchableOpacity = Styled.TouchableOpacity`
+  background-color: #FFF7;
+`;
+const TopViewTEST = Styled.View`
+  position: absolute;
+  background-color: #00fC;
+  top: 120px;
+  right: 24px;
+  width: 30px;
+  height: 30px;
+  border: 2px;
+  padding: 2px;
+`;
+const TopViewTEST2 = Styled.View`
+  position: absolute;
+  background-color: #00fC;
+  top: 180px;
+  right: 24px;
+  width: 30px;
+  height: 30px;
+  border: 2px;
+  padding: 2px;
+`;
+const TopViewTEST3 = Styled.View`
+  position: absolute;
+  background-color: #00fC;
+  top: 240px;
+  right: 24px;
+  width: 30px;
+  height: 30px;
+  border: 2px;
+  padding: 2px;
 `;
 
 interface IGeolocation {
@@ -121,6 +174,7 @@ const MapData = ({navigation}: DrawerProp) => {
   });
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
+  let sound1: Sound;
 
   useEffect(() => {
     androidPermissionLocation();
@@ -294,6 +348,57 @@ const MapData = ({navigation}: DrawerProp) => {
           </>
         )}
       </TopView>
+      <TopViewTEST>
+        <TouchableOpacity style={{flex:1}}
+          onPress={()=>{
+            sound1 = new Sound(audioList[0].url, (error) => {
+              if(error){
+                Alert.alert('error');
+                return;
+              } else {
+                sound1.play((success)=>{
+                  sound1.release();
+                })
+              }
+            });
+          }}
+        >
+        </TouchableOpacity>
+      </TopViewTEST>
+      <TopViewTEST2>
+        <TouchableOpacity style={{flex:1}}
+          onPress={()=>{
+            sound1 = new Sound(audioList[1].url, (error) => {
+              if(error){
+                Alert.alert('error');
+                return;
+              } else {
+                sound1.play((success)=>{
+                  sound1.release();
+                })
+              }
+            });
+          }}
+        >
+        </TouchableOpacity>
+      </TopViewTEST2>
+      <TopViewTEST3>
+        <TouchableOpacity style={{flex:1}}
+          onPress={()=>{
+            sound1 = new Sound(audioList[2].url, (error) => {
+              if(error){
+                Alert.alert('error');
+                return;
+              } else {
+                sound1.play((success)=>{
+                  sound1.release();
+                })
+              }
+            });
+          }}
+        >
+        </TouchableOpacity>
+      </TopViewTEST3>
     </>
   );
 };
