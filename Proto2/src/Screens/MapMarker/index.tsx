@@ -98,6 +98,14 @@ const MapMarker = ({navigation}: DrawerProp) => {
   // let jsonData = saveLocations2[0].routes[0].geometry.coordinates.map((item: any[]) =>{
   //   return {latitude: item[1], longitude: item[0]}});
   // console.log(jsonData);
+
+  const removeLocationsArr = () => {
+    let list = [...locationsArr];
+    list.splice(0, 1);
+    setLocationsArr(list);
+    // AsyncStorage.setItem('save', JSON.stringify(list));
+    console.log("removeLocationsArr");
+  }
   
   useEffect(() => {
     
@@ -197,8 +205,9 @@ const MapMarker = ({navigation}: DrawerProp) => {
         </Text>
       </TopView>
       <TopViewTEST>
-        <TouchableOpacity style={{flex:1}}>
-
+        <TouchableOpacity style={{flex:1}}
+          onPress={()=>removeLocationsArr()}
+        >
         </TouchableOpacity>
       </TopViewTEST>
     </>

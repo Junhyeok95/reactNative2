@@ -63,11 +63,11 @@ const TestText = Styled.Text`
   flex:1;
 `;
 
-// const URI = '';
+// const URL = '';
 
 // const json = async () => {
 //   try {
-//     let response = await fetch(URI);
+//     let response = await fetch(URL);
 //     console.log("1");
 //     // console.log("response", response);
 //     let responseJsonData = await response.json();

@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {Alert} from 'react-native';
 
 const defaultContext: IUserContext = {
-  URI: undefined,
-  updateURI: (uri: string) => {},
+  URL: undefined,
+  updateURL: (url: string) => {},
   userInfo: undefined,
   userInfo2: undefined,
   login: (email: string, password: string) => {},
@@ -23,9 +23,22 @@ interface Props {
 
 const UserContextProvider = ({children}: Props) => {
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
-  const [URI,setURI] = useState<string>("http://btrya23.iptime.org:8000");
-  const updateURI = (uri: string): void => {
-    setURI(uri);
+  const [URL,setURL] = useState<string>();
+  const updateURL = (url: string): void => {
+    setURL(url);
+    AsyncStorage.setItem('saveURL', url);
+  }
+  const initURL = async () => {
+    try {
+      const myURL = await AsyncStorage.getItem('saveURL');
+      if (myURL !== null) {
+        setURL(myURL);
+      } else if (myURL === null) {
+        setURL("http://btrya23.iptime.org:8000");
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const [userInfo, setUserInfo] = useState<IUserInfo | undefined>(undefined);
@@ -35,7 +48,7 @@ const UserContextProvider = ({children}: Props) => {
   const login = (email: string, password: string): void => {
     let TEST_JSON_DATA = { name : 'WDJ', email : 'YJU.AC.KR', key : '-1'};
     console.log(JSON.stringify(TEST_JSON_DATA));
-    AsyncStorage.setItem('login2', JSON.stringify(TEST_JSON_DATA)).then((data) => {
+    AsyncStorage.setItem('login2', JSON.stringify(TEST_JSON_DATA)).then(() => {
       setUserInfo2({
         name: TEST_JSON_DATA.name,
         email: TEST_JSON_DATA.email,
@@ -46,7 +59,7 @@ const UserContextProvider = ({children}: Props) => {
 
   const login2 = (email: string, password: string): void => {
     fetch(
-      URI+'/wdjapp', { 
+      URL+'/app', { 
         method: 'POST',
         headers: {
           'Accept':'application/json',
@@ -61,7 +74,7 @@ const UserContextProvider = ({children}: Props) => {
     .then(json => {
       let data = JSON.stringify(json);
       if(json.id){
-        AsyncStorage.setItem('login2', data).then((data) => {
+        AsyncStorage.setItem('login2', data).then(() => {
           // let json = JSON.parse(data)
           setUserInfo2({
             name: json.name,
@@ -127,13 +140,14 @@ const UserContextProvider = ({children}: Props) => {
 
   useEffect(() => {
     getUserInfo2();
+    initURL();
   }, []);
 
   return (
     <UserContext.Provider
       value={{
-        URI,
-        updateURI,
+        URL,
+        updateURL,
         userInfo,
         userInfo2,
         login,

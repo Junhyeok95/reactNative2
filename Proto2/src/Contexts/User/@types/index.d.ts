@@ -10,8 +10,8 @@ interface IUserInfo2 {
 }
 
 interface IUserContext {
-  URI: string | undefined;
-  updateURI: (uri: string) => void;
+  URL: string | undefined;
+  updateURL: (url: string) => void;
   userInfo: IUserInfo | undefined;
   userInfo2: IUserInfo | undefined;
   login: (email: string, password: string) => void;

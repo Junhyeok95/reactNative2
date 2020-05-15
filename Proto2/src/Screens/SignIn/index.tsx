@@ -10,6 +10,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from '~/Components/Button';
 import Input from '~/Components/Input';
 
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import URLInput from './URLInput';
+
 const TouchableWithoutFeedback = Styled.TouchableWithoutFeedback``;
 const Container = Styled.KeyboardAvoidingView`
   flex: 1;
@@ -51,25 +54,45 @@ const ButtonMargin = Styled.View`
   width: 16px;
 `;
 
-const TopView = Styled.View`
-  position: absolute;
-  top: 48px;
-  left: 16px;
-`;
 const TouchableOpacityView = Styled.View`
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
+  margin: 1px;
   padding: 8px;
   border: 1px;
 `;
+const TouchableOpacityViewRow = Styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+`;
 const TouchableOpacity2 = Styled.TouchableOpacity`
+  flex: 1;
+  margin: 1px;
   padding: 8px;
   border: 1px;
+  justify-content: center;
+`;
+
+const TouchableOpacity3 = Styled.TouchableOpacity`
+  flex:1;
 `;
 const Label = Styled.Text`
   font-size: 16px;
   text-align: center;
   color: #000000;
+`;
+const TopLeftView = Styled.View`
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 54px;
+`;
+const TopRighView = Styled.View`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 50px;
+  height: 50px;
 `;
 
 type NavigationProp = StackNavigationProp<LoginStackNaviParamList, 'SignIn'>;
@@ -79,11 +102,14 @@ interface Props {
 }
 
 const SignIn = ({navigation}: Props) => {
-  const {login, login2} = useContext<IUserContext>(UserContext);
+  const {URL, updateURL, login, login2} = useContext<IUserContext>(UserContext);
   let loginNum = 0;
 
   const [inputEmail, setInputEamil] = useState('');
   const [inputPassword, setInputPassword] = useState('');
+
+  const [showMaster, setShowMaster] = useState<boolean>(false);
+  const [showInput, setShowInput] = useState<boolean>(false);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -143,20 +169,37 @@ const SignIn = ({navigation}: Props) => {
             </ButtonContainer>
           </FormContainer>
         </View>
-        <TopView>
+        {showMaster &&
+        <TopLeftView style={{marginTop: getStatusBarHeight()}}>
           <TouchableOpacityView>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowInput(true)}>
               <Label>
-                URL
+                URL : {URL}
               </Label>
             </TouchableOpacity>
-            <TouchableOpacity2 onPress={()=>login('WDJ@YJU', 'password')}>
-              <Label>
-                MASTER
-              </Label>
-            </TouchableOpacity2>
+            <TouchableOpacityViewRow>
+              <TouchableOpacity2 onPress={()=>login('WDJ@YJU', 'password')}>
+                <Label>
+                  MASTER
+                </Label>
+              </TouchableOpacity2>
+              <TouchableOpacity2 onPress={()=>updateURL("http://localhost:8000")}>
+                <Label>
+                  reset URL{'\n'} localhost
+                </Label>
+              </TouchableOpacity2>
+              <TouchableOpacity2 onPress={()=>updateURL("http://btrya23.iptime.org:8000")}>
+                <Label>
+                  reset URL{'\n'} btrya23
+                </Label>
+              </TouchableOpacity2>
+            </TouchableOpacityViewRow>
           </TouchableOpacityView>
-        </TopView>
+        </TopLeftView>}
+        <TopRighView style={{marginTop: getStatusBarHeight()}}>
+          <TouchableOpacity3 onPress={()=>setShowMaster(!showMaster)}/>
+        </TopRighView>
+      {showInput && <URLInput hideURLInput={() => setShowInput(false)} />}
       </Container>
     </TouchableWithoutFeedback>
   );
