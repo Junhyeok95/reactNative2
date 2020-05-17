@@ -18,28 +18,28 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #00FC;
-  top: 16px;
-  left: 16px;
+  top: 4px;
+  left: 4px;
   width: 50px;
   height: 50px;
   border: 1px;
 `;
 const TopRighView = Styled.View`
   position: absolute;
-  background-color: #0F0A;
-  top: 32px;
-  right: 32px;
-  width: 150px;
+  background-color: #FFFC;
+  top: 4px;
+  right: 4px;
+  width: 250px;
+  border-radius: 16px;
   height: 150px;
-  border: 1px;
 `;
 const CenterRightView = Styled.View`
   position: absolute;
-  background-color: #F00C;
+  background-color: #FFFF;
   right: 5%;
-  top: 50%;
-  width: 50px;
-  height: 50px;
+  top: 44%;
+  width: 10%;
+  height: 12%;
   border: 1px;
 `;
 const BottomLeftView = Styled.View`
@@ -51,6 +51,23 @@ const BottomLeftView = Styled.View`
   height: 50px;
   border: 1px;
 `;
+const TouchableOpacity = Styled.TouchableOpacity`
+  flex: 1;
+  border: 1px;
+  margin: 5px;
+  padding 1px;
+  justify-content: center;
+  align-items: center;
+
+`;
+const Text = Styled.Text`
+  text-align: center;
+  font-size: 16px;
+`;
+const TopRighViewText = Styled.Text``;
+
+
+
 type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
 interface DrawerProp {
   navigation: TypeDrawerProp;
@@ -94,6 +111,9 @@ const MapTest = ({navigation}: DrawerProp) => {
 
   const [onSave, setOnSave] = useState<boolean>(false);
 
+  const deltaArr = [1, 0.5, 0.1, 0.08, 0.04, 0.01, 0.005, 0.001];
+  let deltaCnt = 0;
+
   return (
     <>
       
@@ -107,18 +127,6 @@ const MapTest = ({navigation}: DrawerProp) => {
         }}
 
         region={region}
-
-        // initialRegion={{
-        //   latitude: 35.896311,
-        //   longitude: 128.622051,
-        //   latitudeDelta: 0.02,
-        //   longitudeDelta: 0.02,
-        // }}
-
-        // onRegionChange={region => {
-        //   console.log("onRegionChange");
-        //   console.log(region);
-        // }}
 
         onRegionChangeComplete={regio => {
           console.log("onRegionChangeComplete");
@@ -141,14 +149,60 @@ const MapTest = ({navigation}: DrawerProp) => {
       >
       </MapView>
       <StatusBar barStyle="dark-content" backgroundColor={'#FF000077'} translucent={true} />
-        <TopLeftView
-          style={{marginTop: getStatusBarHeight()}}
+      <TopLeftView
+        style={{marginTop: getStatusBarHeight()}}
+      >
+      </TopLeftView>
+      <TopRighView
+        style={{marginTop: getStatusBarHeight()}}
+      >
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+        <Text>kkkㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</Text>
+      </TopRighView>
+      <CenterRightView>
+        <TouchableOpacity
+          style={{height:30,backgroundColor:"#0AA"}}
+          onPress={()=>{
+            if (deltaCnt >= 0 || deltaCnt <= 7){
+              if (deltaCnt<7){
+                deltaCnt++;
+              }
+            }
+            setRegion({
+              latitude: region.latitude,
+              longitude: region.longitude,
+              latitudeDelta: deltaArr[deltaCnt],
+              longitudeDelta: deltaArr[deltaCnt],
+            })
+            
+          }}
         >
-        </TopLeftView>
-        <TopRighView
-          style={{marginTop: getStatusBarHeight()}}
+          <Text>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{height:30,backgroundColor:"#0FA"}}
+          onPress={()=>{
+            if (deltaCnt >= 0 || deltaCnt <= 7){
+              if (deltaCnt>0){
+                deltaCnt--;
+              }
+            }
+            setRegion({
+              latitude: region.latitude,
+              longitude: region.longitude,
+              latitudeDelta: deltaArr[deltaCnt],
+              longitudeDelta: deltaArr[deltaCnt],
+            })
+          }}  
         >
-        </TopRighView>
+          <Text>-</Text>
+        </TouchableOpacity>
+      </CenterRightView>
       <BottomLeftView>
         <Button
           label={onSave?"중지":"기록"}
@@ -160,7 +214,6 @@ const MapTest = ({navigation}: DrawerProp) => {
             setOnSave(!onSave);
           }}/>        
       </BottomLeftView>
-      <CenterRightView />
     </>
   );
 };

@@ -79,7 +79,7 @@ const MainFirstStackNavi = ({navigation}: DrawerProp) => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#446784',
+          backgroundColor: '#002EF0',
         },
         headerTintColor: '#FFFFFF',
         headerTitleStyle: {
@@ -90,7 +90,7 @@ const MainFirstStackNavi = ({navigation}: DrawerProp) => {
           <IconButton
             style={{marginRight:8}}
             icon="menu"
-            color="black"
+            color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
@@ -113,7 +113,7 @@ const MainSecondStackNavi = ({navigation}: DrawerProp) => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#446784',
+          backgroundColor: '#002EF0',
         },
         headerTintColor: '#FFFFFF',
         headerTitleStyle: {
@@ -124,7 +124,7 @@ const MainSecondStackNavi = ({navigation}: DrawerProp) => {
           <IconButton
             style={{marginRight:8}}
             icon="menu"
-            color="black"
+            color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
@@ -154,7 +154,7 @@ const MainThirdStackNavi = ({navigation}: DrawerProp) => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#446784',
+          backgroundColor: '#002EF0',
         },
         headerTintColor: '#FFFFFF',
         headerTitleStyle: {
@@ -165,7 +165,7 @@ const MainThirdStackNavi = ({navigation}: DrawerProp) => {
           <IconButton
             style={{marginRight:8}}
             icon="menu"
-            color="black"
+            color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
@@ -188,7 +188,7 @@ const MainFourthStackNavi = ({navigation}: DrawerProp) => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#446784',
+          backgroundColor: '#002EF0',
         },
         headerTintColor: '#FFFFFF',
         headerTitleStyle: {
@@ -199,7 +199,7 @@ const MainFourthStackNavi = ({navigation}: DrawerProp) => {
           <IconButton
             style={{marginRight:8}}
             icon="menu"
-            color="black"
+            color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
@@ -291,8 +291,8 @@ const MapTabNavi = () => {
         name={"MapTest"}
         component={MapTest}
         options={{
-          tabBarLabel: '테스트',
-          tabBarIcon: '',
+          tabBarLabel: '테스트 운전',
+          tabBarIcon: 'car',
         }}
       />
     </Tab.Navigator>

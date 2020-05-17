@@ -6,8 +6,6 @@ const Container = Styled.View`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  margin: 0 8px;
-  padding: 0 4px;
   padding-bottom: 4px;
   border-bottom-width: 2px;
   border-bottom-color: #000000;

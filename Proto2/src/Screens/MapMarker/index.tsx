@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useRef, useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import {Platform, Alert, FlatList} from "react-native";
@@ -10,10 +10,9 @@ import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
 const Footer = Styled.View`
   position: absolute;
-  bottom: 8px;
-  left: 16px;
-  right: 16px;
-  border: 1px;
+  bottom: 2%;
+  left: 20%;
+  right: 2%;
 `;
 const SaveContainer = Styled.View`
   padding: 8px;
@@ -22,9 +21,9 @@ const TouchableOpacity = Styled.TouchableOpacity`
   background-color: #FFF7;
 `;
 const Save = Styled.View`
+  background-color: #FFF;
   width: 50px;
   height: 50px;
-  border-radius: 50px;
   overflow: hidden;
   align-items: center;
   justify-content: center;
@@ -57,10 +56,25 @@ const TopViewTEST = Styled.View`
   border: 2px;
   padding: 2px;
 `;
-
+const TopViewTEST2 = Styled.View`
+  position: absolute;
+  background-color: #00fC;
+  top: 180px;
+  right: 24px;
+  width: 50px;
+  height: 50px;
+  border: 2px;
+  padding: 2px;
+`;
 interface IGeolocation {
   latitude: number;
   longitude: number;
+}
+interface IRegion {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
 }
 
 type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
@@ -79,13 +93,12 @@ const MapMarker = ({navigation}: DrawerProp) => {
     let arr = saveLocations2[i].routes[0].geometry.coordinates.map((item: any[]) =>{ return {latitude: item[1], longitude: item[0]}});
     saveData.push(arr);
   }
-  const [markerList, setMarkerList] = useState<Array<String>>(["1","2","3","4","5","6","7","8"]);
+
+  const [poly, setPoly] = useState<number>(-1);
   const [location, setLocation] = useState<IGeolocation>({
     latitude: 35.896311,
     longitude: 128.622051,
   });
-  
-  const [poly, setPoly] = useState<number>(-1);
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   const [locationsArr, setLocationsArr] = useState<Array<any>>(saveData);
   const [time, setTime] = useState<any>();
@@ -93,6 +106,13 @@ const MapMarker = ({navigation}: DrawerProp) => {
   const [p1, setP1] = useState<number>(0);
   const [p2, setP2] = useState<number>(0);
   const [p3, setP3] = useState<number>(0);
+
+  const [region, setRegion] = useState<any>({
+    latitude: 35.896311,
+    longitude: 128.622051,
+    latitudeDelta: 0.03,
+    longitudeDelta: 0.03,
+  });
   
   // const saveLocations = require('./saveLocations.json');
   // let jsonData = saveLocations2[0].routes[0].geometry.coordinates.map((item: any[]) =>{
@@ -106,22 +126,19 @@ const MapMarker = ({navigation}: DrawerProp) => {
     // AsyncStorage.setItem('save', JSON.stringify(list));
     console.log("removeLocationsArr");
   }
+  const addLocationsArr = () => {
+    let num = Math.floor(Math.random() * 10);
+    let arr = saveLocations2[num].routes[0].geometry.coordinates.map((item: any[]) =>{ return {latitude: item[1], longitude: item[0]}});
+    let list = [...locationsArr, arr];
+    setLocationsArr(list);
+    console.log("addLocationsArr");
+  }
   
   useEffect(() => {
-    
     console.log("--- --- MapMarker Mount");
-    let id = setInterval(() => {
-      let now = new Date();
-      // console.log(now.getHours());
-      // console.log(now.getMinutes());
-      // console.log(now.getSeconds());
-      setTime(now.getHours()+" : "+now.getMinutes()+" : "+now.getSeconds());
-    }, 1000);
     return () => {
       console.log("--- --- MapMarker return");
-      clearInterval(id);
     };
-
   },[]);
 
   // useEffect(() => {
@@ -136,6 +153,16 @@ const MapMarker = ({navigation}: DrawerProp) => {
         <TouchableOpacity
         style={index<3?{borderColor:"#00F", borderWidth:3}:index<7?{borderColor:"#0AA", borderWidth:3}:index<12?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
           setPoly(num);
+          console.log(item[0]);
+          let {latitude, longitude} = item[0];
+          setRegion({
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.08,
+            longitudeDelta: 0.08,
+          })
+          console.log("region");
+          console.log(region);
           setP1(Math.floor(Math.random() * 15) + 1);
           setP2(Math.floor(Math.random() * 15) + 1);
           setP3(Math.floor(Math.random() * 5) + 1);
@@ -152,7 +179,6 @@ const MapMarker = ({navigation}: DrawerProp) => {
       </SaveContainer>
     );
   }
-
   return (
     <>
       <MapView
@@ -160,12 +186,13 @@ const MapMarker = ({navigation}: DrawerProp) => {
         provider={PROVIDER_GOOGLE}
         loadingEnabled={true}
         showsUserLocation={true}
-        initialRegion={{
-          latitude: location.latitude,
-          longitude: location.longitude,
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
-        }}
+        region={region}
+        // initialRegion={{
+        //   latitude: location.latitude,
+        //   longitude: location.longitude,
+        //   latitudeDelta: 0.02,
+        //   longitudeDelta: 0.02,
+        // }}
       >
         {poly >= 0 && <Polyline
           coordinates={locationsArr[poly]}
@@ -210,6 +237,12 @@ const MapMarker = ({navigation}: DrawerProp) => {
         >
         </TouchableOpacity>
       </TopViewTEST>
+      <TopViewTEST2>
+      <TouchableOpacity style={{flex:1}}
+          onPress={()=>addLocationsArr()}
+        >
+        </TouchableOpacity>
+      </TopViewTEST2>
     </>
   );
 };

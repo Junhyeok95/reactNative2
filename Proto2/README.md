@@ -18,15 +18,15 @@ npm i -E react-native-maps
 npm i -S react-native-geolocation-service @react-native-community/geolocation
 npm i -S react-native-ble-manager
 ```
-###  icon, splash
+###  icon, splash, lottie
 ```
 npm i -S react-native-splash-screen
 npm i -D @bam.tech/react-native-make
 npm i -S lottie-react-native lottie-ios@3.1.3
 ```
-###  icon, splash
+###  sound, status-bar-height, iphone-x-helper
 ```
-npm i -S react-native-sound react-native-status-bar-height
+npm i -S react-native-sound react-native-status-bar-height react-native-iphone-x-helper
 ```
 
 ### 생각중 -> sqlite-storage, animatable, linear-gradient, firebase, push-notification
@@ -34,4 +34,9 @@ npm i -S react-native-sound react-native-status-bar-height
 android -> app -> build.gradle
 apply from: "../../node_modules/react-native/react.gradle" // 중복주의
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+react-native set-icon --path ./src/Assets/images/app_icon.png --background "#FFFFFF"
+react-native set-splash --path ./src/Assets/images/splash.png --resize cover --background "#FFFFFF"
+#import "RNSplashScreen.h"  // here
+[RNSplashScreen show];  // here  + 스토리보드 생성 SplashScreen
 ```

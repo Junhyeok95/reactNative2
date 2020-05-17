@@ -16,7 +16,7 @@ import URLInput from './URLInput';
 const TouchableWithoutFeedback = Styled.TouchableWithoutFeedback``;
 const Container = Styled.KeyboardAvoidingView`
   flex: 1;
-  background-color: #FFFFFF;
+  background-color: #EFEFEF;
   justify-content: center;
   align-items: center;
 `;
@@ -35,8 +35,10 @@ const TextRowView = Styled.View`
 const KrumamoText = Styled.Text`
   font-size: 60px;
   color: #000000;
+  font-weight: 900;
 `;
 const Ri9Text = Styled.Text`
+  font-weight: 700;
   font-size: 60px;
   color: #FF0000;
 `;
@@ -121,7 +123,7 @@ const SignIn = ({navigation}: Props) => {
           <Icon
             style={{margin: 36}}
             name="account-circle"
-            color={'#0009'}
+            color={'#002EFF'}
             size={200}
           />
           <FormContainer>

@@ -153,7 +153,6 @@ const MapData = ({navigation}: DrawerProp) => {
   const {linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
   const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
 
-  const [onMap, setOnMap] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
 
   const [speed, setSpeed] = useState<number>(0);
@@ -173,19 +172,32 @@ const MapData = ({navigation}: DrawerProp) => {
     longitude: 128.622051,
   });
 
+  const [region, setRegion] = useState<any>({
+    latitude: 35.896311,
+    longitude: 128.622051,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.02,
+  });
+
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   let sound1: Sound;
+
+  const _location = ():any => {
+    return location;
+  }
 
   useEffect(() => {
     androidPermissionLocation();
 
     Geolocation.getCurrentPosition(
-      position => {
+      async position => {
         const {latitude, longitude} = position.coords;
-        setLocation({
+        await setLocation({
           latitude,
           longitude,
         });
+        console.log("나에위치");
+        await console.log(_location());
       },
       error => {
         console.log(error.code, error.message);
@@ -193,21 +205,13 @@ const MapData = ({navigation}: DrawerProp) => {
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
 
-    console.log("--- --- MapData Mount");
-    let id = setInterval(() => {
-      let now = new Date();
-      // console.log(now.getHours());
-      // console.log(now.getMinutes());
-      // console.log(now.getSeconds());
-      setTime(now.getHours()+" : "+now.getMinutes()+" : "+now.getSeconds());
-      let c = checkInfo_0();
-      if(c){
-        console.log("-> linkInfo ", linkInfo);
-        console.log("-> defaultInfo ", defaultInfo);
-        console.log("-> checkInfo ", checkInfo);
-        linkInfo_3();
-      }
-    }, 1000);
+      console.log("--- --- MapData Mount");
+      let id = setInterval(() => {
+        let now = new Date();
+        // console.log(now.getHours());
+        // console.log(now.getMinutes());
+        console.log(now.getSeconds());
+      }, 1000);
     return () => {
       console.log("--- --- MapData return");
       clearInterval(id);
@@ -223,8 +227,10 @@ const MapData = ({navigation}: DrawerProp) => {
     return false;
   };
   let linkInfo_3 = ():void => {
-    if( linkInfo[3] < 50 || 150 < linkInfo[3] )
-    console.log("기울기 경고 경고");
+    if( linkInfo[3] != -1){
+      if( linkInfo[3] < 50 || 150 < linkInfo[3] )
+      console.log("기울기 경고 경고");
+    }
   } 
 
   return (
@@ -244,10 +250,7 @@ const MapData = ({navigation}: DrawerProp) => {
         showsTraffic={false}
         showsIndoors={true}
 
-        onMapReady={() => {
-          setMarginTop(0);
-          setOnMap(true);
-        }}
+        // region={region}
 
         initialRegion={{
           latitude: location.latitude,
@@ -256,28 +259,25 @@ const MapData = ({navigation}: DrawerProp) => {
           longitudeDelta: 0.02,
         }}
 
-        onRegionChange={region => {
-          setLocation({
-            latitude: region.latitude,
-            longitude: region.longitude,
-          });
-        }}
-        onRegionChangeComplete={region => {
-          setLocation({
-            latitude: region.latitude,
-            longitude: region.longitude,
-          });
-        }}
         onUserLocationChange={ e => {
-          setCoordinate({
-            latitude: e.nativeEvent.coordinate.latitude,
-            longitude: e.nativeEvent.coordinate.longitude,
-            speed: e.nativeEvent.coordinate.speed,
-            timestamp: e.nativeEvent.coordinate.timestamp,
-          });
           if(onSave){
+            setCoordinate({
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+              speed: e.nativeEvent.coordinate.speed,
+              timestamp: e.nativeEvent.coordinate.timestamp,
+            });
+
+
             const {latitude, longitude} = e.nativeEvent.coordinate;
             setLocations([...locations, {latitude, longitude}]);
+
+
+            // 각종 값을 체크하는 함수를 만들어야함
+            linkInfo_3();
+            console.log("-> linkInfo ", linkInfo);
+            console.log("-> defaultInfo ", defaultInfo);
+            console.log("-> checkInfo ", checkInfo);
           }
         }}
       >

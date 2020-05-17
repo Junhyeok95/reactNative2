@@ -7,19 +7,19 @@ import Button from '~/Components/Button';
 const Container = Styled.View`
   flex: 1;
   align-items: center;
-  background-color: #8CD3C5;
   padding-top: 24px;
+  background-color: #EFEFEF;
   padding-bottom: 24px;
 `;
 const BackContainer = Styled.View`
   width: 80%;
   background-color: #FCFCFC;
   margin-top: 8px;
-  margin-bottom: 8px;
   padding: 12px;
   border-width: 1px;
-  border-color: #DDD;
-  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 16px;
+  border-color: #AAAA;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
 `;
 const LabelContainer = Styled.View`
   flex-direction: row;

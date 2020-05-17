@@ -8,7 +8,7 @@ const Container = Styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: #8CD3C5;
+  background-color: #EFEFEF;
 `;
 const Text = Styled.Text`
   font-size: 32px;
@@ -17,7 +17,7 @@ const Text = Styled.Text`
 const View = Styled.View`
   background-color: #00F3;
   height: 40%;
-  width: 70%;
+  width: 80%;
   margin: 16px;
 `;
 
@@ -62,11 +62,10 @@ const Driving = ({navigation}: Props) => {
       </Text> */}
       <View>
         <LottieView
-          style={{flex:1, backgroundColor:'#8CD3C5'}}
+          style={{flex:1, backgroundColor:'#EFEFEF'}}
           resizeMode={'contain'}
           source={require('~/Assets/Lottie/nodata2.json')}
           autoPlay
-          loop
           imageAssetsFolder={'images'}
         />
       </View>

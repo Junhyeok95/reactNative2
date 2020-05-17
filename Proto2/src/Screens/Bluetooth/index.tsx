@@ -5,6 +5,7 @@ import List from '~/Screens/Bluetooth/List';
 
 const Container = Styled.View`
   flex: 1;
+  background-color: #EFEFEF;
 `;
 
 const Bluetooth = () => {
@@ -15,7 +16,7 @@ const Bluetooth = () => {
 
   return (
     <Container>
-      <Header />
+      {/* <Header /> */}
       <List />
     </Container>
   );

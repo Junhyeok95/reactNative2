@@ -6,7 +6,7 @@ import LottieView from 'lottie-react-native';
 const Container = Styled.View`
   flex: 1;
   align-items: center;
-  background-color: #8CD3C5;
+  background-color: #EFEFEF;
   padding-top: 24px;
   padding-bottom: 24px;
 `;
@@ -14,11 +14,11 @@ const BackContainer = Styled.View`
   width: 80%;
   background-color: #FCFCFC;
   margin-top: 8px;
-  margin-bottom: 8px;
   padding: 12px;
   border-width: 1px;
-  border-color: #DDD;
-  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 16px;
+  border-color: #AAAA;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
 `;
 const LabelContainer = Styled.View`
   flex-direction: row;
@@ -38,10 +38,10 @@ const Text = Styled.Text`
 `;
 const View = Styled.View`
   flex: 1;
-  background-color: #00F3;
-  width: 75%;
-  margin: 8px;
+  width: 80%;
+  margin-top: 16px;
 `;
+const TouchableOpacity = Styled.TouchableOpacity``;
 
 const BR:string = '\n';
 
@@ -68,9 +68,11 @@ const Setting = ({navigation}: Props) => {
         </Text>
       </BackContainer>
       <BackContainer>
-        <LabelContainer>
-          <Label>이용약관</Label>
-        </LabelContainer>
+        <TouchableOpacity>
+          <LabelContainer>
+            <Label>이용약관</Label>
+          </LabelContainer>
+        </TouchableOpacity>
       </BackContainer>
       <BackContainer>
         <LabelContainer>
@@ -84,11 +86,10 @@ const Setting = ({navigation}: Props) => {
       </BackContainer>
       <View>
         <LottieView
-            style={{flex:1, backgroundColor:'#8CD3C5'}}
+            style={{flex:1, backgroundColor:'#EFEFEF'}}
             resizeMode={'contain'}
             source={require('~/Assets/Lottie/dev1.json')}
             autoPlay
-            loop
             imageAssetsFolder={'images'}
           />
       </View>

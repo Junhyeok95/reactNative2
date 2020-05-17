@@ -22,7 +22,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Container = Styled.View`
   flex: 1;
-  background-color: #8CD3C5;
+  padding: 24px;
 `;
 const View = Styled.View`
   flex: 1;
@@ -121,6 +121,9 @@ const List = ({  }: Props) => {
   };
 
   ////////// ////////// ////////// ////////// //////////
+
+  const [isEnabled, setIsEnabled] = useState<boolean>(true);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const {linkInfo, setLinkInfo} = useContext(DrivingDataContext);
 
@@ -238,13 +241,17 @@ const List = ({  }: Props) => {
   };
 
   const _Scan = () => {
-    if (!scanning) {
-      // 기본 장치 값 초기화
-      // setPeripherals( new Map() );
-      BleManager.scan([], 2, false).then((results) => {
-        setScanning(true);
-        console.log('> Scanning ...');
-      });
+    if (isEnabled){
+      if (!scanning) {
+        // 기본 장치 값 초기화
+        // setPeripherals( new Map() );
+        BleManager.scan([], 2, false).then((results) => {
+          setScanning(true);
+          console.log('> Scanning ...');
+        });
+      }
+    } else {
+      Alert.alert("블루투스를 켜주세요");
     }
   }
 
@@ -316,11 +323,10 @@ const List = ({  }: Props) => {
   const renderEmpty = () => {
     return (
       <LottieView
-        style={{flex:1}}
+        style={{flex:1, backgroundColor:'#EFEFEF'}}
         resizeMode={'cover'}
         source={require('~/Assets/Lottie/blue2.json')}
         autoPlay
-        loop
         imageAssetsFolder={'images'}
       />
     );
@@ -346,13 +352,13 @@ const List = ({  }: Props) => {
   }
 
   const list = Array.from(peripherals.values());
-  const btnScanTitle = 'Ble 검색 ('+(scanning?'ON':'OFF')+')';
+  const btnScanTitle = '장치 검색 ('+(scanning?'ON':'OFF')+')';
 
   return (
     <Container>
-      <Toggle />
-      <Subtitle title = {'Device List ->'+raspId} btnLabel={btnScanTitle} onPress={_Scan} />
-      <FlatListContainer
+      <Toggle onValueChange={toggleSwitch} value={isEnabled} />
+      <Subtitle title = {'Device List'} btnLabel={btnScanTitle} onPress={_Scan} />
+      {isEnabled && <FlatListContainer
         keyExtractor={( item, index ):any => {
           return `key-${index}`;
         }}
@@ -360,7 +366,7 @@ const List = ({  }: Props) => {
         ListEmptyComponent={renderEmpty} // data 배열이 없을 경우 표시되는 컴포넌트
         renderItem={renderItem}
         contentContainerStyle={list.length === 0 && { flex: 1 }}
-      />
+      />}
       {/* <ButtonContainer>
         <Button
           style={{ flex: 1 }}
@@ -461,9 +467,9 @@ const List = ({  }: Props) => {
           }}  
         />
       </ButtonContainer> */}
-      <DataContainer>
+      {/* <DataContainer>
         <TestText>{restring}</TestText>
-      </DataContainer>
+      </DataContainer> */}
     </Container>
   );
 };
