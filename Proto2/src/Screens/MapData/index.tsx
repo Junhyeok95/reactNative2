@@ -9,12 +9,15 @@ import Button from '~/Components/Button';
 
 import {
   FlatList, Platform, Alert,
-  PermissionsAndroid, AppState,
+  PermissionsAndroid, AppState, StatusBar,
   NativeModules, NativeEventEmitter,} from 'react-native';
 
 import {DrivingDataContext} from '~/Contexts/DrivingData';
 import Geolocation from 'react-native-geolocation-service';
 import Sound from 'react-native-sound';
+
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 const audioList = [
   {
@@ -97,6 +100,73 @@ const TopViewTEST3 = Styled.View`
   border: 2px;
   padding: 2px;
 `;
+
+
+const TopLeftView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFFDD;
+  border-color: #00F;
+  border-width: 2px;
+  border-radius: 16px;
+  top: 1%;
+  left: 2%;
+  width: 40%;
+  padding: 5% 10%;
+`;
+const TopRightView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 25px;
+  border-width: 1px;
+  border-color: #AAA;
+  top: 1%;
+  right: 2%;
+  width: 50px;
+  height: 50px;
+`;
+const CenterRightView = Styled.View`
+  position: absolute;
+  right: 2%;
+  top: 44%;
+  width: 40px;
+  height: 12%;
+`;
+const BottomLeftView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 25px;
+  border-width: 1px;
+  border-color: #AAA;
+  bottom: 2%;
+  left: 2%;
+  width: 50px;
+  height: 50px;
+`;
+const BottomRightView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #AAA;
+  bottom: 2%;
+  right: 2%;
+  width: 100px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+`;
+const Bt = Styled.TouchableOpacity`
+  flex: 1;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+const BtLabel = Styled.Text`
+  font-size: 20px;
+`;
+
+
+// position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#0008", borderRadius:30, paddingTop:2
 
 interface IGeolocation {
   latitude: number;
@@ -235,6 +305,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
   return (
     <>
+      <StatusBar barStyle="dark-content" backgroundColor={'transparent'} translucent={true} />
       <MapView
         provider={PROVIDER_GOOGLE}
         style={{flex: 1, marginTop}}
@@ -250,13 +321,13 @@ const MapData = ({navigation}: DrawerProp) => {
         showsTraffic={false}
         showsIndoors={true}
 
-        // region={region}
+        region={region}
 
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
         }}
 
         onUserLocationChange={ e => {
@@ -267,12 +338,8 @@ const MapData = ({navigation}: DrawerProp) => {
               speed: e.nativeEvent.coordinate.speed,
               timestamp: e.nativeEvent.coordinate.timestamp,
             });
-
-
             const {latitude, longitude} = e.nativeEvent.coordinate;
             setLocations([...locations, {latitude, longitude}]);
-
-
             // 각종 값을 체크하는 함수를 만들어야함
             linkInfo_3();
             console.log("-> linkInfo ", linkInfo);
@@ -287,68 +354,7 @@ const MapData = ({navigation}: DrawerProp) => {
           strokeColor="#00F" 
         />)}
       </MapView>
-      <IconButton
-        style={{position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#0008", borderRadius:30, paddingTop:2}}
-        icon="menu"
-        color="#FFFFFF"
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-      />
-      <RightView>
-        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>위도 : {coordinate.latitude.toFixed(4)}</Text>
-        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>경도 : {coordinate.longitude.toFixed(4)}</Text>
-        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>속도 : {coordinate.speed.toFixed(1)}</Text>
-        <Text style={{flex:1, padding:2, backgroundColor:"#FFF"}}>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
-      </RightView>
-      <LeftView>
-        <Button
-          label="초기화"
-          style={{backgroundColor:"#FFF", padding:8, marginBottom:12}}
-          onPress={()=>{
-            setLocations([]);
-          }}/>
-        <Button
-          label={onSave?"중지":"기록"}
-          style={{backgroundColor:"#FFF", padding:8, marginBottom:12}}
-          onPress={()=>{
-            if(onSave){
-              console.log("운전 기록 중지");
-            }
-            setOnSave(!onSave);
-          }}/>
-        <Button
-          label={driving?"운전 종료":"운전 시작"}
-          style={driving?{backgroundColor:"#00F", color:"#FFFFFF", padding:8}:{backgroundColor:"#FFF", padding:8}}
-          color={driving?"#FFFFFF":"#000000"}
-          onPress={()=>{
-            if(driving){
-              Alert.alert('운전을 종료합니다\n\n운전 시간 : 35분\n 급정거 : 7회 \n 급가속 4회 \n 졸음 1회');
-              checkInfo[0] = 0;
-            } else {
-              Alert.alert('운전을 시작합니다');
-              checkInfo[0] = 1;
-            }
-            setDriving(!driving);
-          }}/>
-      </LeftView>
-      <TopView>
-        <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
-          time : {time}
-        </Text>
-        {driving && (
-          <>
-            <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
-              시선 방향 : {linkInfo[4]==-1?"X":face(linkInfo[4])}
-            </Text>
-            <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
-              좌 : {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])}   우 : {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
-            </Text>
-            <Text style={{flex:1, paddingLeft:8, paddingRight:8, backgroundColor:"#FFF"}}>
-              y:{linkInfo[1]==-1?"X":linkInfo[1]}    p:{linkInfo[2]==-1?"X":linkInfo[2]}    r:{linkInfo[3]==-1?"X":linkInfo[3]}
-            </Text>
-          </>
-        )}
-      </TopView>
-      <TopViewTEST>
+      {/* <TopViewTEST>
         <TouchableOpacity style={{flex:1}}
           onPress={()=>{
             sound1 = new Sound(audioList[0].url, (error) => {
@@ -398,7 +404,109 @@ const MapData = ({navigation}: DrawerProp) => {
           }}
         >
         </TouchableOpacity>
-      </TopViewTEST3>
+      </TopViewTEST3> */}
+
+      {driving && (
+        <TopLeftView style={{marginTop:getStatusBarHeight()}}>
+          <Text>
+            SLR : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
+          </Text>
+          <Text>
+            YPR : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
+          </Text>
+          <Text>위도 : {coordinate.latitude.toFixed(4)}</Text>
+          <Text>경도 : {coordinate.longitude.toFixed(4)}</Text>
+          <Text>속도 : {coordinate.speed.toFixed(1)}</Text>
+          <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
+        </TopLeftView>
+      )}
+
+      <TopRightView
+        style={{marginTop:getStatusBarHeight()}}
+      >
+        <IconButton
+          style={{flex:1}}
+          icon="menu"
+          color="#000000"
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+        />
+      </TopRightView>
+
+      <CenterRightView>
+        <IconButton
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderColor: "#AAA",
+            borderRadius: 10,
+            borderWidth: 1,
+          }}
+          icon="plus"
+          color="#000000"
+          onPress={() => {
+          }}
+        />
+        <IconButton
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderColor: "#AAA",
+            borderRadius: 10,
+            borderWidth: 1,
+          }}
+          icon="minus"
+          color="#000000"
+          onPress={() => {
+          }}
+        />
+      </CenterRightView>
+
+      <BottomLeftView>
+        <IconButton
+          icon="crosshairs-gps"
+          color="#000000"
+          onPress={() => {
+            Geolocation.getCurrentPosition(
+              async position => {
+                const {latitude, longitude} = position.coords;
+                setRegion({
+                  latitude: latitude,
+                  longitude: longitude,
+                  latitudeDelta: region.latitudeDelta,
+                  longitudeDelta: region.longitudeDelta,
+                })
+                console.log(position.coords);
+                console.log("나에위치");
+              },
+              error => {
+                console.log(error.code, error.message);
+              },
+              {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+            );
+          }}
+        />
+      </BottomLeftView>
+
+      <BottomRightView
+        style={driving?{backgroundColor:"#00F"}:{backgroundColor:"#FFF"}}
+      >
+        <Bt
+          onPress={()=>{
+            if(driving){
+              Alert.alert('운전을 종료합니다\n\n운전 시간 : 35분\n 급정거 : 7회 \n 급가속 4회 \n 졸음 1회');
+              checkInfo[0] = 0;
+              setLocations([]); // 저장해야함
+            } else {
+              Alert.alert('운전을 시작합니다');
+              checkInfo[0] = 1;
+            }
+            setDriving(!driving); // 운전
+            setOnSave(!onSave); // 기록
+          }}
+        >
+          <BtLabel style={driving?{color:"#FFFFFF"}:{}}>
+            {driving?"운전 종료":"운전 시작"}
+          </BtLabel>
+        </Bt>
+      </BottomRightView>
     </>
   );
 };
