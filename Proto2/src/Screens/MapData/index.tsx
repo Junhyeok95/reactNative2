@@ -35,6 +35,21 @@ const audioList = [
     isRequire: true,
     url: require('./slow_detect.mp3')
   },
+  {
+    title: 'sago',
+    isRequire: true,
+    url: require('./sago.mp3')
+  },
+  {
+    title: 'auto_singo',
+    isRequire: true,
+    url: require('./auto_singo.mp3')
+  },
+  {
+    title: 'singo_req',
+    isRequire: true,
+    url: require('./singo_req.mp3')
+  },
 ]
 
 const RightView = Styled.View`
@@ -164,6 +179,41 @@ const Bt = Styled.TouchableOpacity`
 const BtLabel = Styled.Text`
   font-size: 20px;
 `;
+const SingoView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  border-width: 5px;
+  border-color: #F00;
+  top: 10%;
+  left: 5%;
+  right: 5%;
+  bottom: 10%;
+  justify-content: center;
+  align-items: center;
+  padding: 10%;
+`;
+const SingoTextView = Styled.View`
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+`;
+const SingoText = Styled.Text`
+  font-size: 32px;
+`;
+const SingoBtn = Styled.TouchableOpacity`
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  border-width: 5px;
+  border-color: #F00;
+  justify-content: center;
+  background-color: #DDDD;
+  align-items: center;
+`;
+const SingoBtnText = Styled.Text`
+  font-size: 96px;
+`;
 
 
 // position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#0008", borderRadius:30, paddingTop:2
@@ -209,8 +259,8 @@ const MapData = ({navigation}: DrawerProp) => {
   const face = (num:number) :string => {
     if(num==0) return "X";
     if(num==10) return "정면";
-    if(num==20) return "왼쪽";
-    if(num==30) return "오른쪽";
+    if(num==20) return "오른쪽";
+    if(num==30) return "왼쪽";
     return "";
   }
   const eyePoint = (num:number) :string => {
@@ -219,6 +269,8 @@ const MapData = ({navigation}: DrawerProp) => {
     if(num==2) return "Off";
     return "";
   }
+
+  const [modal, setModal] = useState<boolean>(false);
 
   const {linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
   const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
@@ -251,12 +303,27 @@ const MapData = ({navigation}: DrawerProp) => {
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   let sound1: Sound;
+  let singoSetTimeout: NodeJS.Timeout;
 
   const _location = ():any => {
     return location;
   }
 
   useEffect(() => {
+    // sound1 = new Sound(audioList[5].url, (error) => {
+    //   if(error){
+    //     Alert.alert('error');
+    //     return;
+    //   } else {
+    //     sound1.play((success)=>{
+    //       sound1.release();
+    //     }) 
+    //   }
+    // });
+    
+
+  setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]);
+
     androidPermissionLocation();
 
     Geolocation.getCurrentPosition(
@@ -281,6 +348,7 @@ const MapData = ({navigation}: DrawerProp) => {
         // console.log(now.getHours());
         // console.log(now.getMinutes());
         console.log(now.getSeconds());
+        linkInfo_3();
       }, 1000);
     return () => {
       console.log("--- --- MapData return");
@@ -297,9 +365,29 @@ const MapData = ({navigation}: DrawerProp) => {
     return false;
   };
   let linkInfo_3 = ():void => {
-    if( linkInfo[3] != -1){
-      if( linkInfo[3] < 50 || 150 < linkInfo[3] )
-      console.log("기울기 경고 경고");
+    if(checkInfo[2] != 1){ // 사고 상태 체크
+      if(linkInfo[3] != -1){ // 링크값이 들어오고있는지 체크
+        if(linkInfo[3] < 50 || 150 < linkInfo[3]){ // 기울어젔는지 체크
+          console.log("기울기 사고");
+          setModal(true);
+          singoSetTimeout = setTimeout(() => {
+            setModal(false);
+            // 신고되는 http 로직 넣어야함
+          }, 30000);
+          sound1 = new Sound(audioList[5].url, (error) => {
+            if(error){
+              Alert.alert('error');
+              return;
+            } else {
+              sound1.play((success)=>{
+                sound1.release();
+              })
+            }
+          });
+          checkInfo[2] = 1;
+          setCheckInfo(checkInfo);
+        }
+      }
     }
   } 
 
@@ -341,10 +429,9 @@ const MapData = ({navigation}: DrawerProp) => {
             const {latitude, longitude} = e.nativeEvent.coordinate;
             setLocations([...locations, {latitude, longitude}]);
             // 각종 값을 체크하는 함수를 만들어야함
-            linkInfo_3();
-            console.log("-> linkInfo ", linkInfo);
-            console.log("-> defaultInfo ", defaultInfo);
-            console.log("-> checkInfo ", checkInfo);
+            // console.log("-> linkInfo ", linkInfo);
+            // console.log("-> defaultInfo ", defaultInfo);
+            // console.log("-> checkInfo ", checkInfo);
           }
         }}
       >
@@ -507,6 +594,23 @@ const MapData = ({navigation}: DrawerProp) => {
           </BtLabel>
         </Bt>
       </BottomRightView>
+      {modal &&
+        <SingoView>
+          <SingoTextView>
+            <SingoText>사고가 감지되었습니다</SingoText>
+            <SingoText>취소 버튼을 누르지않으면</SingoText>
+            <SingoText>자동 신고를 하겠습니다</SingoText>
+          </SingoTextView>
+          <SingoBtn
+            onPress={()=>{
+              clearTimeout(singoSetTimeout);
+              setModal(false);
+            }}
+          >
+            <SingoBtnText>취소</SingoBtnText>
+          </SingoBtn>
+        </SingoView>
+      }
     </>
   );
 };

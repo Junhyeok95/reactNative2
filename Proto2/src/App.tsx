@@ -14,7 +14,7 @@ const App = ({ }: Props) => {
     console.log("===== ===== START ===== =====");
     setTimeout(() => {
       SplashScreen.hide();
-    }, 10000);
+    }, 2000);
   }, []);
 
   return (

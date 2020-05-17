@@ -284,6 +284,18 @@ const List = ({  }: Props) => {
         BleManager.disconnect(peripheral.id);
         console.log('> disconnect 1');
       } else {
+        try {
+          BleManager.stopNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
+            console.log('> stopNotification ' + peripheral.id);
+          }).catch((error) => { // stopNotification
+            console.log('> stopNotification error', error);
+          });
+          setRaspId('');
+          setRestring('');
+        } catch (error) {
+          console.log("크하하 에러");
+          console.log(error);
+        }
 
         BleManager.connect(peripheral.id).then(() => {
           let _peripherals = peripherals;
@@ -367,7 +379,7 @@ const List = ({  }: Props) => {
         renderItem={renderItem}
         contentContainerStyle={list.length === 0 && { flex: 1 }}
       />}
-      {/* <ButtonContainer>
+      <ButtonContainer>
         <Button
           style={{ flex: 1 }}
           label="clear"
@@ -466,10 +478,10 @@ const List = ({  }: Props) => {
             }
           }}  
         />
-      </ButtonContainer> */}
-      {/* <DataContainer>
+      </ButtonContainer>
+      <DataContainer>
         <TestText>{restring}</TestText>
-      </DataContainer> */}
+      </DataContainer>
     </Container>
   );
 };

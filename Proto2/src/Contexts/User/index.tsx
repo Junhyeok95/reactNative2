@@ -7,10 +7,14 @@ const defaultContext: IUserContext = {
   updateURL: (url: string) => {},
   userInfo: undefined,
   userInfo2: undefined,
+  profileSearchRes: undefined,
+  settingSearchRes: undefined,
   login: (email: string, password: string) => {},
   login2: (email: string, password: string) => {},
   getUserInfo: () => {},
   getUserInfo2: () => {},
+  profileSearch: () => {},
+  settingSearch: () => {},
   logout: () => {},
   logout2: () => {},
 };
@@ -43,6 +47,8 @@ const UserContextProvider = ({children}: Props) => {
 
   const [userInfo, setUserInfo] = useState<IUserInfo | undefined>(undefined);
   const [userInfo2, setUserInfo2] = useState<IUserInfo2 | undefined>(undefined);
+  const [profileSearchRes, setProfileSearchRes] = useState<any | undefined>(undefined);
+  const [settingSearchRes, setSettingSearchRes] = useState<any | undefined>(undefined);
 
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
   const login = (email: string, password: string): void => {
@@ -68,6 +74,7 @@ const UserContextProvider = ({children}: Props) => {
         body: JSON.stringify({
           _email: email,
           _password: password,
+          _option: 0, // 로그인 로직
         })
     })
     .then(response => response.json())
@@ -83,13 +90,64 @@ const UserContextProvider = ({children}: Props) => {
           });
         });
       } else {
-        Alert.alert("내용을 잘못입력했습니다");
+        Alert.alert("내용을 잘못입력했습니다", data);
       }
     })
     .catch(error => {
       Alert.alert(error.toString());
     });
   };
+
+  const profileSearch = () => {
+    console.log("progile hahah");
+    if(userInfo2){
+      fetch(
+        URL+'/app', { 
+          method: 'POST',
+          headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+          },
+          body: JSON.stringify({
+            _option: 1, // 의료정보 로직
+            _key: userInfo2.key,
+            // _key: 2
+          })
+      })
+      .then(response => response.json())
+      .then(json => {
+        setProfileSearchRes(json);
+      })
+      .catch(error => {
+        Alert.alert(error.toString());
+      });
+    }
+  }
+
+  const settingSearch = () => {
+    console.log("progile hahah");
+    if(userInfo2){
+      fetch(
+        URL+'/app', { 
+          method: 'POST',
+          headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+          },
+          body: JSON.stringify({
+            _option: 2, // 의료정보 로직
+            _key: userInfo2.key,
+          })
+      })
+      .then(response => response.json())
+      .then(json => {
+        setSettingSearchRes(json);
+      })
+      .catch(error => {
+        Alert.alert(error.toString());
+      });
+    }
+  }
 
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
   const getUserInfo = (): void => {
@@ -136,6 +194,7 @@ const UserContextProvider = ({children}: Props) => {
     AsyncStorage.removeItem('login2');
     setUserInfo(undefined);
     setUserInfo2(undefined);
+    setProfileSearchRes(undefined);
   };
 
   useEffect(() => {
@@ -150,10 +209,14 @@ const UserContextProvider = ({children}: Props) => {
         updateURL,
         userInfo,
         userInfo2,
+        profileSearchRes,
+        settingSearchRes,
         login,
         login2,
         getUserInfo,
         getUserInfo2,
+        profileSearch,
+        settingSearch,
         logout,
         logout2,
       }}>

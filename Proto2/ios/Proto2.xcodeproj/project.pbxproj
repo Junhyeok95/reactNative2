@@ -25,6 +25,9 @@
 		40787EF7246FC0F400F70EC6 /* fast_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40787EF4246FC0F400F70EC6 /* fast_detect.mp3 */; };
 		40787EF8246FC0F400F70EC6 /* sleep_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40787EF5246FC0F400F70EC6 /* sleep_detect.mp3 */; };
 		40931A28247118A800F74D5F /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40931A27247118A800F74D5F /* SplashScreen.storyboard */; };
+		40DB96BA24718A64009305A7 /* singo_req.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40DB96B724718A64009305A7 /* singo_req.mp3 */; };
+		40DB96BB24718A64009305A7 /* auto_singo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40DB96B824718A64009305A7 /* auto_singo.mp3 */; };
+		40DB96BC24718A64009305A7 /* sago.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40DB96B924718A64009305A7 /* sago.mp3 */; };
 		446940A7E5DEF1725E0AB2AE /* libPods-Proto2-Proto2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A0AC9EC16619397D8284244 /* libPods-Proto2-Proto2Tests.a */; };
 		B6172255518CEF0FC84E469C /* libPods-Proto2-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E986B42A65D4AEDB084EDF64 /* libPods-Proto2-tvOSTests.a */; };
 		BC640C97E20F06E83258DB85 /* libPods-Proto2-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A547E529A34E7D57C568622 /* libPods-Proto2-tvOS.a */; };
@@ -90,6 +93,9 @@
 		40787EF4246FC0F400F70EC6 /* fast_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fast_detect.mp3; path = ../src/Screens/MapData/fast_detect.mp3; sourceTree = "<group>"; };
 		40787EF5246FC0F400F70EC6 /* sleep_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sleep_detect.mp3; path = ../src/Screens/MapData/sleep_detect.mp3; sourceTree = "<group>"; };
 		40931A27247118A800F74D5F /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
+		40DB96B724718A64009305A7 /* singo_req.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = singo_req.mp3; path = ../src/Screens/MapData/singo_req.mp3; sourceTree = "<group>"; };
+		40DB96B824718A64009305A7 /* auto_singo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = auto_singo.mp3; path = ../src/Screens/MapData/auto_singo.mp3; sourceTree = "<group>"; };
+		40DB96B924718A64009305A7 /* sago.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sago.mp3; path = ../src/Screens/MapData/sago.mp3; sourceTree = "<group>"; };
 		4A547E529A34E7D57C568622 /* libPods-Proto2-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Proto2-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66B3484D010CB41385981151 /* Pods-Proto2-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Proto2-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Proto2-tvOS/Pods-Proto2-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		821C750559F59E2726118411 /* Pods-Proto2-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Proto2-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Proto2-tvOSTests/Pods-Proto2-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -159,6 +165,9 @@
 		13B07FAE1A68108700A75B9A /* Proto2 */ = {
 			isa = PBXGroup;
 			children = (
+				40DB96B824718A64009305A7 /* auto_singo.mp3 */,
+				40DB96B924718A64009305A7 /* sago.mp3 */,
+				40DB96B724718A64009305A7 /* singo_req.mp3 */,
 				403C8FDE246FE8640083D18B /* fast_detect.mp3 */,
 				403C8FDC246FE8630083D18B /* sleep_detect.mp3 */,
 				403C8FDD246FE8640083D18B /* slow_detect.mp3 */,
@@ -416,11 +425,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				40DB96BB24718A64009305A7 /* auto_singo.mp3 in Resources */,
 				40931A28247118A800F74D5F /* SplashScreen.storyboard in Resources */,
+				40DB96BA24718A64009305A7 /* singo_req.mp3 in Resources */,
 				403C8FE0246FE8640083D18B /* slow_detect.mp3 in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				403C8FE1246FE8640083D18B /* fast_detect.mp3 in Resources */,
 				40787EF6246FC0F400F70EC6 /* slow_detect.mp3 in Resources */,
+				40DB96BC24718A64009305A7 /* sago.mp3 in Resources */,
 				403C8FDF246FE8640083D18B /* sleep_detect.mp3 in Resources */,
 				40787EF7246FC0F400F70EC6 /* fast_detect.mp3 in Resources */,
 				40787EF8246FC0F400F70EC6 /* sleep_detect.mp3 in Resources */,

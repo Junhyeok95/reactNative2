@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
+import {UserContext} from '~/Contexts/User';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import Button from '~/Components/Button';
@@ -55,8 +56,19 @@ interface Props {
 }
 
 const Profile = ({navigation}: Props) => {
+  const {userInfo2, profileSearchRes, profileSearch} = useContext<IUserContext>(UserContext);
+
   useEffect(() => {
     console.log("--- --- Profile");
+    console.log(profileSearchRes);
+    if(userInfo2){
+      if(userInfo2.key != -1){
+        profileSearch();
+      }
+    }
+    return () => {
+      console.log("--- --- MapTest return");
+    };
   },[]);
   return (
     <Container>
@@ -64,42 +76,103 @@ const Profile = ({navigation}: Props) => {
         <LabelContainer>
           <Label>회원 정보</Label>
         </LabelContainer>
-        <Text>
-          김영진
-          {BR}
-          010-0000-0000
-        </Text>
+        {profileSearchRes ? 
+          <>
+            <Text>
+              이름 : {profileSearchRes[0].name}
+            </Text>
+            <Text>
+              성별 : {profileSearchRes[0].gender}
+            </Text>
+            <Text>
+              생일 : {profileSearchRes[0].birth}
+            </Text>
+            <Text>
+              연락처 : {profileSearchRes[0].phone}
+            </Text>
+          </>
+          :
+          <Text>
+            김영진
+            {BR}
+            010-0000-0000
+          </Text>
+        }
       </BackContainer>
+
       <BackContainer>
         <LabelContainer>
           <Label>비상연락망</Label>
         </LabelContainer>
+        <Text>
+          연락처 : {profileSearchRes && profileSearchRes[1] ? profileSearchRes[1] : "010-0000-0000" }
+        </Text>
       </BackContainer>
+
       <BackContainer>
         <LabelContainer>
           <Label>의료 정보</Label>
         </LabelContainer>
-        <Text>
-          병력 : 당뇨
-          {BR}
-          복용 약 : 인슐린
-          {BR}
-          수술여부 : 유
-        </Text>
+        {profileSearchRes && profileSearchRes[2] ? 
+          <>
+            <Text>
+              다니는 병원 : {profileSearchRes[2].hospital}
+            </Text>
+            <Text>
+              병력 : {profileSearchRes[2].sickness_name}
+            </Text>
+            <Text>
+              복용 약 : {profileSearchRes[2].medicine}
+            </Text>
+            <Text>
+              증상 : {profileSearchRes[2].symptom}
+            </Text>
+          </>
+          :
+          <Text>
+            다니는 병원 : 영진병원
+            {BR}
+            병력 : 당뇨
+            {BR}
+            복용 약 : 인슐린
+            {BR}
+            증상 : 힘이 없음
+          </Text>
+        }
       </BackContainer>
       <BackContainer>
         <LabelContainer>
           <Label>손해보험사</Label>
         </LabelContainer>
-        <Text>
-          OO손해보험
-          {BR}
-          1588 - 1588
-          {BR}
-          가입일 : 20XX. XX. XX
-          {BR}
-          만료일 : 20XX. XX. XX
-        </Text>
+        {profileSearchRes && profileSearchRes[3] && profileSearchRes[4] ?
+          <>
+            <Text>
+              보험사 : {profileSearchRes[3].insurance_name}
+            </Text>
+            <Text>
+              연락처 : {profileSearchRes[3].insurance_phone}
+            </Text>
+            <Text>
+              가입일 : {profileSearchRes[4].subscription_date}
+            </Text>
+            <Text>
+              만기일 : {profileSearchRes[4].expiration_date}
+            </Text>
+          </>
+          :
+          <>
+            <Text>
+              OO손해보험
+              {BR}
+              1588 - 1588
+            </Text>
+            <Text>
+              가입일 : 20XX. XX. XX
+              {BR}
+              만기일 : 20XX. XX. XX
+            </Text>
+          </>
+        }
       </BackContainer>
       
       {/* <Button label="Open Full Modal" onPress={() => navigation.navigate('FullModal')} /> */}
