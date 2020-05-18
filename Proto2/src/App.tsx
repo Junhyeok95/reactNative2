@@ -5,6 +5,7 @@ import {UserContextProvider} from '~/Contexts/User';
 import {DrivingDataProvider} from '~/Contexts/DrivingData';
 import Navigator from '~/Screens/Navigator';
 import SplashScreen from 'react-native-splash-screen'
+import {StatusBar} from 'react-native';
 
 interface Props {}
 
@@ -21,6 +22,7 @@ const App = ({ }: Props) => {
     <Fragment>
       <UserContextProvider>
         <DrivingDataProvider>
+          <StatusBar barStyle="dark-content" backgroundColor={'transparent'} translucent={true} />
           <Navigator />
         </DrivingDataProvider>
       </UserContextProvider>

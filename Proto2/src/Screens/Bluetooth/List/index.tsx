@@ -45,22 +45,14 @@ const Text = Styled.Text`
   text-align: center;
 `;
 
-const ButtonContainer = Styled.View`
-  flex-direction: row;
-  height: 10%;
-`;
-
-const DataContainer = Styled.View`
-  background-color: #00F;
-  height: 8%;
-  margin: 6px;
-`;
 const TestText = Styled.Text`
-  margin: 2px;
+  position: absolute;
+  right: 2%;
+  bottom: 2%;
   text-align: center;
-  background-color: #FFF;
+  background-color: #FFFFFF;
+  margin: 2px;
   font-size: 24px;
-  flex:1;
 `;
 
 // const URL = '';
@@ -379,7 +371,7 @@ const List = ({  }: Props) => {
         renderItem={renderItem}
         contentContainerStyle={list.length === 0 && { flex: 1 }}
       />}
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <Button
           style={{ flex: 1 }}
           label="clear"
@@ -478,10 +470,8 @@ const List = ({  }: Props) => {
             }
           }}  
         />
-      </ButtonContainer>
-      <DataContainer>
-        <TestText>{restring}</TestText>
-      </DataContainer>
+      </ButtonContainer> */}
+      <TestText>{restring ? restring.slice(restring.length-2, restring.length-1):""}</TestText>
     </Container>
   );
 };

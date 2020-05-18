@@ -8,6 +8,55 @@ import {DrawerActions} from '@react-navigation/native';
 import IconButton from '~/Components/IconButton';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 
+import Geolocation from 'react-native-geolocation-service';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
+
+const Text = Styled.Text`
+  font-size: 16px;
+`;
+const TopLeftView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFFDD;
+  border-color: #00F;
+  border-width: 2px;
+  border-radius: 16px;
+  top: 1%;
+  left: 2%;
+  width: 40%;
+  padding: 5% 10%;
+`;
+const TopRightView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 25px;
+  border-width: 1px;
+  border-color: #AAA;
+  top: 1%;
+  right: 2%;
+  width: 50px;
+  height: 50px;
+`;
+const CenterRightView = Styled.View`
+  position: absolute;
+  right: 2%;
+  top: 44%;
+  width: 40px;
+  height: 12%;
+`;
+const BottomLeftView = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 25px;
+  border-width: 1px;
+  border-color: #AAA;
+  bottom: 2%;
+  left: 2%;
+  width: 50px;
+  height: 50px;
+`;
+
+// Footer -------------------------------
 const Footer = Styled.View`
   position: absolute;
   bottom: 2%;
@@ -18,7 +67,6 @@ const SaveContainer = Styled.View`
   padding: 8px;
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
-  background-color: #FFF7;
 `;
 const Save = Styled.View`
   background-color: #FFF;
@@ -34,38 +82,27 @@ const SaveName = Styled.Text`
   background-color: #FFF;
   font-weight: 600;
 `;
-const TopView = Styled.View`
-  position: absolute;
-  background-color: #0F0C;
-  top: 60px;
-  left: 24px;
-  border: 1px;
-  padding: 8px;
-`;
-const Text = Styled.Text`
-  font-size: 16px;
-`;
+// Footer -------------------------------
 
 const TopViewTEST = Styled.View`
   position: absolute;
-  background-color: #00fC;
-  top: 120px;
-  right: 24px;
-  width: 50px;
-  height: 50px;
-  border: 2px;
-  padding: 2px;
+  background-color: #0F0;
+  border: 5px;
+  right: 2%;
+  top: 20%;
+  width: 40px;
+  height: 5%;
 `;
 const TopViewTEST2 = Styled.View`
   position: absolute;
-  background-color: #00fC;
-  top: 180px;
-  right: 24px;
-  width: 50px;
-  height: 50px;
-  border: 2px;
-  padding: 2px;
+  background-color: #0F0;
+  border: 5px;
+  right: 2%;
+  top: 30%;
+  width: 40px;
+  height: 5%;
 `;
+
 interface IGeolocation {
   latitude: number;
   longitude: number;
@@ -89,8 +126,11 @@ const MapMarker = ({navigation}: DrawerProp) => {
 
   const saveLocations2 = require('./saveLocations2.json');
   let saveData = [];
-  for(let i=0; i<saveLocations2.length; i++){
-    let arr = saveLocations2[i].routes[0].geometry.coordinates.map((item: any[]) =>{ return {latitude: item[1], longitude: item[0]}});
+  // for(let i=0; i<saveLocations2.length; i++){
+  for(let i=0; i<3; i++){
+    let arr = saveLocations2[i].routes[0].geometry.coordinates.map(
+      (item: any[]) =>{ return {latitude: item[1], longitude: item[0]}}
+    );
     saveData.push(arr);
   }
 
@@ -110,8 +150,8 @@ const MapMarker = ({navigation}: DrawerProp) => {
   const [region, setRegion] = useState<any>({
     latitude: 35.896311,
     longitude: 128.622051,
-    latitudeDelta: 0.03,
-    longitudeDelta: 0.03,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
   });
   
   // const saveLocations = require('./saveLocations.json');
@@ -135,6 +175,8 @@ const MapMarker = ({navigation}: DrawerProp) => {
   }
   
   useEffect(() => {
+    console.log("--- --- MapMarker Mount");
+    console.log(locationsArr[0]);
     console.log("--- --- MapMarker Mount");
     return () => {
       console.log("--- --- MapMarker return");
@@ -186,13 +228,16 @@ const MapMarker = ({navigation}: DrawerProp) => {
         provider={PROVIDER_GOOGLE}
         loadingEnabled={true}
         showsUserLocation={true}
+
+        showsMyLocationButton={false}
+        showsPointsOfInterest={false}
+        showsCompass={false}
+        showsScale={false}
+        showsBuildings={false}
+        showsTraffic={false}
+        showsIndoors={true}
+
         region={region}
-        // initialRegion={{
-        //   latitude: location.latitude,
-        //   longitude: location.longitude,
-        //   latitudeDelta: 0.02,
-        //   longitudeDelta: 0.02,
-        // }}
       >
         {poly >= 0 && <Polyline
           coordinates={locationsArr[poly]}
@@ -200,12 +245,116 @@ const MapMarker = ({navigation}: DrawerProp) => {
           strokeColor="#00f"
         />}
       </MapView>
-      <IconButton
-        style={{position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#FFFFFF", borderWidth:3, borderRadius:30, paddingTop:2}}
-        icon="menu"
-        color="#000000"
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-      />
+
+        <TopLeftView style={{marginTop:getStatusBarHeight()}}>
+          <Text>
+            날짜 : {time}
+          </Text>
+          <Text>
+            급정거  : {p1}
+          </Text>
+          <Text>
+            급가속 : {p2}
+          </Text>
+          <Text>
+            졸음 : {p3}
+          </Text>
+        </TopLeftView>
+
+        <TopRightView
+          style={{marginTop:getStatusBarHeight()}}
+        >
+          <IconButton
+            style={{flex:1}}
+            icon="menu"
+            color="#000000"
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          />
+        </TopRightView>
+
+        <CenterRightView>
+          <IconButton
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#AAA",
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="plus"
+            color="#000000"
+            onPress={() => {
+              setRegion({
+                latitude: region.latitude,
+                longitude: region.longitude,
+                latitudeDelta: region.latitudeDelta - (region.latitudeDelta/2),
+                longitudeDelta: region.longitudeDelta - (region.longitudeDelta/2),
+              });
+              console.log(region);
+            }}
+          />
+          <IconButton
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#AAA",
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="minus"
+            color="#000000"
+            onPress={() => {
+              setRegion({
+                latitude: region.latitude,
+                longitude: region.longitude,
+                latitudeDelta: region.latitudeDelta * 2,
+                longitudeDelta: region.longitudeDelta * 2,
+              });
+              console.log(region);
+            }}
+          />
+        </CenterRightView>
+
+        <BottomLeftView>
+          <IconButton
+            icon="crosshairs-gps"
+            color="#000000"
+            onPress={() => {
+              Geolocation.getCurrentPosition(
+                async position => {
+                  const {latitude, longitude} = position.coords;
+                  setRegion({
+                    latitude: latitude,
+                    longitude: longitude,
+                    latitudeDelta: region.latitudeDelta,
+                    longitudeDelta: region.longitudeDelta,
+                  })
+                  console.log(position.coords);
+                  console.log("나에위치");
+                },
+                error => {
+                  console.log(error.code, error.message);
+                },
+                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+              );
+            }}
+          />
+        </BottomLeftView>
+      
+
+
+      <TopViewTEST>
+        <TouchableOpacity style={{flex:1}}
+          onPress={()=>removeLocationsArr()}
+        >
+        </TouchableOpacity>
+      </TopViewTEST>
+      
+      <TopViewTEST2>
+      <TouchableOpacity style={{flex:1}}
+          onPress={()=>addLocationsArr()}
+        >
+        </TouchableOpacity>
+      </TopViewTEST2>
+      
       <Footer>
         <FlatList
         data={locationsArr}
@@ -217,32 +366,6 @@ const MapMarker = ({navigation}: DrawerProp) => {
         renderItem={renderItem}
       />
       </Footer>
-      <TopView>
-        <Text style={{flex:1, paddingLeft:8, paddingRight:8, padding:4, backgroundColor:"#FFF"}}>
-          time : {time}
-        </Text>
-        <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
-          급정거 : {p1}
-        </Text>
-        <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
-          급가속 : {p2}
-        </Text>
-        <Text style={{flex:1, paddingLeft:8, padding:4, backgroundColor:"#FFF"}}>
-          졸음 : {p3}
-        </Text>
-      </TopView>
-      <TopViewTEST>
-        <TouchableOpacity style={{flex:1}}
-          onPress={()=>removeLocationsArr()}
-        >
-        </TouchableOpacity>
-      </TopViewTEST>
-      <TopViewTEST2>
-      <TouchableOpacity style={{flex:1}}
-          onPress={()=>addLocationsArr()}
-        >
-        </TouchableOpacity>
-      </TopViewTEST2>
     </>
   );
 };

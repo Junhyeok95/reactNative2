@@ -60,9 +60,8 @@ const Profile = ({navigation}: Props) => {
 
   useEffect(() => {
     console.log("--- --- Profile");
-    console.log(profileSearchRes);
     if(userInfo2){
-      if(userInfo2.key != -1){
+      if(userInfo2.key != -1 && userInfo2.key != undefined){
         profileSearch();
       }
     }

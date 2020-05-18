@@ -61,9 +61,8 @@ const Setting = ({navigation}: Props) => {
 
   useEffect(() => {
     console.log("--- --- Setting");
-    console.log(settingSearchRes);
     if(userInfo2){
-      if(userInfo2.key != -1){
+      if(userInfo2.key != -1 && userInfo2.key != undefined){
         settingSearch();
       }
     }
@@ -108,7 +107,7 @@ const Setting = ({navigation}: Props) => {
             모든 서비스의 이용조건 및 절차, 
             </Text>
             <Text>
-            이용자와 당 사이트의 권리, 의무
+            이용자와 당 사이트의 권리, 의무,
             </Text>
             <Text>
             책임사항과 기타 필요한 사항을

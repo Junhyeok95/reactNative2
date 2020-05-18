@@ -50,73 +50,16 @@ const audioList = [
     isRequire: true,
     url: require('./singo_req.mp3')
   },
+  {
+    title: 'cancel',
+    isRequire: true,
+    url: require('./cancel.mp3')
+  },
 ]
 
-const RightView = Styled.View`
-  position: absolute;
-  background-color: #0F0C;
-  overflow: hidden;
-  right: 24px;
-  bottom: 24px;
-  border: 1px;
-  padding: 8px;
-  justify-content: center;
-`;
-const TopView = Styled.View`
-  position: absolute;
-  background-color: #0F0C;
-  top: 60px;
-  left: 24px;
-  border: 1px;
-  padding: 8px;
-`;
-const LeftView = Styled.View`
-  position: absolute;
-  background-color: #0F0C;
-  left: 24px;
-  bottom: 24px;
-  border: 1px;
-  padding: 8px;
-`;
 const Text = Styled.Text`
   font-size: 16px;
 `;
-
-const TouchableOpacity = Styled.TouchableOpacity`
-  background-color: #FFF7;
-`;
-const TopViewTEST = Styled.View`
-  position: absolute;
-  background-color: #00fC;
-  top: 120px;
-  right: 24px;
-  width: 30px;
-  height: 30px;
-  border: 2px;
-  padding: 2px;
-`;
-const TopViewTEST2 = Styled.View`
-  position: absolute;
-  background-color: #00fC;
-  top: 180px;
-  right: 24px;
-  width: 30px;
-  height: 30px;
-  border: 2px;
-  padding: 2px;
-`;
-const TopViewTEST3 = Styled.View`
-  position: absolute;
-  background-color: #00fC;
-  top: 240px;
-  right: 24px;
-  width: 30px;
-  height: 30px;
-  border: 2px;
-  padding: 2px;
-`;
-
-
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFFDD;
@@ -201,7 +144,7 @@ const SingoTextView = Styled.View`
 const SingoText = Styled.Text`
   font-size: 32px;
 `;
-const SingoBtn = Styled.TouchableOpacity`
+const SingoCancelBtn = Styled.TouchableOpacity`
   width: 200px;
   height: 200px;
   border-radius: 20px;
@@ -211,7 +154,7 @@ const SingoBtn = Styled.TouchableOpacity`
   background-color: #DDDD;
   align-items: center;
 `;
-const SingoBtnText = Styled.Text`
+const SingoCancelBtnText = Styled.Text`
   font-size: 96px;
 `;
 
@@ -297,8 +240,8 @@ const MapData = ({navigation}: DrawerProp) => {
   const [region, setRegion] = useState<any>({
     latitude: 35.896311,
     longitude: 128.622051,
-    latitudeDelta: 0.02,
-    longitudeDelta: 0.02,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
   });
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
@@ -310,6 +253,7 @@ const MapData = ({navigation}: DrawerProp) => {
   }
 
   useEffect(() => {
+
     // sound1 = new Sound(audioList[5].url, (error) => {
     //   if(error){
     //     Alert.alert('error');
@@ -373,6 +317,7 @@ const MapData = ({navigation}: DrawerProp) => {
           singoSetTimeout = setTimeout(() => {
             setModal(false);
             // 신고되는 http 로직 넣어야함
+            
           }, 30000);
           sound1 = new Sound(audioList[5].url, (error) => {
             if(error){
@@ -393,7 +338,6 @@ const MapData = ({navigation}: DrawerProp) => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor={'transparent'} translucent={true} />
       <MapView
         provider={PROVIDER_GOOGLE}
         style={{flex: 1, marginTop}}
@@ -410,13 +354,6 @@ const MapData = ({navigation}: DrawerProp) => {
         showsIndoors={true}
 
         region={region}
-
-        initialRegion={{
-          latitude: location.latitude,
-          longitude: location.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        }}
 
         onUserLocationChange={ e => {
           if(onSave){
@@ -441,57 +378,6 @@ const MapData = ({navigation}: DrawerProp) => {
           strokeColor="#00F" 
         />)}
       </MapView>
-      {/* <TopViewTEST>
-        <TouchableOpacity style={{flex:1}}
-          onPress={()=>{
-            sound1 = new Sound(audioList[0].url, (error) => {
-              if(error){
-                Alert.alert('error');
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
-              }
-            });
-          }}
-        >
-        </TouchableOpacity>
-      </TopViewTEST>
-      <TopViewTEST2>
-        <TouchableOpacity style={{flex:1}}
-          onPress={()=>{
-            sound1 = new Sound(audioList[1].url, (error) => {
-              if(error){
-                Alert.alert('error');
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
-              }
-            });
-          }}
-        >
-        </TouchableOpacity>
-      </TopViewTEST2>
-      <TopViewTEST3>
-        <TouchableOpacity style={{flex:1}}
-          onPress={()=>{
-            sound1 = new Sound(audioList[2].url, (error) => {
-              if(error){
-                Alert.alert('error');
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
-              }
-            });
-          }}
-        >
-        </TouchableOpacity>
-      </TopViewTEST3> */}
 
       {driving && (
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
@@ -530,6 +416,13 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="plus"
           color="#000000"
           onPress={() => {
+            setRegion({
+              latitude: region.latitude,
+              longitude: region.longitude,
+              latitudeDelta: region.latitudeDelta - (region.latitudeDelta/2),
+              longitudeDelta: region.longitudeDelta - (region.longitudeDelta/2),
+            });
+            console.log(region);
           }}
         />
         <IconButton
@@ -542,6 +435,13 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="minus"
           color="#000000"
           onPress={() => {
+            setRegion({
+              latitude: region.latitude,
+              longitude: region.longitude,
+              latitudeDelta: region.latitudeDelta * 2,
+              longitudeDelta: region.longitudeDelta * 2,
+            });
+            console.log(region);
           }}
         />
       </CenterRightView>
@@ -601,14 +501,24 @@ const MapData = ({navigation}: DrawerProp) => {
             <SingoText>취소 버튼을 누르지않으면</SingoText>
             <SingoText>자동 신고를 하겠습니다</SingoText>
           </SingoTextView>
-          <SingoBtn
-            onPress={()=>{
-              clearTimeout(singoSetTimeout);
-              setModal(false);
-            }}
-          >
-            <SingoBtnText>취소</SingoBtnText>
-          </SingoBtn>
+            <SingoCancelBtn
+              onPress={()=>{
+                clearTimeout(singoSetTimeout);
+                setModal(false);
+                sound1 = new Sound(audioList[6].url, (error) => {
+                  if(error){
+                    Alert.alert('error');
+                    return;
+                  } else {
+                    sound1.play((success)=>{
+                      sound1.release();
+                    })
+                  }
+                });
+              }}
+            >
+            <SingoCancelBtnText>취소</SingoCancelBtnText>
+          </SingoCancelBtn>
         </SingoView>
       }
     </>

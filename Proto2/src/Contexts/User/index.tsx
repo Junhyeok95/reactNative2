@@ -99,7 +99,6 @@ const UserContextProvider = ({children}: Props) => {
   };
 
   const profileSearch = () => {
-    console.log("progile hahah");
     if(userInfo2){
       fetch(
         URL+'/app', { 
@@ -125,7 +124,6 @@ const UserContextProvider = ({children}: Props) => {
   }
 
   const settingSearch = () => {
-    console.log("progile hahah");
     if(userInfo2){
       fetch(
         URL+'/app', { 
