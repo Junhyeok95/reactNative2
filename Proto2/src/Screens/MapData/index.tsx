@@ -252,53 +252,122 @@ const MapData = ({navigation}: DrawerProp) => {
     return location;
   }
 
+  const _checkInfo = ():any => {
+    return checkInfo;
+  }
+
+  const _linkInfo = ():any => {
+    return linkInfo;
+  }
+
+  // Geolocation.getCurrentPosition(
+    //   async position => {
+    //     const {latitude, longitude} = position.coords;
+    //     await setLocation({
+    //       latitude,
+    //       longitude,
+    //     });
+    //     console.log("나에위치");
+    //     await console.log(_location());
+    //   },
+    //   error => {
+    //     console.log(error.code, error.message);
+    //   },
+    //   {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    // );
+
+
+
+  //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
   useEffect(() => {
 
-    // sound1 = new Sound(audioList[5].url, (error) => {
-    //   if(error){
-    //     Alert.alert('error');
-    //     return;
-    //   } else {
-    //     sound1.play((success)=>{
-    //       sound1.release();
-    //     }) 
-    //   }
-    // });
+    sound1 = new Sound(audioList[1].url, (error) => {
+      if(error){
+        Alert.alert('error');
+        return;
+      } else {
+        sound1.play((success)=>{
+          sound1.release();
+        }) 
+      }
+    });
+
+    setTimeout(() => {
+      sound1 = new Sound(audioList[2].url, (error) => {
+        if(error){
+          Alert.alert('error');
+          return;
+        } else {
+          sound1.play((success)=>{
+            sound1.release();
+          }) 
+        }
+      });
+
+      setTimeout(() => {
+        // 취소되었습니다
+        sound1 = new Sound(audioList[6].url, (error) => {
+          if(error){
+            Alert.alert('error');
+            return;
+          } else {
+            sound1.play((success)=>{
+              sound1.release();
+            }) 
+          }
+        });
+
+        setTimeout(() => {
+          // 신고가 감지되었습니다
+          sound1 = new Sound(audioList[5].url, (error) => {
+            if(error){
+              Alert.alert('error');
+              return;
+            } else {
+              sound1.play((success)=>{
+                sound1.release();
+              }) 
+            }
+          });
+    
+          
+        }, 10000);
+  
+        
+      }, 10000);
+
+
+    }, 10000);
     
 
-  setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]);
+    // 지울예정
+    // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]); 
 
     androidPermissionLocation();
+    console.log("--- --- MapData Mount");
 
-    Geolocation.getCurrentPosition(
-      async position => {
-        const {latitude, longitude} = position.coords;
-        await setLocation({
-          latitude,
-          longitude,
-        });
-        console.log("나에위치");
-        await console.log(_location());
-      },
-      error => {
-        console.log(error.code, error.message);
-      },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-    );
 
-      console.log("--- --- MapData Mount");
       let id = setInterval(() => {
         let now = new Date();
         // console.log(now.getHours());
         // console.log(now.getMinutes());
         console.log(now.getSeconds());
-        linkInfo_3();
+        linkInfo_3(); // 사고체크
+        linkInfo_5(); // 졸음체크
+        // console.log(checkInfo);
+        console.log(_checkInfo());
+        console.log(_linkInfo());
       }, 1000);
     return () => {
       console.log("--- --- MapData return");
       clearInterval(id);
     };
+
+
   },[]);
+
+  //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
+
 
   let checkInfo_0 = () :boolean => {
     if (checkInfo[0] == -1 || checkInfo[0] == 0) {
@@ -308,17 +377,21 @@ const MapData = ({navigation}: DrawerProp) => {
     }
     return false;
   };
+
   let linkInfo_3 = ():void => {
     if(checkInfo[2] != 1){ // 사고 상태 체크
-      if(linkInfo[3] != -1){ // 링크값이 들어오고있는지 체크
+      if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
         if(linkInfo[3] < 50 || 150 < linkInfo[3]){ // 기울어젔는지 체크
           console.log("기울기 사고");
+
           setModal(true);
           singoSetTimeout = setTimeout(() => {
+
             setModal(false);
-            // 신고되는 http 로직 넣어야함
-            
-          }, 30000);
+            // // 신고되는 http 로직 넣어야함
+
+          }, 7000);
+
           sound1 = new Sound(audioList[5].url, (error) => {
             if(error){
               Alert.alert('error');
@@ -329,11 +402,53 @@ const MapData = ({navigation}: DrawerProp) => {
               })
             }
           });
-          checkInfo[2] = 1;
-          setCheckInfo(checkInfo);
+
+          let _checkInfo = checkInfo;
+          _checkInfo[2] = 1;
+          setCheckInfo(_checkInfo);
         }
       }
     }
+  };
+
+  let linkInfo_5Cnt = 0;
+  let linkInfo_5 = ():void => {
+    // if(checkInfo[8] != 1){ // 졸음 상태 체크
+    //   if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
+    //     if(linkInfo[5] == 2){ // 눈을 감고있는지 체크
+            console.log("졸음 발생");
+            linkInfo_5Cnt ++; // sleep 체크 변수
+            if(linkInfo_5Cnt > 5){
+              linkInfo_5Cnt = 0;
+
+              // 졸음운전
+              sound1 = new Sound(audioList[1].url, (error) => {
+                if(error){
+                  Alert.alert('error');
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+
+              // let _checkInfo = checkInfo;
+              // _checkInfo[8] = 1;
+              // setCheckInfo(_checkInfo);
+
+              // setTimeout(() => {
+              //   let _checkInfo = checkInfo;
+              //   _checkInfo[8] = 0;
+              //   setCheckInfo(_checkInfo);
+              // }, 5000);
+              
+            } else {
+              linkInfo_5Cnt = 0;
+            }
+    //     }
+    //   }
+    // }
   } 
 
   return (
@@ -515,6 +630,11 @@ const MapData = ({navigation}: DrawerProp) => {
                     })
                   }
                 });
+                setTimeout(() => {
+                  let _checkInfo = checkInfo;
+                  _checkInfo[2] = 0;
+                  setCheckInfo(_checkInfo);
+                }, 5000);
               }}
             >
             <SingoCancelBtnText>취소</SingoCancelBtnText>

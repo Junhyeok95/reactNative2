@@ -127,7 +127,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
   const saveLocations2 = require('./saveLocations2.json');
   let saveData = [];
   // for(let i=0; i<saveLocations2.length; i++){
-  for(let i=0; i<3; i++){
+  for(let i=0; i<2; i++){
     let arr = saveLocations2[i].routes[0].geometry.coordinates.map(
       (item: any[]) =>{ return {latitude: item[1], longitude: item[0]}}
     );
@@ -161,7 +161,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
 
   const removeLocationsArr = () => {
     let list = [...locationsArr];
-    list.splice(0, 1);
+    list.splice(list.length-1, 1);
     setLocationsArr(list);
     // AsyncStorage.setItem('save', JSON.stringify(list));
     console.log("removeLocationsArr");
@@ -193,7 +193,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
     return (
       <SaveContainer>
         <TouchableOpacity
-        style={index<3?{borderColor:"#00F", borderWidth:3}:index<7?{borderColor:"#0AA", borderWidth:3}:index<12?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
+        style={index<2?{borderColor:"#00F", borderWidth:3}:index<4?{borderColor:"#0AA", borderWidth:3}:index<6?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
           setPoly(num);
           console.log(item[0]);
           let {latitude, longitude} = item[0];

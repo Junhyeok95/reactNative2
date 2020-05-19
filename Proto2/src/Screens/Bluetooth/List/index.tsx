@@ -55,23 +55,6 @@ const TestText = Styled.Text`
   font-size: 24px;
 `;
 
-// const URL = '';
-
-// const json = async () => {
-//   try {
-//     let response = await fetch(URL);
-//     console.log("1");
-//     // console.log("response", response);
-//     let responseJsonData = await response.json();
-//     console.log("2");
-//     console.log("responseJsonData", responseJsonData);
-//     console.log("3");
-//     return responseJsonData;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
 interface Props {}
 
 const List = ({  }: Props) => {
@@ -114,17 +97,20 @@ const List = ({  }: Props) => {
 
   ////////// ////////// ////////// ////////// //////////
 
-  const [isEnabled, setIsEnabled] = useState<boolean>(true);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [isEnabled, setIsEnabled] = useState<boolean>(true); // blueToothEnable
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+    setPeripherals( new Map() );
+  };
 
-  const {linkInfo, setLinkInfo} = useContext(DrivingDataContext);
+  const {defaultInfo, setDefaultInfo, linkInfo, setLinkInfo} = useContext<IDrivingData>(DrivingDataContext);
+  // const {}  = useContext<IDrivingData>(DrivingDataContext);
 
   const [scanning, setScanning] = useState<boolean>(false);
   const [peripherals, setPeripherals] = useState(new Map());
   const [appState, setAppState] = useState<string>(AppState.currentState);
 
   const [raspId, setRaspId] = useState<string>('');
-  const [blueToothEnable, setBlueToothEnable] = useState<boolean>(false);
 
   const [roll, setRoll] = useState<number>(0); // 갸웃갸웃
   const [pitch, setPitch] = useState<number>(0); // 끄덕끄덕
@@ -137,9 +123,17 @@ const List = ({  }: Props) => {
 
   const [restring, setRestring] = useState<string>("x");
 
-
   useEffect(()=>{
-    console.log('> List useEffect');
+
+    // console.log('> List useEffect');
+    // let _defaultInfo = defaultInfo;
+    // _defaultInfo[3] = 30;
+    // console.log(_defaultInfo);
+    // // setDefaultInfo([2,2,2,2,2,2,2,2,2,2,2]);
+    // setDefaultInfo([3,3,3,3,33,3,3,3,3]);
+    // setDefaultInfo(_defaultInfo);
+    // console.log(_defaultInfo);
+
     if (Platform.OS === 'android') {
       androidPermissionBluetooth();
       androidPermissionLocation();
@@ -214,7 +208,7 @@ const List = ({  }: Props) => {
           arr[i] = data.value[i]
         }
         setLinkInfo(arr); // 저장
-        console.log(arr);
+        // console.log(arr);
         /*
           임시 테스트 규칙
           0 -> 신고
@@ -304,10 +298,14 @@ const List = ({  }: Props) => {
             BleManager.retrieveServices(peripheral.id).then((peripheralInfo) => {
               console.log("### retrieveServices");
               console.log(peripheralInfo);
-
               setTimeout(() => { // 2 setTimeout
                 BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
                   console.log('### Started notification on ' + peripheral.id);
+
+                    let _defaultInfo = defaultInfo;
+                    _defaultInfo[3] = 1;
+                    setDefaultInfo(_defaultInfo);
+
                 }).catch((error) => { // startNotification
                   console.log('Notification error', error);
                 });
@@ -346,8 +344,8 @@ const List = ({  }: Props) => {
             color={'#888'}
             size={72}
           />
-          <View style={item.name=="KURUMAMORI"?{borderWidth:1, borderColor:"#00F"}:{}}>
-            <Text style={{fontSize: 16, textAlign: 'center', color: '#333333', padding: 4}}>{item.name}</Text>
+          <View style={item.name=="KURUMAMORI" || item.name=="raspberrypi" ?{borderWidth:1, borderColor:"#00F"}:{}}>
+            <Text style={{fontSize: 16, textAlign: 'center', color: '#333333', padding: 4}}>{item.name=="KURUMAMORI" || item.name=="raspberrypi" ? "KURUMAMORI" : item.name}</Text>
             <Text style={{fontSize: 12, textAlign: 'center', color: '#333333', padding: 2}}>{item.id}</Text>
           </View>
         </RowView>

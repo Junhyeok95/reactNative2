@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 import Button from '~/Components/Button';
+import {DrivingDataContext} from '~/Contexts/DrivingData';
 
 const Container = Styled.View`
   flex: 1;
@@ -22,21 +23,38 @@ const View = Styled.View`
 `;
 
 const DrivingButtonContainer = Styled.View`
-  background-color: #F00;
   position: absolute;
-  right: 12px;
-  bottom: 24px;
-  padding: 8px;
-  border-radius: 4px;
-  width: 100px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border-width: 8px;
+  bottom: 2%;
+  right: 2%;
+  width: 120px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
 `;
+const Bt = Styled.TouchableOpacity`
+  flex: 1;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+const BtLabel = Styled.Text`
+  font-size: 24px;
+`;
+
 const DeviceButtonContainer = Styled.View`
   position: absolute;
-  left: 12px;
-  bottom: 24px;
-  padding: 8px;
-  border-radius: 4px;
-  width: 100px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border-width: 8px;
+  bottom: 2%;
+  left: 2%;
+  width: 120px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
 `;
 
 
@@ -48,12 +66,14 @@ interface Props {
 
 const Driving = ({navigation}: Props) => {
 
-  const [device, setDevice] = useState<boolean>(false);
-  const [driving, setDriving] = useState<boolean>(false);
-
+  const {defaultInfo} = useContext<IDrivingData>(DrivingDataContext);
 
   useEffect(() => {
     console.log("--- --- Driving");
+    console.log(defaultInfo);
+    return () => {
+      console.log("--- --- Driving return");
+    };
   },[]);
   return (
     <Container>
@@ -70,30 +90,28 @@ const Driving = ({navigation}: Props) => {
         />
       </View>
       <Text>
-        운전기록이 없습니다
+        운전기록이 없습니다 {defaultInfo[3]}
       </Text>
-      <DeviceButtonContainer style={{backgroundColor: device?'#00F':'#555'}}>
-        <Button
-          style={{flex:1, padding:8}}
-          label={device?'페어링':'신호없음'}
+      <DeviceButtonContainer style={{borderColor: defaultInfo[3] == 1?'#00F':'#111111'}}>
+        <Bt
           onPress={() => {
-            setDevice(!device);
-            if(device){
-              // navigation.navigate('MainThirdStackNavi');
+            if(defaultInfo[3] != 1){
+              navigation.navigate('MainThirdStackNavi');
             } else {
-              // navigation.navigate('MainThirdStackNavi');
             }
           }}
-      />
+        >
+          <BtLabel>{defaultInfo[3] == 1?'페어링':'신호없음'}</BtLabel>
+        </Bt>
       </DeviceButtonContainer>
-      <DrivingButtonContainer style={{backgroundColor: driving?'#00F':'#555'}}>
-        <Button
-          style={{flex:1, padding:8}}
-          label="운전 시작"
+      <DrivingButtonContainer style={{borderColor: defaultInfo[4] == 1?'#00F':'#111111'}}>
+        <Bt
           onPress={() => {
             navigation.navigate('MapTabNavi');
           }}
-        />
+        >
+          <BtLabel>{defaultInfo[4] == 1?'운전중':'운전'}</BtLabel>
+        </Bt>
       </DrivingButtonContainer>
     </Container>
   );

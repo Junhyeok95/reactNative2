@@ -6,17 +6,6 @@ interface Props { // cache 유저 있을 경우에 기록 뭉치를 부름
   children: JSX.Element | Array<JSX.Element>;
 }
 
-interface IDrivingData {
-  drivingSaveData: Array<IDrivingSaveData>,
-  defaultInfo: Array<number>,
-  linkInfo: Array<number>,
-  checkInfo: Array<number>,
-  drivingSave: (data?: IDrivingSaveData) => void,
-  setDefaultInfo: (data: any) => void,
-  setLinkInfo: (data: any) => void,
-  setCheckInfo: (data: any) => void,
-}
-
 const DrivingDataContext = createContext<IDrivingData>({ // 초기값
   drivingSaveData: [],
   defaultInfo: [],

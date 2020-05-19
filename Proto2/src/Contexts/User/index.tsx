@@ -69,7 +69,7 @@ const UserContextProvider = ({children}: Props) => {
         method: 'POST',
         headers: {
           'Accept':'application/json',
-          'Content-Type':'application/json',
+          'Content-Type':'application/json;charset=UTF-8',
         },
         body: JSON.stringify({
           _email: email,
@@ -105,12 +105,12 @@ const UserContextProvider = ({children}: Props) => {
           method: 'POST',
           headers: {
             'Accept':'application/json',
-            'Content-Type':'application/json',
+            'Content-Type':'application/json;charset=UTF-8',
           },
           body: JSON.stringify({
             _option: 1, // 의료정보 로직
             _key: userInfo2.key,
-            // _key: 2
+            // _key: 
           })
       })
       .then(response => response.json())
@@ -130,10 +130,10 @@ const UserContextProvider = ({children}: Props) => {
           method: 'POST',
           headers: {
             'Accept':'application/json',
-            'Content-Type':'application/json',
+            'Content-Type':'application/json;charset=UTF-8',
           },
           body: JSON.stringify({
-            _option: 2, // 의료정보 로직
+            _option: 2, // 기기 로직
             _key: userInfo2.key,
           })
       })

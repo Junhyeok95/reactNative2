@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import Header from '~/Screens/Bluetooth/Header';
 import List from '~/Screens/Bluetooth/List';
 
 const Container = Styled.View`
@@ -16,7 +15,6 @@ const Bluetooth = () => {
 
   return (
     <Container>
-      {/* <Header /> */}
       <List />
     </Container>
   );

@@ -78,16 +78,16 @@ const Profile = ({navigation}: Props) => {
         {profileSearchRes ? 
           <>
             <Text>
-              이름 : {profileSearchRes[0].name}
+              이름 : {profileSearchRes[0].name ? profileSearchRes[0].name.toString() : ""}
             </Text>
             <Text>
-              성별 : {profileSearchRes[0].gender}
+              성별 : {profileSearchRes[0].gender ? profileSearchRes[0].gender.toString() : ""}
             </Text>
             <Text>
-              생일 : {profileSearchRes[0].birth}
+              생일 : {profileSearchRes[0].birth ? profileSearchRes[0].birth.toString() : ""}
             </Text>
             <Text>
-              연락처 : {profileSearchRes[0].phone}
+              연락처 : {profileSearchRes[0].phone ? profileSearchRes[0].phone.toString() : ""}
             </Text>
           </>
           :
