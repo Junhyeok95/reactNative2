@@ -267,56 +267,63 @@ const List = ({  }: Props) => {
         });
         setRaspId('');
         setRestring('');
-        BleManager.disconnect(peripheral.id);
-        console.log('> disconnect 1');
+        setTimeout(() => {
+          BleManager.disconnect(peripheral.id);
+          console.log('> disconnect 1');
+        }, 1000);
       } else {
-        try {
-          BleManager.stopNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
-            console.log('> stopNotification ' + peripheral.id);
-          }).catch((error) => { // stopNotification
-            console.log('> stopNotification error', error);
+        // try {
+        //   BleManager.stopNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
+        //     console.log('> stopNotification ' + peripheral.id);
+        //   }).catch((error) => { // stopNotification
+        //     console.log('> stopNotification error', error);
+        //   });
+        //   setRaspId('');
+        //   setRestring('');
+        // } catch (error) {
+        //   console.log("크하하 에러");
+        //   console.log(error);
+        // }
+
+        setTimeout(() => {
+
+          BleManager.connect(peripheral.id).then(() => {
+            let _peripherals = peripherals;
+            let p = peripherals.get(peripheral.id);
+            if (p) {
+              p.connected = true;
+              _peripherals.set(peripheral.id, p);
+              setPeripherals(new Map(_peripherals));
+            }
+            setRaspId(peripheral.id);
+            console.log('###### Connected to ' + peripheral.id);
+
+            setTimeout(() => {
+              BleManager.retrieveServices(peripheral.id).then((peripheralInfo) => {
+                console.log("### retrieveServices");
+                console.log(peripheralInfo);
+                setTimeout(() => { // 2 setTimeout
+                  BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
+                    console.log('### Started notification on ' + peripheral.id);
+
+                      let _defaultInfo = defaultInfo;
+                      _defaultInfo[3] = 1;
+                      setDefaultInfo(_defaultInfo);
+
+                  }).catch((error) => { // startNotification
+                    console.log('Notification error', error);
+                  });
+                }, 1000); // 2 setTimeout
+                
+              });
+            }, 500);
+
+          }).catch((error) => {
+            console.log('> Connection error', error);
           });
-          setRaspId('');
-          setRestring('');
-        } catch (error) {
-          console.log("크하하 에러");
-          console.log(error);
-        }
 
-        BleManager.connect(peripheral.id).then(() => {
-          let _peripherals = peripherals;
-          let p = peripherals.get(peripheral.id);
-          if (p) {
-            p.connected = true;
-            _peripherals.set(peripheral.id, p);
-            setPeripherals(new Map(_peripherals));
-          }
-          setRaspId(peripheral.id);
-          console.log('###### Connected to ' + peripheral.id);
+        }, 1000);
 
-          setTimeout(() => {
-            BleManager.retrieveServices(peripheral.id).then((peripheralInfo) => {
-              console.log("### retrieveServices");
-              console.log(peripheralInfo);
-              setTimeout(() => { // 2 setTimeout
-                BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
-                  console.log('### Started notification on ' + peripheral.id);
-
-                    let _defaultInfo = defaultInfo;
-                    _defaultInfo[3] = 1;
-                    setDefaultInfo(_defaultInfo);
-
-                }).catch((error) => { // startNotification
-                  console.log('Notification error', error);
-                });
-              }, 1000); // 2 setTimeout
-              
-            });
-          }, 500);
-
-        }).catch((error) => {
-          console.log('> Connection error', error);
-        });
 
       }
     }

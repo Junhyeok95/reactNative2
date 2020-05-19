@@ -57,6 +57,10 @@ const DeviceButtonContainer = Styled.View`
   align-items: center;
 `;
 
+const TText = Styled.Text`
+  color: #EFEFEF;
+`;
+
 
 type NavigationProp = StackNavigationProp<MainFirstStackNavi, 'Driving'>;
 
@@ -67,14 +71,29 @@ interface Props {
 const Driving = ({navigation}: Props) => {
 
   const {defaultInfo} = useContext<IDrivingData>(DrivingDataContext);
+  const [onTime, setOnTime] = useState<any>();
+  let driving: NodeJS.Timeout;
 
+  const ha = () => {
+    if(defaultInfo[3] ==1){
+      console.log("그만 갱신");
+      clearInterval(driving);
+    }
+  }
   useEffect(() => {
-    console.log("--- --- Driving");
-    console.log(defaultInfo);
+    driving = setInterval(() => {
+      let now = new Date();
+        // console.log(now.getHours());
+        // console.log(now.getMinutes());
+        // console.log(now.getSeconds());
+        setOnTime(now.getSeconds()); // 화면 갱신
+        ha();
+    }, 1000);
     return () => {
-      console.log("--- --- Driving return");
+      clearInterval(driving);
     };
   },[]);
+
   return (
     <Container>
       {/* <Text>
@@ -90,8 +109,9 @@ const Driving = ({navigation}: Props) => {
         />
       </View>
       <Text>
-        운전기록이 없습니다 {defaultInfo[3]}
+        운전기록이 없습니다 
       </Text>
+      <TText>{onTime}</TText>
       <DeviceButtonContainer style={{borderColor: defaultInfo[3] == 1?'#00F':'#111111'}}>
         <Bt
           onPress={() => {
