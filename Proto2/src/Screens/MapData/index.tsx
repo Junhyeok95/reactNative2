@@ -21,40 +21,50 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 const audioList = [
   {
-    title: 'fast',
+    title: 'fast', // 0
     isRequire: true,
     url: require('./fast_detect.mp3')
   },
   {
-    title: 'sleep',
+    title: 'sleep', // 1 
     isRequire: true,
     url: require('./sleep_detect.mp3')
   },
   {
-    title: 'slow',
+    title: 'slow', // 2
     isRequire: true,
     url: require('./slow_detect.mp3')
   },
   {
-    title: 'sago',
+    title: 'sago', // 3
     isRequire: true,
     url: require('./sago.mp3')
   },
   {
-    title: 'auto_singo',
+    title: 'auto_singo', // 4
     isRequire: true,
     url: require('./auto_singo.mp3')
   },
   {
-    title: 'singo_req',
+    title: 'singo_req', // 5
     isRequire: true,
     url: require('./singo_req.mp3')
   },
   {
-    title: 'cancel',
+    title: 'cancel', // 6
     isRequire: true,
     url: require('./cancel.mp3')
   },
+  {
+    title: 'singogo', // 7
+    isRequire: true,
+    url: require('./singogo.mp3')
+  },
+  {
+    title: 'lookfront_eye', // 8
+    isRequire: true,
+    url: require('./lookfront_eye.mp3')
+  }
 ]
 
 const Text = Styled.Text`
@@ -223,7 +233,7 @@ const MapData = ({navigation}: DrawerProp) => {
   const [speed, setSpeed] = useState<number>(0);
   const [onSave, setOnSave] = useState<boolean>(false);
   const [driving, setDriving] = useState<boolean>(false);
-  const [time, setTime] = useState<any>();
+  const [onTime, setOnTime] = useState<any>();
 
   const [coordinate, setCoordinate] = useState<ICoordinate>({
     latitude: 0.0000,
@@ -240,8 +250,8 @@ const MapData = ({navigation}: DrawerProp) => {
   const [region, setRegion] = useState<any>({
     latitude: 35.896311,
     longitude: 128.622051,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
+    latitudeDelta: 0.008,
+    longitudeDelta: 0.008,
   });
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
@@ -280,83 +290,23 @@ const MapData = ({navigation}: DrawerProp) => {
 
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
   useEffect(() => {
-
-    sound1 = new Sound(audioList[1].url, (error) => {
-      if(error){
-        Alert.alert('error');
-        return;
-      } else {
-        sound1.play((success)=>{
-          sound1.release();
-        }) 
-      }
-    });
-
-    setTimeout(() => {
-      sound1 = new Sound(audioList[2].url, (error) => {
-        if(error){
-          Alert.alert('error');
-          return;
-        } else {
-          sound1.play((success)=>{
-            sound1.release();
-          }) 
-        }
-      });
-
-      setTimeout(() => {
-        // 취소되었습니다
-        sound1 = new Sound(audioList[6].url, (error) => {
-          if(error){
-            Alert.alert('error');
-            return;
-          } else {
-            sound1.play((success)=>{
-              sound1.release();
-            }) 
-          }
-        });
-
-        setTimeout(() => {
-          // 신고가 감지되었습니다
-          sound1 = new Sound(audioList[5].url, (error) => {
-            if(error){
-              Alert.alert('error');
-              return;
-            } else {
-              sound1.play((success)=>{
-                sound1.release();
-              }) 
-            }
-          });
-    
-          
-        }, 10000);
-  
-        
-      }, 10000);
-
-
-    }, 10000);
-    
-
     // 지울예정
     // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]); 
-
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
-
 
       let id = setInterval(() => {
         let now = new Date();
         // console.log(now.getHours());
         // console.log(now.getMinutes());
-        console.log(now.getSeconds());
+        // console.log(now.getSeconds());
+        setOnTime(now.getSeconds()); // 화면 갱신
         linkInfo_3(); // 사고체크
+        linkInfo_4(); // 태만 체크
         linkInfo_5(); // 졸음체크
         // console.log(checkInfo);
-        console.log(_checkInfo());
-        console.log(_linkInfo());
+        // console.log(_checkInfo());
+        // console.log(_linkInfo());
       }, 1000);
     return () => {
       console.log("--- --- MapData return");
@@ -365,9 +315,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
 
   },[]);
-
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
-
 
   let checkInfo_0 = () :boolean => {
     if (checkInfo[0] == -1 || checkInfo[0] == 0) {
@@ -379,52 +327,32 @@ const MapData = ({navigation}: DrawerProp) => {
   };
 
   let linkInfo_3 = ():void => {
-    if(checkInfo[2] != 1){ // 사고 상태 체크
-      if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
-        if(linkInfo[3] < 50 || 150 < linkInfo[3]){ // 기울어젔는지 체크
-          console.log("기울기 사고");
+    if(defaultInfo[4]){ // 운전상태 체크
+      if(checkInfo[2] != 1){ // 사고 상태 체크
+        if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
+          if(linkInfo[3] < 50 || 150 < linkInfo[3]){ // 기울어젔는지 체크
+            console.log("기울기 사고");
 
-          setModal(true);
-          singoSetTimeout = setTimeout(() => {
+            // 신고의사를 묻는 알람
+            sound1 = new Sound(audioList[5].url, (error) => {
+              if(error){
+                return;
+              } else {
+                sound1.play((success)=>{
+                  sound1.release();
+                })
+              }
+            });
 
-            setModal(false);
-            // // 신고되는 http 로직 넣어야함
+            setModal(true);
+            singoSetTimeout = setTimeout(() => {
 
-          }, 7000);
+              setModal(false);
+              // // 신고되는 http 로직 넣어야함
 
-          sound1 = new Sound(audioList[5].url, (error) => {
-            if(error){
-              Alert.alert('error');
-              return;
-            } else {
-              sound1.play((success)=>{
-                sound1.release();
-              })
-            }
-          });
-
-          let _checkInfo = checkInfo;
-          _checkInfo[2] = 1;
-          setCheckInfo(_checkInfo);
-        }
-      }
-    }
-  };
-
-  let linkInfo_5Cnt = 0;
-  let linkInfo_5 = ():void => {
-    // if(checkInfo[8] != 1){ // 졸음 상태 체크
-    //   if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
-    //     if(linkInfo[5] == 2){ // 눈을 감고있는지 체크
-            console.log("졸음 발생");
-            linkInfo_5Cnt ++; // sleep 체크 변수
-            if(linkInfo_5Cnt > 5){
-              linkInfo_5Cnt = 0;
-
-              // 졸음운전
-              sound1 = new Sound(audioList[1].url, (error) => {
+              // 신고를 했다는 알림
+              sound1 = new Sound(audioList[7].url, (error) => {
                 if(error){
-                  Alert.alert('error');
                   return;
                 } else {
                   sound1.play((success)=>{
@@ -432,6 +360,77 @@ const MapData = ({navigation}: DrawerProp) => {
                   })
                 }
               });
+            }, 10000);
+
+            let _checkInfo = checkInfo;
+            _checkInfo[2] = 1;
+            setCheckInfo(_checkInfo);
+          }
+        }
+      }
+    }
+  };
+
+  let linkInfo_4Cnt = 0; // 태만 카운트
+  let linkInfo_4 = ():void => {
+    // 주시태만 체크
+    // if(checkInfo[10] != 1){ // 주시태만 상태 체크
+    //   if(linkInfo[10] != -1){ // 값이 들어오고 있는지 체크
+        if(linkInfo[4] == 10 || linkInfo[4] == 20){
+            console.log("태만 체크");
+            linkInfo_4Cnt ++; // sleep 체크 변수
+            if(linkInfo_4Cnt > 7){
+              linkInfo_4Cnt = 0;
+              // 태만 감지 사운드
+              sound1 = new Sound(audioList[8].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+              
+
+              // let _checkInfo = checkInfo;
+              // _checkInfo[10] = 1;
+              // setCheckInfo(_checkInfo);
+
+              // setTimeout(() => {
+              //   let _checkInfo = checkInfo;
+              //   _checkInfo[10] = 0;
+              //   setCheckInfo(_checkInfo);
+              // }, 5000);
+            }
+        } else {
+          linkInfo_4Cnt = 0;
+        }
+    //     }
+    //   }
+    // }
+  }
+
+  let linkInfo_5Cnt = 0; // 졸음 카운트
+  let linkInfo_5 = ():void => {
+    // if(checkInfo[8] != 1){ // 졸음 상태 체크
+    //   if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
+        if(linkInfo[5] == 2 && linkInfo[6]){ // 눈을 감고있는지 체크
+            console.log("졸음 체크");
+            linkInfo_5Cnt ++; // sleep 체크 변수
+            if(linkInfo_5Cnt > 3){
+              linkInfo_5Cnt = 0;
+              // 졸음운전 슬립 사운드
+              sound1 = new Sound(audioList[1].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+              
 
               // let _checkInfo = checkInfo;
               // _checkInfo[8] = 1;
@@ -442,14 +441,14 @@ const MapData = ({navigation}: DrawerProp) => {
               //   _checkInfo[8] = 0;
               //   setCheckInfo(_checkInfo);
               // }, 5000);
-              
-            } else {
-              linkInfo_5Cnt = 0;
             }
+        } else {
+          linkInfo_5Cnt = 0;
+        }
     //     }
     //   }
     // }
-  } 
+  }
 
   return (
     <>
@@ -506,6 +505,7 @@ const MapData = ({navigation}: DrawerProp) => {
           <Text>경도 : {coordinate.longitude.toFixed(4)}</Text>
           <Text>속도 : {coordinate.speed.toFixed(1)}</Text>
           <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
+          <Text>{onTime}</Text>
         </TopLeftView>
       )}
 
@@ -596,8 +596,23 @@ const MapData = ({navigation}: DrawerProp) => {
               Alert.alert('운전을 종료합니다\n\n운전 시간 : 35분\n 급정거 : 7회 \n 급가속 4회 \n 졸음 1회');
               checkInfo[0] = 0;
               setLocations([]); // 저장해야함
+              // --- 사고다시 가능
+              let _checkInfo = checkInfo;
+              _checkInfo[2] = 0;
+              setCheckInfo(_checkInfo);
+              // --- 사고다시 가능
+              // ---- 운전 시작 상태
+              let _defaultInfo = defaultInfo;
+              _defaultInfo[4] = 0;
+              setDefaultInfo(_defaultInfo);
+              // ---- 운전 시작 상태
             } else {
               Alert.alert('운전을 시작합니다');
+              // ---- 운전 시작 상태
+              let _defaultInfo = defaultInfo;
+              _defaultInfo[4] = 1;
+              setDefaultInfo(_defaultInfo);
+              // ---- 운전 시작 상태
               checkInfo[0] = 1;
             }
             setDriving(!driving); // 운전
@@ -620,9 +635,9 @@ const MapData = ({navigation}: DrawerProp) => {
               onPress={()=>{
                 clearTimeout(singoSetTimeout);
                 setModal(false);
+                // 신고취소
                 sound1 = new Sound(audioList[6].url, (error) => {
                   if(error){
-                    Alert.alert('error');
                     return;
                   } else {
                     sound1.play((success)=>{

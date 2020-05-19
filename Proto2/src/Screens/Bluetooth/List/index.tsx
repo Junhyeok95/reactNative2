@@ -70,7 +70,7 @@ const List = ({  }: Props) => {
         Alert.alert('You need to enable bluetooth to use this app.');
       });
     } else if (Platform.OS === 'ios') {
-      Alert.alert('PermissionBluetooth, Android only');
+      // Alert.alert('PermissionBluetooth, Android only');
     }
   };
 
@@ -91,13 +91,13 @@ const List = ({  }: Props) => {
         }
       });
     } else if (Platform.OS === 'ios') {
-      Alert.alert('PermissionLocation, Android only');
+      // Alert.alert('PermissionLocation, Android only');
     }
   };
 
   ////////// ////////// ////////// ////////// //////////
 
-  const [isEnabled, setIsEnabled] = useState<boolean>(true); // blueToothEnable
+  const [isEnabled, setIsEnabled] = useState<boolean>(false); // blueToothEnable
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
     setPeripherals( new Map() );

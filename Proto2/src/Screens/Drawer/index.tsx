@@ -33,12 +33,12 @@ interface Props {
 }
 
 const Drawer = ({props}: Props) => {
-  const {logout, logout2} = useContext<IUserContext>(UserContext);
+  const {userInfo2, logout, logout2} = useContext<IUserContext>(UserContext);
   return (
     <>
       <DrawerContentScrollView {...props}>
         <Header>
-          <Text>User ID</Text>
+          <Text> - {userInfo2 != undefined && userInfo2.name != null && userInfo2.name != undefined ? userInfo2.name : "회원"} / {userInfo2 != undefined && userInfo2.key != null && userInfo2.key != undefined && userInfo2.key != -1 ? userInfo2.key : "key"} - </Text>
         </Header>
         <DrawerItemList {...props} />
         <Footer>

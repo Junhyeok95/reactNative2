@@ -27,8 +27,8 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // [ 날짜, 위도, 경도, 링크상태, 운전상태, 현재속도, 이전속도 ] -> 7개
   const [defaultInfo, setDefaultInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1]);
   // 토탈 체크 정보 -> 10개
-  // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 가속상태, 가속횟수, 감속상태, 감속횟수, 졸음상태, 졸음횟수 ]
-  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]);
+  // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 가속상태, 가속횟수, 감속상태, 감속횟수, 졸음상태, 졸음횟수, 태만상태, 태만횟수 ]
+  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1]);
 
   const getCacheData = async (key: string) => { // 활용해서 운전기록뭉치 (날짜 : {기록 : {위도, 경도} , 포인트 : {내용}  })
     const cacheData = await AsyncStorage.getItem(key);
