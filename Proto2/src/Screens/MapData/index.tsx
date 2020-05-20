@@ -258,36 +258,6 @@ const MapData = ({navigation}: DrawerProp) => {
   let sound1: Sound;
   let singoSetTimeout: NodeJS.Timeout;
 
-  const _location = ():any => {
-    return location;
-  }
-
-  const _checkInfo = ():any => {
-    return checkInfo;
-  }
-
-  const _linkInfo = ():any => {
-    return linkInfo;
-  }
-
-  // Geolocation.getCurrentPosition(
-    //   async position => {
-    //     const {latitude, longitude} = position.coords;
-    //     await setLocation({
-    //       latitude,
-    //       longitude,
-    //     });
-    //     console.log("나에위치");
-    //     await console.log(_location());
-    //   },
-    //   error => {
-    //     console.log(error.code, error.message);
-    //   },
-    //   {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-    // );
-
-
-
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
   useEffect(() => {
     // 지울예정
@@ -313,12 +283,11 @@ const MapData = ({navigation}: DrawerProp) => {
       clearInterval(id);
     };
 
-
   },[]);
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
 
   let linkInfo_3 = ():void => {
-    if(driving){ // 운전상태 체크
+    // if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
         if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
           if(linkInfo[3] < 70 || 130 < linkInfo[3]){ // 기울어젔는지 체크
@@ -359,12 +328,12 @@ const MapData = ({navigation}: DrawerProp) => {
           }
         }
       }
-    }
+    // }
   };
 
   let linkInfo_4Cnt = 0; // 태만 카운트
   let linkInfo_4 = ():void => {
-    if(driving){ // 운전상태 체크
+    // if(driving){ // 운전상태 체크
 
     // 주시태만 체크
     // if(checkInfo[10] != 1){ // 주시태만 상태 체크
@@ -406,12 +375,12 @@ const MapData = ({navigation}: DrawerProp) => {
     //     }
     //   }
     // }
-      }
+      // }
   }
 
   let linkInfo_5Cnt = 0; // 졸음 카운트
   let linkInfo_5 = ():void => {
-    if(driving){ // 운전상태 체크
+    // if(driving){ // 운전상태 체크
 
     // if(checkInfo[8] != 1){ // 졸음 상태 체크
     //   if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
@@ -453,7 +422,7 @@ const MapData = ({navigation}: DrawerProp) => {
     //     }
     //   }
     // }
-      }
+      // }
   }
 
   return (

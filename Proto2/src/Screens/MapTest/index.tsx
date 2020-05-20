@@ -177,9 +177,6 @@ const MapTest = ({navigation}: DrawerProp) => {
 
     // 가상 운전을 위한 포문 추가
 
-
-
-
     // 가상 운전을 위한 포문 추가
 
     let moveCnt = 0;
