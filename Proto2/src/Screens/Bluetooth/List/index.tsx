@@ -125,14 +125,14 @@ const List = ({  }: Props) => {
 
   useEffect(()=>{
 
-    // console.log('> List useEffect');
-    // let _defaultInfo = defaultInfo;
-    // _defaultInfo[3] = 30;
+    console.log('> List useEffect');
+    let _defaultInfo = [...defaultInfo];
+    _defaultInfo[3] = 0;
     // console.log(_defaultInfo);
     // // setDefaultInfo([2,2,2,2,2,2,2,2,2,2,2]);
     // setDefaultInfo([3,3,3,3,33,3,3,3,3]);
-    // setDefaultInfo(_defaultInfo);
     // console.log(_defaultInfo);
+    setDefaultInfo(_defaultInfo);
 
     if (Platform.OS === 'android') {
       androidPermissionBluetooth();

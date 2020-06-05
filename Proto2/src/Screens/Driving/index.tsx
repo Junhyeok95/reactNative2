@@ -58,9 +58,9 @@ const DeviceButtonContainer = Styled.View`
 `;
 
 const TText = Styled.Text`
-  color: #EFEFEF;
+  color: #F00;
 `;
-
+// color: #EFEFEF;
 
 type NavigationProp = StackNavigationProp<MainFirstStackNavi, 'Driving'>;
 
@@ -74,24 +74,25 @@ const Driving = ({navigation}: Props) => {
   const [onTime, setOnTime] = useState<any>();
   let driving: NodeJS.Timeout;
 
-  const ha = () => {
-    if(defaultInfo[3] ==1){
-      console.log("그만 갱신");
-      clearInterval(driving);
-    }
-  }
+  // const ha = () => {
+  //   if(defaultInfo[3] ==1){
+  //     console.log("그만 갱신");
+  //     clearInterval(driving);
+  //   }
+  // }
   useEffect(() => {
-    driving = setInterval(() => {
-      let now = new Date();
-        // console.log(now.getHours());
-        // console.log(now.getMinutes());
-        // console.log(now.getSeconds());
-        setOnTime(now.getSeconds()); // 화면 갱신
-        ha();
-    }, 1000);
-    return () => {
-      clearInterval(driving);
-    };
+    // console.log("화면");
+    // driving = setInterval(() => {
+    //   let now = new Date();
+    //     console.log(now.getHours());
+    //     console.log(now.getMinutes());
+    //     console.log(now.getSeconds());
+    //     setOnTime(now.getSeconds()); // 화면 갱신
+    //     ha();
+    // }, 1000);
+    // return () => {
+    //   clearInterval(driving);
+    // };
   },[]);
 
   return (
