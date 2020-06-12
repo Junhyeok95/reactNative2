@@ -125,6 +125,16 @@ const List = ({  }: Props) => {
 
   useEffect(()=>{
 
+    // TEST -----
+    let myInterval = setInterval(() => {
+      let now = new Date();
+        let nowarr = [...linkInfo];
+        nowarr[0] = now.getSeconds();
+        nowarr[2] = now.getSeconds();
+        setLinkInfo(nowarr); // 저장
+    }, 1000);
+    // TEST -----
+
     console.log('> List useEffect');
     let _defaultInfo = [...defaultInfo];
     _defaultInfo[3] = 0;
@@ -151,6 +161,11 @@ const List = ({  }: Props) => {
       HandlerDisconnectedPeripheral.remove();
       HandlerUpdate.remove();
       AppState.removeEventListener("change", HandleAppStateChange);
+
+      // TEST -----
+      console.log("--- --- MapData return");
+      clearInterval(myInterval);
+      // TEST -----
     };
   }, []);
 
@@ -203,7 +218,7 @@ const List = ({  }: Props) => {
 
         let str = JSON.stringify(data.value);
         setRestring(str);
-        let arr = linkInfo;
+        let arr = [...linkInfo];
         for(let i = 0 ; i < arr.length ; i++){
           arr[i] = data.value[i]
         }

@@ -23,6 +23,7 @@ import Setting from './Setting';
 import MapData from './MapData';
 import MapMarker from './MapMarker';
 import MapTest from './MapTest';
+import MapDataWiFi from './MapDataWiFi';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -293,6 +294,14 @@ const MapTabNavi = () => {
         options={{
           tabBarLabel: '테스트 운전',
           tabBarIcon: 'car',
+        }}
+      />
+      <Tab.Screen
+        name={"MapDataWiFi"}
+        component={MapDataWiFi}
+        options={{
+          tabBarLabel: 'WiFi',
+          tabBarIcon: 'wifi',
         }}
       />
     </Tab.Navigator>

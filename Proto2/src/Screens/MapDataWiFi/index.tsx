@@ -23,47 +23,47 @@ const audioList = [
   {
     title: 'fast', // 0
     isRequire: true,
-    url: require('./fast_detect.mp3')
+    url: require('../MapData/fast_detect.mp3')
   },
   {
     title: 'sleep', // 1 
     isRequire: true,
-    url: require('./sleep_detect.mp3')
+    url: require('../MapData/sleep_detect.mp3')
   },
   {
     title: 'slow', // 2
     isRequire: true,
-    url: require('./slow_detect.mp3')
+    url: require('../MapData/slow_detect.mp3')
   },
   {
     title: 'sago', // 3
     isRequire: true,
-    url: require('./sago.mp3')
+    url: require('../MapData/sago.mp3')
   },
   {
     title: 'auto_singo', // 4
     isRequire: true,
-    url: require('./auto_singo.mp3')
+    url: require('../MapData/auto_singo.mp3')
   },
   {
     title: 'singo_req', // 5
     isRequire: true,
-    url: require('./singo_req.mp3')
+    url: require('../MapData/singo_req.mp3')
   },
   {
     title: 'cancel', // 6
     isRequire: true,
-    url: require('./cancel.mp3')
+    url: require('../MapData/cancel.mp3')
   },
   {
     title: 'singogo', // 7
     isRequire: true,
-    url: require('./singogo.mp3')
+    url: require('../MapData/singogo.mp3')
   },
   {
     title: 'lookfront_eye', // 8
     isRequire: true,
-    url: require('./lookfront_eye.mp3')
+    url: require('../MapData/lookfront_eye.mp3')
   }
 ]
 
@@ -187,15 +187,15 @@ interface DrawerProp {
   navigation: TypeDrawerProp;
 }
 
-const MapData = ({navigation}: DrawerProp) => {
+const MapDataWiFi = ({navigation}: DrawerProp) => {
   // 안드로이드 위치권한 요청
   const androidPermissionLocation = () => {
     if (Platform.OS === 'android' && Platform.Version >= 23) {
-      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => { // check
+      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => { // check
         if (result) {
           console.log("android LOCATION check OK");
         } else {
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => { // request
+          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => { // request
             if (result) {
               console.log("android LOCATION request Ok");
             } else {
@@ -471,7 +471,7 @@ const MapData = ({navigation}: DrawerProp) => {
         />)} */}
       </MapView>
 
-      {driving && (
+      {/* {driving && ( */}
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
           <Text>
             SLR : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
@@ -485,7 +485,7 @@ const MapData = ({navigation}: DrawerProp) => {
           <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
           <Text>{onTime}</Text>
         </TopLeftView>
-      )}
+      {/* )} */}
 
       <TopRightView
         style={{marginTop:getStatusBarHeight()}}
@@ -628,5 +628,5 @@ const MapData = ({navigation}: DrawerProp) => {
   );
 };
 
-export default MapData;
+export default MapDataWiFi;
 

@@ -847,12 +847,13 @@
 				);
 				INFOPLIST_FILE = Proto2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Proto2ABC;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Proto2;
 				PRODUCT_NAME = Proto2;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -871,12 +872,13 @@
 				DEVELOPMENT_TEAM = 489338LU32;
 				INFOPLIST_FILE = Proto2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Proto2ABC;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Proto2;
 				PRODUCT_NAME = Proto2;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
