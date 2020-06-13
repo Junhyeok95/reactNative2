@@ -259,6 +259,32 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
   let singoSetTimeout: NodeJS.Timeout;
 
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
+
+  let _watchId: number;
+
+
+  const [tt, setTT] = useState<String>("---");
+
+  useEffect(() => {
+    _watchId = Geolocation.watchPosition(
+      position => {
+        console.log(">>", position.coords);
+        setTT(JSON.stringify(position.coords));
+        const {latitude, longitude} = position.coords;
+        // setLocations([...locations, {latitude, longitude}]);
+      },
+      error => {
+        console.log(error);
+      },
+      {
+        enableHighAccuracy: true,
+        distanceFilter: 2,
+        interval: 1000,
+        fastestInterval: 1000,
+      },
+    );
+  }, [tt]);
+
   useEffect(() => {
     // 지울예정
     // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]); 
@@ -282,6 +308,12 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
     //   console.log("--- --- MapData return");
     //   clearInterval(id);
     // };
+
+    return () => {
+      if (_watchId !== null) {
+        Geolocation.clearWatch(_watchId);
+      }
+    };
 
   },[]);
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
@@ -444,25 +476,26 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
 
         region={region}
 
-        onUserLocationChange={ e => {
-          if(onSave){
-            setCoordinate({
-              latitude: e.nativeEvent.coordinate.latitude,
-              longitude: e.nativeEvent.coordinate.longitude,
-              speed: e.nativeEvent.coordinate.speed,
-              timestamp: e.nativeEvent.coordinate.timestamp,
-            });
-            // ㅠㅠ 마법소스인데
-            // const {latitude, longitude} = e.nativeEvent.coordinate;
-            // setLocations([...locations, {latitude, longitude}]);
-            // ㅠㅠ 마법소스인데
+        // onUserLocationChange={ e => {
+        //   console.log("## ",e.nativeEvent.coordinate);
+        //   if(onSave){
+        //     setCoordinate({
+        //       latitude: e.nativeEvent.coordinate.latitude,
+        //       longitude: e.nativeEvent.coordinate.longitude,
+        //       speed: e.nativeEvent.coordinate.speed,
+        //       timestamp: e.nativeEvent.coordinate.timestamp,
+        //     });
+        //     // ㅠㅠ 마법소스인데
+        //     // const {latitude, longitude} = e.nativeEvent.coordinate;
+        //     // setLocations([...locations, {latitude, longitude}]);
+        //     // ㅠㅠ 마법소스인데
 
-            // 각종 값을 체크하는 함수를 만들어야함
-            // console.log("-> linkInfo ", linkInfo);
-            // console.log("-> defaultInfo ", defaultInfo);
-            // console.log("-> checkInfo ", checkInfo);
-          }
-        }}
+        //     // 각종 값을 체크하는 함수를 만들어야함
+        //     // console.log("-> linkInfo ", linkInfo);
+        //     // console.log("-> defaultInfo ", defaultInfo);
+        //     // console.log("-> checkInfo ", checkInfo);
+        //   }
+        // }}
       >
         {/* {onSave && (<Polyline
           coordinates={locations}
@@ -484,6 +517,7 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
           <Text>속도 : {coordinate.speed.toFixed(1)}</Text>
           <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
           <Text>{onTime}</Text>
+          <Text>{tt}</Text>
         </TopLeftView>
       {/* )} */}
 
