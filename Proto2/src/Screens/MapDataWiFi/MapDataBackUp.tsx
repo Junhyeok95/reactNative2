@@ -178,21 +178,8 @@ interface IGeolocation {
 interface ICoordinate {
   latitude: number;
   longitude: number;
-  speed: number | null;
+  speed: number;
   timestamp: number;
-}
-
-interface ILatLng {
-  latitude: number;
-  longitude: number;
-}
-
-interface ICamera {
-  center: ILatLng;
-  heading: number;
-  pitch: number;
-  zoom: number;
-  altitude: number;
 }
 
 type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
@@ -252,8 +239,7 @@ const MapData = ({navigation}: DrawerProp) => {
     latitude: 0.0000,
     longitude: 0.0000,
     speed: 0.0000,
-    timestamp: 0,
-     // Milliseconds since Unix epoch ㄴㄴㄴ
+    timestamp: 0, // Milliseconds since Unix epoch
   });
   
   const [location, setLocation] = useState<IGeolocation>({
@@ -261,30 +247,16 @@ const MapData = ({navigation}: DrawerProp) => {
     longitude: 128.622051,
   });
 
-  // const [region, setRegion] = useState<any>({
-  //   latitude: 35.896311,
-  //   longitude: 128.622051,
-  //   latitudeDelta: 0.008,
-  //   longitudeDelta: 0.008,
-  // });
-
-  const [camera, setCamera] = useState<ICamera>({
-    center: {
-      latitude: 35.896311,
-      longitude: 128.622051
-    },
-    heading: 0,
-    pitch: 0,
-    zoom: 15,
-    altitude: 0
+  const [region, setRegion] = useState<any>({
+    latitude: 35.896311,
+    longitude: 128.622051,
+    latitudeDelta: 0.008,
+    longitudeDelta: 0.008,
   });
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   let sound1: Sound;
   let singoSetTimeout: NodeJS.Timeout;
-
-  let watch: number;
-  const [_watch, _setWatch] = useState<any>();
 
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
   useEffect(() => {
@@ -470,26 +442,27 @@ const MapData = ({navigation}: DrawerProp) => {
         showsTraffic={false}
         showsIndoors={true}
 
-        camera={camera}
-        // onUserLocationChange={ e => {
-        // //   if(onSave){
-        // //     setCoordinate({
-        // //       latitude: e.nativeEvent.coordinate.latitude,
-        // //       longitude: e.nativeEvent.coordinate.longitude,
-        // //       speed: e.nativeEvent.coordinate.speed,
-        // //       timestamp: e.nativeEvent.coordinate.timestamp,
-        // //     });
-        // //     // ㅠㅠ 마법소스인데
-        // //     // const {latitude, longitude} = e.nativeEvent.coordinate;
-        // //     // setLocations([...locations, {latitude, longitude}]);
-        // //     // ㅠㅠ 마법소스인데
+        region={region}
 
-        // //     // 각종 값을 체크하는 함수를 만들어야함
-        // //     // console.log("-> linkInfo ", linkInfo);
-        // //     // console.log("-> defaultInfo ", defaultInfo);
-        // //     // console.log("-> checkInfo ", checkInfo);
-        // //   }
-        // }}
+        onUserLocationChange={ e => {
+          if(onSave){
+            setCoordinate({
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+              speed: e.nativeEvent.coordinate.speed,
+              timestamp: e.nativeEvent.coordinate.timestamp,
+            });
+            // ㅠㅠ 마법소스인데
+            // const {latitude, longitude} = e.nativeEvent.coordinate;
+            // setLocations([...locations, {latitude, longitude}]);
+            // ㅠㅠ 마법소스인데
+
+            // 각종 값을 체크하는 함수를 만들어야함
+            // console.log("-> linkInfo ", linkInfo);
+            // console.log("-> defaultInfo ", defaultInfo);
+            // console.log("-> checkInfo ", checkInfo);
+          }
+        }}
       >
         {/* {onSave && (<Polyline
           coordinates={locations}
@@ -506,10 +479,11 @@ const MapData = ({navigation}: DrawerProp) => {
           <Text>
             YPR : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
           </Text>
-          <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
-          <Text>경도 : {coordinate.longitude.toFixed(5)}</Text>
-          <Text>속도 : {typeof coordinate.speed === "number" ? (coordinate.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
+          <Text>위도 : {coordinate.latitude.toFixed(4)}</Text>
+          <Text>경도 : {coordinate.longitude.toFixed(4)}</Text>
+          <Text>속도 : {coordinate.speed.toFixed(1)}</Text>
           <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
+          <Text>{onTime}</Text>
         </TopLeftView>
       )}
 
@@ -535,23 +509,13 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="plus"
           color="#000000"
           onPress={() => {
-            setCamera({
-              center: {
-                latitude: camera.center.latitude,
-                longitude: camera.center.longitude
-              },
-              heading: 0,
-              pitch: 0,
-              zoom: camera.zoom+1,
-              altitude: 0
+            setRegion({
+              latitude: region.latitude,
+              longitude: region.longitude,
+              latitudeDelta: region.latitudeDelta - (region.latitudeDelta/2),
+              longitudeDelta: region.longitudeDelta - (region.longitudeDelta/2),
             });
-            // setRegion({
-            //   latitude: region.latitude,
-            //   longitude: region.longitude,
-            //   latitudeDelta: region.latitudeDelta - (region.latitudeDelta/2),
-            //   longitudeDelta: region.longitudeDelta - (region.longitudeDelta/2),
-            // });
-            // console.log(region);
+            console.log(region);
           }}
         />
         <IconButton
@@ -564,23 +528,13 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="minus"
           color="#000000"
           onPress={() => {
-            setCamera({
-              center: {
-                latitude: camera.center.latitude,
-                longitude: camera.center.longitude
-              },
-              heading: 0,
-              pitch: 0,
-              zoom: camera.zoom-1,
-              altitude: 0
+            setRegion({
+              latitude: region.latitude,
+              longitude: region.longitude,
+              latitudeDelta: region.latitudeDelta * 2,
+              longitudeDelta: region.longitudeDelta * 2,
             });
-            // setRegion({
-            //   latitude: region.latitude,
-            //   longitude: region.longitude,
-            //   latitudeDelta: region.latitudeDelta * 2,
-            //   longitudeDelta: region.longitudeDelta * 2,
-            // });
-            // console.log(region);
+            console.log(region);
           }}
         />
       </CenterRightView>
@@ -593,22 +547,19 @@ const MapData = ({navigation}: DrawerProp) => {
             Geolocation.getCurrentPosition(
               async position => {
                 const {latitude, longitude} = position.coords;
-                // Geolocation
-                setCamera({
-                  center: {
-                    latitude: latitude,
-                    longitude: longitude
-                  },
-                  heading: 0,
-                  pitch: 0,
-                  zoom: camera.zoom,
-                  altitude: 0
-                });
+                setRegion({
+                  latitude: latitude,
+                  longitude: longitude,
+                  latitudeDelta: region.latitudeDelta,
+                  longitudeDelta: region.longitudeDelta,
+                })
+                console.log(position.coords);
+                console.log("나에위치");
               },
               error => {
                 console.log(error.code, error.message);
               },
-              { enableHighAccuracy: true, timeout: 3000, maximumAge: 1000 }
+              {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
             );
           }}
         />
@@ -628,62 +579,9 @@ const MapData = ({navigation}: DrawerProp) => {
               _checkInfo[2] = 0;
               setCheckInfo(_checkInfo);
               // --- 사고다시 가능
-
-              // 추가ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
-              Geolocation.clearWatch(0);
             } else {
               Alert.alert('운전을 시작합니다');
               checkInfo[0] = 1; // 아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ 이거뭐지
-
-              // 추가ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
-              Geolocation.watchPosition(
-                position => {
-                  // console.log("#############", position);
-                  let now = new Date();
-                  setOnTime(position.timestamp); // 화면 갱신
-                  console.log(position.timestamp, "하하 >>", position.coords);
-                  // linkInfo_3(); // 사고체크
-                  // linkInfo_4(); // 태만 체크
-                  // linkInfo_5(); // 졸음체크
-                  const {latitude, longitude, speed} = position.coords;
-                  const {timestamp} = position;
-                  console.log(position);
-                  setCoordinate({
-                    latitude: latitude,
-                    longitude: longitude,
-                    speed: speed,
-                    timestamp: timestamp,
-                  });
-                  // let aaa = (camera: ICamera) => {
-                  //   console.log(camera.zoom);
-                  // };
-                  // aaa(camera);
-                  setCamera( camera => {
-                    console.log(camera.zoom);
-                    return ({
-                      center: {
-                        latitude: latitude,
-                        longitude: longitude
-                      },
-                      heading: 0,
-                      pitch: 0,
-                      zoom: camera.zoom,
-                      altitude: 0
-                    });
-                  });
-                },
-                error => {
-                  console.log(error);
-                },
-                {
-                  timeout: 0,
-                  maximumAge: 0,
-                  enableHighAccuracy: true,
-                  // enableHighAccuracy: false,
-                  distanceFilter: 0.1,
-                },
-              );
-              // console.log(">>>>>>>>>>>>>,", watch);
             }
             setDriving(!driving); // 운전
             setOnSave(!onSave); // 기록
