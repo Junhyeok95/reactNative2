@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState, useRef, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
@@ -67,8 +67,20 @@ const audioList = [
   }
 ]
 
+const ViewViewView = Styled.View`
+  flex: 1;
+`;
 const Text = Styled.Text`
   font-size: 16px;
+`;
+const TopLeftView2 = Styled.View`
+  background-color: #FFFFFF;
+  border-color: #00F;
+  border-width: 2px;
+  border-radius: 16px;
+  width: 86%;
+  margin-bottom: 30px;
+  padding: 2%;
 `;
 const TopLeftView = Styled.View`
   position: absolute;
@@ -182,6 +194,19 @@ interface ICoordinate {
   timestamp: number;
 }
 
+interface ILatLng {
+  latitude: number;
+  longitude: number;
+}
+
+interface ICamera {
+  center: ILatLng;
+  heading: number;
+  pitch: number;
+  zoom: number;
+  altitude: number;
+}
+
 type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
 interface DrawerProp {
   navigation: TypeDrawerProp;
@@ -254,11 +279,24 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
     longitudeDelta: 0.008,
   });
 
+  const [camera, setCamera] = useState<ICamera>({
+    center: {
+      latitude: 35.896311,
+      longitude: 128.622051
+    },
+    heading: 0,
+    pitch: 0,
+    zoom: 15,
+    altitude: 0
+  });
+
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   let sound1: Sound;
   let singoSetTimeout: NodeJS.Timeout;
 
   //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
+
+  const mapRef = useRef(null);
 
   let _watchId: number;
 
@@ -266,48 +304,62 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
   const [tt, setTT] = useState<String>("---");
 
   useEffect(() => {
-    _watchId = Geolocation.watchPosition(
-      position => {
-        console.log(">>", position.coords);
-        setTT(JSON.stringify(position.coords));
-        const {latitude, longitude} = position.coords;
-        // setLocations([...locations, {latitude, longitude}]);
-      },
-      error => {
-        console.log(error);
-      },
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 2,
-        interval: 1000,
-        fastestInterval: 1000,
-      },
-    );
-  }, [tt]);
-
-  useEffect(() => {
     // 지울예정
     // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]); 
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
 
-    //   let id = setInterval(() => {
+    //   let abc = setInterval(() => {
     //     let now = new Date();
     //     // console.log(now.getHours());
     //     // console.log(now.getMinutes());
     //     // console.log(now.getSeconds());
-    //     setOnTime(now.getSeconds()); // 화면 갱신
-    //     linkInfo_3(); // 사고체크
-    //     linkInfo_4(); // 태만 체크
-    //     linkInfo_5(); // 졸음체크
+    //     // setOnTime(now.getSeconds()); // 화면 갱신
+    //     // linkInfo_3(); // 사고체크
+    //     // linkInfo_4(); // 태만 체크
+    //     // linkInfo_5(); // 졸음체크
     //     // console.log(checkInfo);
     //     // console.log(_checkInfo());
     //     // console.log(_linkInfo());
-    //   }, 1000);
+    //     Geolocation.getCurrentPosition(
+    //       async position => {
+    //         const {latitude, longitude} = position.coords;
+    //         console.log(">>>>>>>>>>>",latitude,longitude);
+    //       },
+    //       error => {
+    //         console.log(error.code, error.message);
+    //       },
+    //       {enableHighAccuracy: true, timeout: 100, maximumAge: 100},
+    //     );
+    //   }, 250);
     // return () => {
-    //   console.log("--- --- MapData return");
-    //   clearInterval(id);
+    //   console.log("-----------------------");
+    //   clearInterval(abc);
     // };
+
+    _watchId = Geolocation.watchPosition(
+      position => {
+        // console.log("#############", position);
+        let now = new Date();
+        setOnTime(position.timestamp); // 화면 갱신
+        console.log(position.timestamp, "하하 >>", position.coords);
+        setTT(JSON.stringify(position.coords));
+        // linkInfo_3(); // 사고체크
+        // linkInfo_4(); // 태만 체크
+        // linkInfo_5(); // 졸음체크
+        const {latitude, longitude} = position.coords;
+      },
+      error => {
+        console.log(error);
+      },
+      {
+        // timeout
+        maximumAge: 0,
+        enableHighAccuracy: true,
+        // enableHighAccuracy: false,
+        distanceFilter: 0.1,
+      },
+    );
 
     return () => {
       if (_watchId !== null) {
@@ -457,8 +509,16 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
       // }
   }
 
+
   return (
-    <>
+    <ViewViewView>
+      <TopLeftView2 style={{marginTop:getStatusBarHeight()}}>
+        
+        <Text>{tt}</Text>
+        <Text>시간 : {onTime}</Text>
+
+      </TopLeftView2>
+
       <MapView
         provider={PROVIDER_GOOGLE}
         style={{flex: 1, marginTop}}
@@ -474,7 +534,11 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
         showsTraffic={false}
         showsIndoors={true}
 
-        region={region}
+        camera={camera}
+
+        // region={region}
+
+        // initialRegion={region}
 
         // onUserLocationChange={ e => {
         //   console.log("## ",e.nativeEvent.coordinate);
@@ -505,20 +569,7 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
       </MapView>
 
       {/* {driving && ( */}
-        <TopLeftView style={{marginTop:getStatusBarHeight()}}>
-          <Text>
-            SLR : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
-          </Text>
-          <Text>
-            YPR : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
-          </Text>
-          <Text>위도 : {coordinate.latitude.toFixed(4)}</Text>
-          <Text>경도 : {coordinate.longitude.toFixed(4)}</Text>
-          <Text>속도 : {coordinate.speed.toFixed(1)}</Text>
-          <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
-          <Text>{onTime}</Text>
-          <Text>{tt}</Text>
-        </TopLeftView>
+        
       {/* )} */}
 
       <TopRightView
@@ -578,17 +629,22 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
           icon="crosshairs-gps"
           color="#000000"
           onPress={() => {
+            console.log("내 위치");
             Geolocation.getCurrentPosition(
               async position => {
                 const {latitude, longitude} = position.coords;
-                setRegion({
-                  latitude: latitude,
-                  longitude: longitude,
-                  latitudeDelta: region.latitudeDelta,
-                  longitudeDelta: region.longitudeDelta,
+                // Geolocation
+                setCamera({
+                  center: {
+                    latitude: latitude,
+                    longitude: longitude
+                  },
+                  heading: 0,
+                  pitch: 0,
+                  zoom: 15,
+                  altitude: 0
                 })
-                console.log(position.coords);
-                console.log("나에위치");
+                console.log(">>>>>>>>>>>");
               },
               error => {
                 console.log(error.code, error.message);
@@ -658,7 +714,7 @@ const MapDataWiFi = ({navigation}: DrawerProp) => {
           </SingoCancelBtn>
         </SingoView>
       }
-    </>
+    </ViewViewView>
   );
 };
 
