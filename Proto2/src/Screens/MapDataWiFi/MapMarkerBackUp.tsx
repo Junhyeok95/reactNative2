@@ -23,7 +23,7 @@ const TopLeftView = Styled.View`
   border-radius: 16px;
   top: 1%;
   left: 2%;
-  width: 60%;
+  width: 50%;
   padding: 5% 10%;
 `;
 const TopRightView = Styled.View`
@@ -194,9 +194,6 @@ const MapMarker = ({navigation}: DrawerProp) => {
       <SaveContainer>
         <TouchableOpacity
         style={index<2?{borderColor:"#00F", borderWidth:3}:index<4?{borderColor:"#0AA", borderWidth:3}:index<6?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
-          console.log("hahahaha");
-          console.log(locationsArr[num]);
-          console.log("hahahaha");
           setPoly(num);
           console.log(item[0]);
           let {latitude, longitude} = item[0];
@@ -250,27 +247,11 @@ const MapMarker = ({navigation}: DrawerProp) => {
       </MapView>
 
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
-          {/* <Text>
-            날짜 : {defaultInfo[0].toString().substr(0,4) + 
-            " - " + defaultInfo[0].toString().substr(4,2) + 
-            " - " + defaultInfo[0].toString().substr(6,2)}
-          </Text> */}
           <Text>
-            운행종료 : 
-            {/* {defaultInfo[0].toString().substr(0,4) + 
-            "-" + defaultInfo[0].toString().substr(4,2) + 
-            "-" + defaultInfo[0].toString().substr(6,2) + 
-            " " + } */}
-
+            날짜 : {time}
           </Text>
           <Text>
-            주행시간 :
-             {/* {defaultInfo[0].toString().substr(0,4) + 
-            " - " + defaultInfo[0].toString().substr(4,2) + 
-            " - " + defaultInfo[0].toString().substr(6,2)} */}
-          </Text>
-          <Text>
-            급정거 : {p1}
+            급정거  : {p1}
           </Text>
           <Text>
             급가속 : {p2}

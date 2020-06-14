@@ -125,24 +125,26 @@ const List = ({  }: Props) => {
 
   useEffect(()=>{
 
-    // TEST -----
-    let myInterval = setInterval(() => {
-      let now = new Date();
-        let nowarr = [...linkInfo];
-        nowarr[0] = now.getSeconds();
-        nowarr[2] = now.getSeconds();
-        setLinkInfo(nowarr); // 저장
-    }, 1000);
-    // TEST -----
-
-    console.log('> List useEffect');
-    let _defaultInfo = [...defaultInfo];
-    _defaultInfo[3] = 0;
-    // console.log(_defaultInfo);
-    // // setDefaultInfo([2,2,2,2,2,2,2,2,2,2,2]);
-    // setDefaultInfo([3,3,3,3,33,3,3,3,3]);
-    // console.log(_defaultInfo);
-    setDefaultInfo(_defaultInfo);
+    // // TEST -----
+    //       let myInterval = setInterval(() => {
+    //         let now = new Date();
+    //           let nowarr = [...linkInfo];
+    //           nowarr[0] = now.getSeconds();
+    //           nowarr[2] = now.getSeconds();
+    //           setLinkInfo(nowarr); // 저장
+    //       }, 1000);
+          
+    //       console.log('> List useEffect');
+    //       // let _defaultInfo = [...defaultInfo];
+    //       // let _defaultInfo = defaultInfo;
+    //       let _defaultInfo = Object.assign({}, defaultInfo);
+    //       _defaultInfo[3] = 0;
+    //       // console.log(_defaultInfo);
+    //       // // setDefaultInfo([2,2,2,2,2,2,2,2,2,2,2]);
+    //       // setDefaultInfo([3,3,3,3,33,3,3,3,3]);
+    //       // console.log(_defaultInfo);
+    //       setDefaultInfo(_defaultInfo);
+    // // TEST -----
 
     if (Platform.OS === 'android') {
       androidPermissionBluetooth();
@@ -162,10 +164,10 @@ const List = ({  }: Props) => {
       HandlerUpdate.remove();
       AppState.removeEventListener("change", HandleAppStateChange);
 
-      // TEST -----
-      console.log("--- --- MapData return");
-      clearInterval(myInterval);
-      // TEST -----
+      // // TEST -----
+      //         console.log("--- --- MapData return");
+      //         clearInterval(myInterval);
+      // // TEST -----
     };
   }, []);
 
@@ -321,7 +323,7 @@ const List = ({  }: Props) => {
                   BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
                     console.log('### Started notification on ' + peripheral.id);
 
-                      let _defaultInfo = defaultInfo;
+                      let _defaultInfo = [...defaultInfo];
                       _defaultInfo[3] = 1;
                       setDefaultInfo(_defaultInfo);
 

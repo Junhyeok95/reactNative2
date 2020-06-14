@@ -13,6 +13,8 @@ import {
   NativeModules, NativeEventEmitter,} from 'react-native';
 
 import {DrivingDataContext} from '~/Contexts/DrivingData';
+import {UserContext} from '~/Contexts/User';
+
 import Geolocation from 'react-native-geolocation-service';
 import Sound from 'react-native-sound';
 
@@ -249,7 +251,8 @@ const MapData = ({navigation}: DrawerProp) => {
     return "";
   }
   
-  const {linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
+  const {drivingSaveData, setDrivingSaveData, linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
+  const {userInfo2} = useContext<IUserContext>(UserContext);
   
   const [modal, setModal] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
@@ -260,6 +263,11 @@ const MapData = ({navigation}: DrawerProp) => {
   const [onSave, setOnSave] = useState<boolean>(false);
   const [onPolyline, setOnPolyline] = useState<boolean>(false);
   const [driving, setDriving] = useState<boolean>(false);
+
+  // MapMarker Point
+  const [_startTime, _setStartTime] = useState<number>(0);
+  const [_endTime, _setEndTime] = useState<number>();
+  // MapMarker Point
 
   const [coordinate, setCoordinate] = useState<ICoordinate>({
     latitude: 0.0000,
@@ -466,7 +474,7 @@ const MapData = ({navigation}: DrawerProp) => {
 // console.log("-> defaultInfo ", defaultInfo);
 // console.log("-> checkInfo ", checkInfo);
           if(onSave){
-            console.log("onUserLocationChange !!");
+            // console.log("onUserLocationChange !!");
             const {latitude, longitude} = e.nativeEvent.coordinate;
             setLocations([...locations, {latitude, longitude}]);
 
@@ -620,12 +628,32 @@ const MapData = ({navigation}: DrawerProp) => {
           onPress={()=>{
             if(driving){
               Alert.alert('운전을 종료합니다');
-
+              
+              
               // 저장해야함
+              // console.log("실제 주행 ->> ", locations);
+              // console.log("값확인 !!",drivingSaveData);
+              
+              let _drivingSaveData = Object.assign({}, drivingSaveData);
+              // _drivingSaveData.Drivingline = [...locations];
+              let _endT = new Date().getTime();
+              _setEndTime(_endT);
+              if(locations){
+                if(userInfo2 && userInfo2.key){
+                  _drivingSaveData.webUserId = userInfo2.key;
+                }
+                if(userInfo2 && userInfo2.name){
+                  _drivingSaveData.Drivingline = locations;
+                  // 탐지 객체도 넣어야함 DrivingMarker
+                  _drivingSaveData.name = userInfo2.name;
+                  _drivingSaveData.startTime = _startTime;
+                  _drivingSaveData.endTime = _endT;
+                }
+              }
+              setDrivingSaveData(_drivingSaveData);
               setLocations([]);
-
               // 저장해야함
-
+              
               // --- 사고다시 가능
               let _checkInfo = [...checkInfo];
               _checkInfo[0] = 0;
@@ -635,10 +663,20 @@ const MapData = ({navigation}: DrawerProp) => {
               // --- 사고다시 가능
               Geolocation.clearWatch(0);
 
+              // --- 운전 시작시간 클리어 ...
+              _setStartTime(0);
+              // --- 운전 시작시간 클리어 ...
+              
             } else {
 
               Alert.alert('운전을 시작합니다');
               setOnPolyline(true);
+
+              // 저장해야함
+              // save 전에 클리어
+              setLocations([]);
+              _setStartTime(new Date().getTime());
+              // 저장해야함
               
               let _checkInfo = [...checkInfo];
               _checkInfo[0] = 1;

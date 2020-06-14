@@ -4,18 +4,28 @@ interface IUserProfile {
 }
 
 interface IDrivingSaveData extends IUserProfile {
-  time: number;
+  // name
+  // webUserId
+  startTime: number;
+  endTime: number | undefined;
   Drivingline: Array<any> | undefined;
   DrivingMarker: Array<any> | undefined;
 }
 
 interface IDrivingData {
-  drivingSaveData: Array<IDrivingSaveData>,
+  drivingSaveDataArr: Array<any>,
+  setDrivingSaveDataArr: (data: any) => void,
+
+  drivingSaveData: IDrivingSaveData | undefined,
+  setDrivingSaveData: (data: any) => void,
+
+
   defaultInfo: Array<number>,
   linkInfo: Array<number>,
   checkInfo: Array<number>,
-  drivingSave: (data?: IDrivingSaveData) => void,
   setDefaultInfo: (data: any) => void,
   setLinkInfo: (data: any) => void,
   setCheckInfo: (data: any) => void,
+
+  drivingSave: (data?: IDrivingSaveData) => void,
 }

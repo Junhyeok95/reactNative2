@@ -13,6 +13,9 @@ const App = ({ }: Props) => {
 
   useEffect(() => {
     console.log("===== ===== START ===== =====");
+    // console.log(new Date());
+    // console.log(+new Date());
+    // console.log(new Date().getTime());
     setTimeout(() => {
       SplashScreen.hide();
     }, 2000);
