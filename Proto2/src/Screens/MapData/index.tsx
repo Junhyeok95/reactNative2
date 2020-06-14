@@ -110,6 +110,18 @@ const BottomLeftView = Styled.View`
   width: 50px;
   height: 50px;
 `;
+const BottomLeftView2 = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 25px;
+  border-width: 1px;
+  border-color: #AAA;
+  bottom: 2%;
+  left: 4%;
+  margin-left: 50px;
+  width: 50px;
+  height: 50px;
+`;
 const BottomRightView = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -130,7 +142,8 @@ const Bt = Styled.TouchableOpacity`
   align-items: center;
 `;
 const BtLabel = Styled.Text`
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 900;
 `;
 const SingoView = Styled.View`
   position: absolute;
@@ -235,18 +248,18 @@ const MapData = ({navigation}: DrawerProp) => {
     if(num==2) return "Off";
     return "";
   }
-
-  const [modal, setModal] = useState<boolean>(false);
-
+  
   const {linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
-  const [testDrawer, setTestDrawer] = useState<Array<number>>([]);
-
+  
+  const [modal, setModal] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
 
-  const [speed, setSpeed] = useState<number>(0);
-  const [onSave, setOnSave] = useState<boolean>(false);
-  const [driving, setDriving] = useState<boolean>(false);
   const [onTime, setOnTime] = useState<any>();
+  const [speed, setSpeed] = useState<number>(0);
+
+  const [onSave, setOnSave] = useState<boolean>(false);
+  const [onPolyline, setOnPolyline] = useState<boolean>(false);
+  const [driving, setDriving] = useState<boolean>(false);
 
   const [coordinate, setCoordinate] = useState<ICoordinate>({
     latitude: 0.0000,
@@ -255,18 +268,12 @@ const MapData = ({navigation}: DrawerProp) => {
     timestamp: 0,
      // Milliseconds since Unix epoch ㄴㄴㄴ
   });
-  
-  const [location, setLocation] = useState<IGeolocation>({
-    latitude: 35.896311,
-    longitude: 128.622051,
+  const [coordinate2, setCoordinate2] = useState<ICoordinate>({
+    latitude: 0.0000,
+    longitude: 0.0000,
+    speed: 0.0000,
+    timestamp: 0, // Milliseconds since Unix epoch
   });
-
-  // const [region, setRegion] = useState<any>({
-  //   latitude: 35.896311,
-  //   longitude: 128.622051,
-  //   latitudeDelta: 0.008,
-  //   longitudeDelta: 0.008,
-  // });
 
   const [camera, setCamera] = useState<ICamera>({
     center: {
@@ -281,38 +288,15 @@ const MapData = ({navigation}: DrawerProp) => {
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   let sound1: Sound;
+  let sound2: Sound;
   let singoSetTimeout: NodeJS.Timeout;
 
-  let watch: number;
-  const [_watch, _setWatch] = useState<any>();
-
-  //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
   useEffect(() => {
     // 지울예정
     // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]); 
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
-
-    //   let id = setInterval(() => {
-    //     let now = new Date();
-    //     // console.log(now.getHours());
-    //     // console.log(now.getMinutes());
-    //     // console.log(now.getSeconds());
-    //     setOnTime(now.getSeconds()); // 화면 갱신
-    //     linkInfo_3(); // 사고체크
-    //     linkInfo_4(); // 태만 체크
-    //     linkInfo_5(); // 졸음체크
-    //     // console.log(checkInfo);
-    //     // console.log(_checkInfo());
-    //     // console.log(_linkInfo());
-    //   }, 1000);
-    // return () => {
-    //   console.log("--- --- MapData return");
-    //   clearInterval(id);
-    // };
-
   },[]);
-  //  ##### ##### ##### ##### ##### ##### ##### ##### #####  useEffect
 
   let linkInfo_3 = ():void => {
     // if(driving){ // 운전상태 체크
@@ -339,18 +323,19 @@ const MapData = ({navigation}: DrawerProp) => {
               // // 신고되는 http 로직 넣어야함
 
               // 신고를 했다는 알림
-              sound1 = new Sound(audioList[7].url, (error) => {
+              sound2 = new Sound(audioList[7].url, (error) => {
                 if(error){
                   return;
                 } else {
-                  sound1.play((success)=>{
-                    sound1.release();
+                  sound2.play((success)=>{
+                    sound2.release();
                   })
                 }
               });
+
             }, 10000);
 
-            let _checkInfo = checkInfo;
+            let _checkInfo = [...checkInfo];
             _checkInfo[2] = 1;
             setCheckInfo(_checkInfo);
           }
@@ -370,6 +355,7 @@ const MapData = ({navigation}: DrawerProp) => {
           linkInfo_4Cnt++; // sleep 체크 변수
           console.log("태만 체크", linkInfo_4Cnt);
             if(linkInfo_4Cnt > 5){
+              // 태만 클리어
               linkInfo_4Cnt = 0;
               // 태만 감지 사운드
               sound1 = new Sound(audioList[8].url, (error) => {
@@ -382,17 +368,19 @@ const MapData = ({navigation}: DrawerProp) => {
                 }
               });
 
-              // let _checkInfo = checkInfo;
+              // // 주시태만 중
+              // let _checkInfo = [...checkInfo];
               // _checkInfo[10] = 1;
               // setCheckInfo(_checkInfo);
 
               // setTimeout(() => {
-              //   let _checkInfo = checkInfo;
+              //   let _checkInfo = [...checkInfo];
               //   _checkInfo[10] = 0;
               //   setCheckInfo(_checkInfo);
               // }, 5000);
             }
         } else if( linkInfo[4] == 10 ){
+          // 정면주시 보상
           console.log("정면 성공 체크", linkInfo_4Cnt);
           if(linkInfo_4Cnt>1){
             linkInfo_4Cnt -= 2;
@@ -416,6 +404,7 @@ const MapData = ({navigation}: DrawerProp) => {
           linkInfo_5Cnt++; // sleep 체크 변수
           console.log(">>        졸음 체크", linkInfo_5Cnt);
             if(linkInfo_5Cnt > 8){
+              // 졸음 클리어
               linkInfo_5Cnt = 0;
               // 졸음운전 슬립 사운드
               sound1 = new Sound(audioList[1].url, (error) => {
@@ -429,12 +418,12 @@ const MapData = ({navigation}: DrawerProp) => {
               });
               
 
-              // let _checkInfo = checkInfo;
+              // let _checkInfo = [...checkInfo];
               // _checkInfo[8] = 1;
               // setCheckInfo(_checkInfo);
 
               // setTimeout(() => {
-              //   let _checkInfo = checkInfo;
+              //   let _checkInfo = [...checkInfo];
               //   _checkInfo[8] = 0;
               //   setCheckInfo(_checkInfo);
               // }, 5000);
@@ -471,31 +460,30 @@ const MapData = ({navigation}: DrawerProp) => {
         showsIndoors={true}
 
         camera={camera}
-        // onUserLocationChange={ e => {
-        // //   if(onSave){
-        // //     setCoordinate({
-        // //       latitude: e.nativeEvent.coordinate.latitude,
-        // //       longitude: e.nativeEvent.coordinate.longitude,
-        // //       speed: e.nativeEvent.coordinate.speed,
-        // //       timestamp: e.nativeEvent.coordinate.timestamp,
-        // //     });
-        // //     // ㅠㅠ 마법소스인데
-        // //     // const {latitude, longitude} = e.nativeEvent.coordinate;
-        // //     // setLocations([...locations, {latitude, longitude}]);
-        // //     // ㅠㅠ 마법소스인데
+        onUserLocationChange={ e => {
+// 각종 값을 체크하는 함수를 만들어야함
+// console.log("-> linkInfo ", linkInfo);
+// console.log("-> defaultInfo ", defaultInfo);
+// console.log("-> checkInfo ", checkInfo);
+          if(onSave){
+            console.log("onUserLocationChange !!");
+            const {latitude, longitude} = e.nativeEvent.coordinate;
+            setLocations([...locations, {latitude, longitude}]);
 
-        // //     // 각종 값을 체크하는 함수를 만들어야함
-        // //     // console.log("-> linkInfo ", linkInfo);
-        // //     // console.log("-> defaultInfo ", defaultInfo);
-        // //     // console.log("-> checkInfo ", checkInfo);
-        // //   }
-        // }}
+            setCoordinate2({
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+              speed: e.nativeEvent.coordinate.speed,
+              timestamp: e.nativeEvent.coordinate.timestamp,
+            });
+          }
+        }}
       >
-        {/* {onSave && (<Polyline
+        {onSave && onPolyline && (<Polyline
           coordinates={locations}
           strokeWidth={3}
           strokeColor="#00F" 
-        />)} */}
+        />)}
       </MapView>
 
       {driving && (
@@ -506,16 +494,22 @@ const MapData = ({navigation}: DrawerProp) => {
           <Text>
             YPR : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
           </Text>
+          <Text></Text>
+
           <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
           <Text>경도 : {coordinate.longitude.toFixed(5)}</Text>
           <Text>속도 : {typeof coordinate.speed === "number" ? (coordinate.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
           <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
+          <Text></Text>
+
+          <Text>위도 : {coordinate2.latitude.toFixed(5)}</Text>
+          <Text>경도 : {coordinate2.longitude.toFixed(5)}</Text>
+          <Text>속도 : {typeof coordinate2.speed === "number" ? (coordinate2.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
+          <Text>시간 : {parseInt((coordinate2.timestamp/1000).toString())}</Text>
         </TopLeftView>
       )}
 
-      <TopRightView
-        style={{marginTop:getStatusBarHeight()}}
-      >
+      <TopRightView style={{marginTop:getStatusBarHeight()}}>
         <IconButton
           style={{flex:1}}
           icon="menu"
@@ -545,13 +539,6 @@ const MapData = ({navigation}: DrawerProp) => {
               zoom: camera.zoom+1,
               altitude: 0
             });
-            // setRegion({
-            //   latitude: region.latitude,
-            //   longitude: region.longitude,
-            //   latitudeDelta: region.latitudeDelta - (region.latitudeDelta/2),
-            //   longitudeDelta: region.longitudeDelta - (region.longitudeDelta/2),
-            // });
-            // console.log(region);
           }}
         />
         <IconButton
@@ -574,13 +561,6 @@ const MapData = ({navigation}: DrawerProp) => {
               zoom: camera.zoom-1,
               altitude: 0
             });
-            // setRegion({
-            //   latitude: region.latitude,
-            //   longitude: region.longitude,
-            //   latitudeDelta: region.latitudeDelta * 2,
-            //   longitudeDelta: region.longitudeDelta * 2,
-            // });
-            // console.log(region);
           }}
         />
       </CenterRightView>
@@ -592,74 +572,95 @@ const MapData = ({navigation}: DrawerProp) => {
           onPress={() => {
             Geolocation.getCurrentPosition(
               async position => {
-                const {latitude, longitude} = position.coords;
-                // Geolocation
-                setCamera({
-                  center: {
-                    latitude: latitude,
-                    longitude: longitude
-                  },
-                  heading: 0,
-                  pitch: 0,
-                  zoom: camera.zoom,
-                  altitude: 0
+                const {latitude, longitude, speed} = position.coords;
+                const {timestamp} = position;
+                setCoordinate({
+                  latitude: latitude,
+                  longitude: longitude,
+                  speed: speed,
+                  timestamp: timestamp,
+                });
+                setCamera( camera => {
+                  return ({
+                    center: {
+                      latitude: latitude,
+                      longitude: longitude
+                    },
+                    heading: 0,
+                    pitch: 0,
+                    zoom: camera.zoom,
+                    altitude: 0
+                  });
                 });
               },
               error => {
                 console.log(error.code, error.message);
               },
-              { enableHighAccuracy: true, timeout: 3000, maximumAge: 1000 }
+              {
+                timeout: 0,
+                maximumAge: 0,
+                enableHighAccuracy: true,
+              }
             );
           }}
         />
       </BottomLeftView>
+      {driving && (<BottomLeftView2>
+        <IconButton
+          icon={onPolyline?"eye":"eye-off"}
+          color={onPolyline?"#00FA":"#AAAA"}
+          onPress={() => {
+            setOnPolyline(!onPolyline);
+          }}
+        />
+      </BottomLeftView2>)}
 
-      <BottomRightView
-        style={driving?{backgroundColor:"#00F"}:{backgroundColor:"#FFF"}}
-      >
+      <BottomRightView style={driving?{backgroundColor:"#00F"}:{backgroundColor:"#FFF"}}>
         <Bt
           onPress={()=>{
             if(driving){
               Alert.alert('운전을 종료합니다');
-              checkInfo[0] = 0; // 아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ 이거뭐지
-              setLocations([]); // 저장해야함
+
+              // 저장해야함
+              setLocations([]);
+
+              // 저장해야함
+
               // --- 사고다시 가능
-              let _checkInfo = checkInfo;
+              let _checkInfo = [...checkInfo];
+              _checkInfo[0] = 0;
+              _checkInfo[1] = 1;
               _checkInfo[2] = 0;
               setCheckInfo(_checkInfo);
               // --- 사고다시 가능
-
-              // 추가ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
               Geolocation.clearWatch(0);
-            } else {
-              Alert.alert('운전을 시작합니다');
-              checkInfo[0] = 1; // 아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ 이거뭐지
 
-              // 추가ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
+            } else {
+
+              Alert.alert('운전을 시작합니다');
+              setOnPolyline(true);
+              
+              let _checkInfo = [...checkInfo];
+              _checkInfo[0] = 1;
+              _checkInfo[1] = 0;
+              _checkInfo[2] = 0;
+              setCheckInfo(_checkInfo);
+
               Geolocation.watchPosition(
                 position => {
-                  // console.log("#############", position);
                   let now = new Date();
-                  setOnTime(position.timestamp); // 화면 갱신
-                  console.log(position.timestamp, "하하 >>", position.coords);
-                  // linkInfo_3(); // 사고체크
-                  // linkInfo_4(); // 태만 체크
-                  // linkInfo_5(); // 졸음체크
+// linkInfo_3(); // 사고체크
+// linkInfo_4(); // 태만 체크
+// linkInfo_5(); // 졸음체크
                   const {latitude, longitude, speed} = position.coords;
                   const {timestamp} = position;
-                  console.log(position);
                   setCoordinate({
                     latitude: latitude,
                     longitude: longitude,
                     speed: speed,
                     timestamp: timestamp,
                   });
-                  // let aaa = (camera: ICamera) => {
-                  //   console.log(camera.zoom);
-                  // };
-                  // aaa(camera);
                   setCamera( camera => {
-                    console.log(camera.zoom);
                     return ({
                       center: {
                         latitude: latitude,
@@ -679,12 +680,12 @@ const MapData = ({navigation}: DrawerProp) => {
                   timeout: 0,
                   maximumAge: 0,
                   enableHighAccuracy: true,
-                  // enableHighAccuracy: false,
-                  distanceFilter: 0.1,
+                  distanceFilter: 1,
                 },
               );
-              // console.log(">>>>>>>>>>>>>,", watch);
             }
+
+            // 무조건 실행, 운전스위치, 기록스위치
             setDriving(!driving); // 운전
             setOnSave(!onSave); // 기록
           }}
@@ -716,7 +717,7 @@ const MapData = ({navigation}: DrawerProp) => {
                   }
                 });
                 setTimeout(() => {
-                  let _checkInfo = checkInfo;
+                  let _checkInfo = [...checkInfo];
                   _checkInfo[2] = 0;
                   setCheckInfo(_checkInfo);
                 }, 5000);
