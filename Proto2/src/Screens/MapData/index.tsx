@@ -251,7 +251,7 @@ const MapData = ({navigation}: DrawerProp) => {
     return "";
   }
   
-  const {drivingSaveData, setDrivingSaveData, linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
+  const {drivingSaveData, setDrivingSaveData, drivingSave, linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
   const {userInfo2} = useContext<IUserContext>(UserContext);
   
   const [modal, setModal] = useState<boolean>(false);
@@ -301,7 +301,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
   useEffect(() => {
     // 지울예정
-    // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]); 
+    // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]);
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
   },[]);
@@ -628,16 +628,14 @@ const MapData = ({navigation}: DrawerProp) => {
           onPress={()=>{
             if(driving){
               Alert.alert('운전을 종료합니다');
-              
-              
+              console.log("운전을 종료합니다");
               // 저장해야함
-              // console.log("실제 주행 ->> ", locations);
-              // console.log("값확인 !!",drivingSaveData);
-              
-              let _drivingSaveData = Object.assign({}, drivingSaveData);
               // _drivingSaveData.Drivingline = [...locations];
+              let _drivingSaveData = Object.assign({}, drivingSaveData);
               let _endT = new Date().getTime();
-              _setEndTime(_endT);
+              _setEndTime(() => _endT);
+              // console.log(locations);
+
               if(locations){
                 if(userInfo2 && userInfo2.key){
                   _drivingSaveData.webUserId = userInfo2.key;
@@ -649,9 +647,15 @@ const MapData = ({navigation}: DrawerProp) => {
                   _drivingSaveData.startTime = _startTime;
                   _drivingSaveData.endTime = _endT;
                 }
+                if(_drivingSaveData.endTime && _drivingSaveData.startTime){
+                  if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
+                    console.log("운전을 기록합니다");
+                    drivingSave(_drivingSaveData);
+                  }
+                }
               }
               setDrivingSaveData(_drivingSaveData);
-              setLocations([]);
+              setLocations([]); // 초기화
               // 저장해야함
               
               // --- 사고다시 가능

@@ -13,19 +13,19 @@ interface IDrivingSaveData extends IUserProfile {
 }
 
 interface IDrivingData {
-  drivingSaveDataArr: Array<any>,
-  setDrivingSaveDataArr: (data: any) => void,
+  drivingSaveDataArr: Array<any>  | undefined;
+  setDrivingSaveDataArr: (data: any) => void;
 
-  drivingSaveData: IDrivingSaveData | undefined,
-  setDrivingSaveData: (data: any) => void,
+  drivingSaveData: IDrivingSaveData | undefined;
+  setDrivingSaveData: (data: any) => void;
 
+  defaultInfo: Array<number>;
+  linkInfo: Array<number>;
+  checkInfo: Array<number>;
+  setDefaultInfo: (data: any) => void;
+  setLinkInfo: (data: any) => void;
+  setCheckInfo: (data: any) => void;
 
-  defaultInfo: Array<number>,
-  linkInfo: Array<number>,
-  checkInfo: Array<number>,
-  setDefaultInfo: (data: any) => void,
-  setLinkInfo: (data: any) => void,
-  setCheckInfo: (data: any) => void,
-
-  drivingSave: (data?: IDrivingSaveData) => void,
+  drivingSave: (data?: IDrivingSaveData) => void;
+  drivingRemove: () => void;
 }

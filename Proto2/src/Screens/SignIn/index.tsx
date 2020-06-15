@@ -159,7 +159,8 @@ const SignIn = ({navigation}: Props) => {
                 style={{ backgroundColor:"#DDDDDD" }}
                 label="회원가입"
                 // onPress={() => navigation.navigate('SignUp')}
-                onPress={() => Linking.openURL(URL+"/auth/signup")}
+                // onPress={() => Linking.openURL(URL+"/auth/signup")}
+                onPress={() => Linking.openURL(URL+"/auth/register")}
               />
               {/* <ButtonMargin />
               <Button

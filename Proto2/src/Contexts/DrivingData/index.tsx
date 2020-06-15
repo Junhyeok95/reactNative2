@@ -21,12 +21,13 @@ const DrivingDataContext = createContext<IDrivingData>({ // 초기값
   setCheckInfo: (data: any) => {},
 
   drivingSave: (data?: IDrivingSaveData) => {},
+  drivingRemove: () => {}
 });
 
 const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이걸로 초기화됨
 
   // ## 필요한것 ... -> 운전시작시간, 운전종료시간, 위도경도 배열, 감지 배열(위도, 경도, 급정거, 급가속, 졸음, 주시태만, 날짜, 시간)
-  const [drivingSaveDataArr, setDrivingSaveDataArr] = useState<Array<IDrivingSaveData>>([]); // 따로두면 시간,라인,마커 관계힘듬
+  const [drivingSaveDataArr, setDrivingSaveDataArr] = useState<Array<IDrivingSaveData> | undefined>([]); // 따로두면 시간,라인,마커 관계힘듬
   const [drivingSaveData, setDrivingSaveData] = useState<IDrivingSaveData>(); // 따로두면 시간,라인,마커 관계힘듬
   // 라즈베리 + 아두이노 정보 -> 14개
   // [ 신고버튼상태, 요, 피치, 롤, 시선방향, 좌눈, 우눈, 화면x, 화면y, 왼좌표x, 왼좌표y, 우좌표x, 우좌표y , 카운터 ] // 화면, 좌표는 1/3 된 값
@@ -44,7 +45,6 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
       return undefined;
     }
     const cacheList = JSON.parse(cacheData); // 캐시 리스트에서 날짜 조회해서 지우기, 보관날짜 생각 년월일 숫자로 ...
-
     return cacheList;
   };
 
@@ -57,21 +57,30 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
     // ARR 작업을 하자
     const cachedData = await getCacheData('DrivingList');
     if (cachedData) { // 기록이 있으면 가저옴
+      console.log("get Cache Data List > ", cachedData.length);
       setDrivingSaveDataArr(cachedData);
       return;
     } else {
-        // console.log('x cachedData -> setDrivingList()');
+        console.log('get Cache Data List x');
       return;
     }
   };
 
   // 운전 기록 후 setDraving, 그 뒤 캐시값으로 던지기
   const drivingSave = async (data?:IDrivingSaveData) => {
-    console.log('drivingSave');
-    if(data != undefined){
-      setDrivingSaveDataArr([...drivingSaveDataArr, data]);
+    console.log('운전 기록 시도');
+    if(drivingSaveDataArr != undefined && data != undefined){
+      let list = [...drivingSaveDataArr, data];
+      console.log('운전 기록 성공', list.length);
+      setDrivingSaveDataArr(list);
+      AsyncStorage.setItem('DrivingList', JSON.stringify(list));
     }
-    // setCachedData('DrivingList', drivingSaveData);
+  }
+
+  const drivingRemove = async () => {
+    console.log('drivingRemove');
+    AsyncStorage.removeItem('DrivingList');
+    setDrivingSaveDataArr(undefined);
   }
 
   // const setToDay = (): void => {
@@ -101,7 +110,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // }
 
   useEffect(() => {
-    // setDrivingList(); // 리스트 호출
+    setDrivingList(); // 리스트 호출
     // setToDay();
     // let ttt = new Date(3600000);
     // let ttt = new Date(1500000000000);
@@ -131,6 +140,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
         setCheckInfo,
 
         drivingSave, // 저장 이외에 삭제도 필요함 하지만 지금은 필요하지않지
+        drivingRemove
       }}>
       {children}
     </DrivingDataContext.Provider>

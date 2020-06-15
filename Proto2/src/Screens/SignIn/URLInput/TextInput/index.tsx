@@ -27,7 +27,14 @@ const TextInput = ({ hideURLInput }: Props) => {
       returnKeyType="done"
       placeholderTextColor="#00F"
       onSubmitEditing={({ nativeEvent }) => {
-        updateURL(nativeEvent.text);
+        console.log("서치 ->> ", nativeEvent.text.indexOf("http://"));
+        if(nativeEvent.text.indexOf("http://") == 0){
+          updateURL(nativeEvent.text);
+          console.log("good > "+nativeEvent.text);
+        }else{
+          updateURL("http://"+nativeEvent.text);
+          console.log("no > http://"+nativeEvent.text);
+        }
         hideURLInput();
       }}
     />

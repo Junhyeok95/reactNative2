@@ -59,12 +59,12 @@ const BottomLeftView = Styled.View`
 // Footer -------------------------------
 const Footer = Styled.View`
   position: absolute;
-  bottom: 2%;
+  bottom: 1%;
   left: 20%;
   right: 2%;
 `;
 const SaveContainer = Styled.View`
-  padding: 8px;
+  padding: 4px;
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
 `;
@@ -114,6 +114,27 @@ interface IRegion {
   longitudeDelta: number;
 }
 
+interface ILatLng {
+  latitude: number;
+  longitude: number;
+}
+
+interface ICamera {
+  center: ILatLng;
+  heading: number;
+  pitch: number;
+  zoom: number;
+  altitude: number;
+}
+
+interface IDriving {
+  stopTime: number;
+  drivingTime: number;
+  sleepMarker: number;
+  suddenStopMarker: number;
+  suddenAccelerationMarker: number;
+}
+
 type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
 interface DrawerProp {
   navigation: TypeDrawerProp;
@@ -122,7 +143,7 @@ import {DrivingDataContext} from '~/Contexts/DrivingData';
 
 const MapMarker = ({navigation}: DrawerProp) => {
 
-  const {defaultInfo, setDefaultInfo} = useContext(DrivingDataContext);
+  const {drivingSaveData, drivingSaveDataArr, defaultInfo, setDefaultInfo} = useContext(DrivingDataContext);
 
   const saveLocations2 = require('./saveLocations2.json');
   let saveData = [];
@@ -134,24 +155,30 @@ const MapMarker = ({navigation}: DrawerProp) => {
     saveData.push(arr);
   }
 
-  const [poly, setPoly] = useState<number>(-1);
-  const [location, setLocation] = useState<IGeolocation>({
-    latitude: 35.896311,
-    longitude: 128.622051,
+  const [drivingInfo, setDrivingInfo] = useState<IDriving>({
+    stopTime: 0,
+    drivingTime: 0,
+    sleepMarker: 0,
+    suddenStopMarker: 0,
+    suddenAccelerationMarker: 0
   });
-  const [locations, setLocations] = useState<Array<IGeolocation>>([]);
+
+  const [poly, setPoly] = useState<number>(-1);
   const [locationsArr, setLocationsArr] = useState<Array<any>>(saveData);
-  const [time, setTime] = useState<any>();
 
   const [p1, setP1] = useState<number>(0);
   const [p2, setP2] = useState<number>(0);
   const [p3, setP3] = useState<number>(0);
 
-  const [region, setRegion] = useState<any>({
-    latitude: 35.896311,
-    longitude: 128.622051,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
+  const [camera, setCamera] = useState<ICamera>({
+    center: {
+      latitude: 35.896311,
+      longitude: 128.622051
+    },
+    heading: 0,
+    pitch: 0,
+    zoom: 15,
+    altitude: 0
   });
   
   // const saveLocations = require('./saveLocations.json');
@@ -176,16 +203,13 @@ const MapMarker = ({navigation}: DrawerProp) => {
   
   useEffect(() => {
     console.log("--- --- MapMarker Mount");
-    console.log(locationsArr[0]);
-    console.log("--- --- MapMarker Mount");
+    console.log(drivingSaveDataArr?.length);
+    // console.log(drivingSaveDataArr);
+    // console.log(drivingSaveDataArr[0].Drivingline);
     return () => {
       console.log("--- --- MapMarker return");
     };
   },[]);
-
-  // useEffect(() => {
-  //   return () => {}
-  // },[ ___ ]);
 
   const renderItem = ({ item, index }:any) => {
     let num = 0;
@@ -194,20 +218,31 @@ const MapMarker = ({navigation}: DrawerProp) => {
       <SaveContainer>
         <TouchableOpacity
         style={index<2?{borderColor:"#00F", borderWidth:3}:index<4?{borderColor:"#0AA", borderWidth:3}:index<6?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
-          console.log("hahahaha");
-          console.log(locationsArr[num]);
-          console.log("hahahaha");
           setPoly(num);
-          console.log(item[0]);
-          let {latitude, longitude} = item[0];
-          setRegion({
-            latitude: latitude,
-            longitude: longitude,
-            latitudeDelta: 0.08,
-            longitudeDelta: 0.08,
-          })
-          console.log("region");
-          console.log(region);
+          let {latitude, longitude} = item.Drivingline[0];
+          console.log(item);
+          console.log(item.endTime);
+          // let saveNameTime = (new Date(item.endTime).getMonth()+1) + "월 " + new Date(item.endTime).getDate() + "일";
+          // console.log(saveNameTime);
+          setDrivingInfo({
+            stopTime: item.endTime,
+            drivingTime: item.endTime-item.startTime,
+            sleepMarker: 0,
+            suddenStopMarker: 0,
+            suddenAccelerationMarker: 0
+          });
+          setCamera( camera => {
+            return ({
+              center: {
+                latitude: latitude,
+                longitude: longitude
+              },
+              heading: 0,
+              pitch: 0,
+              zoom: camera.zoom,
+              altitude: 0
+            });
+          });
           setP1(Math.floor(Math.random() * 15) + 1);
           setP2(Math.floor(Math.random() * 15) + 1);
           setP3(Math.floor(Math.random() * 5) + 1);
@@ -219,7 +254,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
               size={30}
             />
           </Save>
-          <SaveName numberOfLines={1}>{index}</SaveName>
+          <SaveName numberOfLines={1}>{(new Date(item.endTime).getMonth()+1) + " / " + new Date(item.endTime).getDate() + ""}</SaveName>
         </TouchableOpacity>
       </SaveContainer>
     );
@@ -230,6 +265,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
         style={{flex: 1}}
         provider={PROVIDER_GOOGLE}
         loadingEnabled={true}
+
         showsUserLocation={true}
 
         showsMyLocationButton={false}
@@ -240,10 +276,10 @@ const MapMarker = ({navigation}: DrawerProp) => {
         showsTraffic={false}
         showsIndoors={true}
 
-        region={region}
+        camera={camera}
       >
-        {poly >= 0 && <Polyline
-          coordinates={locationsArr[poly]}
+        {poly >= 0 && drivingSaveDataArr != undefined && <Polyline
+          coordinates={drivingSaveDataArr[poly].Drivingline}
           strokeWidth={3}
           strokeColor="#00f"
         />}
@@ -256,27 +292,26 @@ const MapMarker = ({navigation}: DrawerProp) => {
             " - " + defaultInfo[0].toString().substr(6,2)}
           </Text> */}
           <Text>
-            운행종료 : 
-            {/* {defaultInfo[0].toString().substr(0,4) + 
-            "-" + defaultInfo[0].toString().substr(4,2) + 
-            "-" + defaultInfo[0].toString().substr(6,2) + 
-            " " + } */}
-
+            운행종료 :   {drivingInfo.stopTime != 0 ? 
+            (new Date(drivingInfo.stopTime).getMonth()+1) + "월 " +
+            (new Date(drivingInfo.stopTime).getDate() + "일  ") +
+            (new Date(drivingInfo.stopTime).getHours() + ":") +
+            (new Date(drivingInfo.stopTime).getMinutes()) : ""}
           </Text>
           <Text>
-            주행시간 :
-             {/* {defaultInfo[0].toString().substr(0,4) + 
-            " - " + defaultInfo[0].toString().substr(4,2) + 
-            " - " + defaultInfo[0].toString().substr(6,2)} */}
+            주행시간 :   {drivingInfo.drivingTime != 0 ? 
+            (new Date(drivingInfo.drivingTime).getHours()-9) + " : " +
+            (new Date(drivingInfo.drivingTime).getMinutes() + " : ") +
+            (new Date(drivingInfo.drivingTime).getSeconds())+" " : ""}
           </Text>
           <Text>
-            급정거 : {p1}
+            급정거 : {drivingInfo.suddenStopMarker}
           </Text>
           <Text>
-            급가속 : {p2}
+            급가속 : {drivingInfo.suddenAccelerationMarker}
           </Text>
           <Text>
-            졸음 : {p3}
+            졸음 : {drivingInfo.sleepMarker}
           </Text>
         </TopLeftView>
 
@@ -302,13 +337,16 @@ const MapMarker = ({navigation}: DrawerProp) => {
             icon="plus"
             color="#000000"
             onPress={() => {
-              setRegion({
-                latitude: region.latitude,
-                longitude: region.longitude,
-                latitudeDelta: region.latitudeDelta - (region.latitudeDelta/2),
-                longitudeDelta: region.longitudeDelta - (region.longitudeDelta/2),
+              setCamera({
+                center: {
+                  latitude: camera.center.latitude,
+                  longitude: camera.center.longitude
+                },
+                heading: 0,
+                pitch: 0,
+                zoom: camera.zoom+1,
+                altitude: 0
               });
-              console.log(region);
             }}
           />
           <IconButton
@@ -321,13 +359,16 @@ const MapMarker = ({navigation}: DrawerProp) => {
             icon="minus"
             color="#000000"
             onPress={() => {
-              setRegion({
-                latitude: region.latitude,
-                longitude: region.longitude,
-                latitudeDelta: region.latitudeDelta * 2,
-                longitudeDelta: region.longitudeDelta * 2,
+              setCamera({
+                center: {
+                  latitude: camera.center.latitude,
+                  longitude: camera.center.longitude
+                },
+                heading: 0,
+                pitch: 0,
+                zoom: camera.zoom-1,
+                altitude: 0
               });
-              console.log(region);
             }}
           />
         </CenterRightView>
@@ -340,19 +381,27 @@ const MapMarker = ({navigation}: DrawerProp) => {
               Geolocation.getCurrentPosition(
                 async position => {
                   const {latitude, longitude} = position.coords;
-                  setRegion({
-                    latitude: latitude,
-                    longitude: longitude,
-                    latitudeDelta: region.latitudeDelta,
-                    longitudeDelta: region.longitudeDelta,
-                  })
-                  console.log(position.coords);
-                  console.log("나에위치");
+                  setCamera( camera => {
+                    return ({
+                      center: {
+                        latitude: latitude,
+                        longitude: longitude
+                      },
+                      heading: 0,
+                      pitch: 0,
+                      zoom: camera.zoom,
+                      altitude: 0
+                    });
+                  });
                 },
                 error => {
                   console.log(error.code, error.message);
                 },
-                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+                {
+                  enableHighAccuracy: true,
+                  timeout: 0,
+                  maximumAge: 0
+                },
               );
             }}
           />
@@ -360,7 +409,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
       
 
 
-      <TopViewTEST>
+      {/* <TopViewTEST>
         <TouchableOpacity style={{flex:1}}
           onPress={()=>removeLocationsArr()}
         >
@@ -372,11 +421,12 @@ const MapMarker = ({navigation}: DrawerProp) => {
           onPress={()=>addLocationsArr()}
         >
         </TouchableOpacity>
-      </TopViewTEST2>
+      </TopViewTEST2> */}
       
       <Footer>
         <FlatList
-        data={locationsArr}
+        // data={locationsArr}
+        data={drivingSaveDataArr}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => {

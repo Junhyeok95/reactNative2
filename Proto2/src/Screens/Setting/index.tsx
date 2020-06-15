@@ -1,6 +1,9 @@
 import React, {useState, useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
+
+import {DrivingDataContext} from '~/Contexts/DrivingData';
 import {UserContext} from '~/Contexts/User';
+
 import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 
@@ -58,12 +61,13 @@ interface Props {
 
 const Setting = ({navigation}: Props) => {
   const {userInfo2, settingSearchRes, settingSearch} = useContext<IUserContext>(UserContext);
+  const {drivingRemove} = useContext(DrivingDataContext);
 
   useEffect(() => {
     console.log("--- --- Setting");
     if(userInfo2){
       if(userInfo2.key != -1 && userInfo2.key != undefined){
-        settingSearch();
+        
       }
     }
     return () => {
@@ -96,7 +100,7 @@ const Setting = ({navigation}: Props) => {
             
       </BackContainer>
       <BackContainer>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>drivingRemove()}>
           <LabelContainer>
             <Label>이용약관</Label>
           </LabelContainer>
