@@ -29,6 +29,11 @@ npm i -S lottie-react-native lottie-ios@3.1.3
 npm i -S react-native-sound react-native-status-bar-height react-native-iphone-x-helper
 ```
 
+###  base, elements
+```
+npm i -S native-base react-native-elements
+```
+
 ### 생각중 -> sqlite-storage, animatable, linear-gradient, firebase, push-notification
 ```
 android -> app -> build.gradle
