@@ -305,13 +305,13 @@ const MapMarker = ({navigation}: DrawerProp) => {
             (new Date(drivingInfo.drivingTime).getSeconds())+" " : ""}
           </Text>
           <Text>
-            급정거 : {drivingInfo.suddenStopMarker}
+            급정거 : {drivingInfo.stopTime != 0 ? drivingInfo.suddenStopMarker : ""}
           </Text>
           <Text>
-            급가속 : {drivingInfo.suddenAccelerationMarker}
+            급가속 : {drivingInfo.stopTime != 0 ? drivingInfo.suddenAccelerationMarker : ""}
           </Text>
           <Text>
-            졸음 : {drivingInfo.sleepMarker}
+            졸음 : {drivingInfo.stopTime != 0 ? drivingInfo.sleepMarker : ""}
           </Text>
         </TopLeftView>
 

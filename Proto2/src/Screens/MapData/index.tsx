@@ -504,11 +504,11 @@ const MapData = ({navigation}: DrawerProp) => {
           </Text>
           <Text></Text>
 
-          <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
+          {/* <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
           <Text>경도 : {coordinate.longitude.toFixed(5)}</Text>
           <Text>속도 : {typeof coordinate.speed === "number" ? (coordinate.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
           <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
-          <Text></Text>
+          <Text></Text> */}
 
           <Text>위도 : {coordinate2.latitude.toFixed(5)}</Text>
           <Text>경도 : {coordinate2.longitude.toFixed(5)}</Text>
@@ -688,43 +688,43 @@ const MapData = ({navigation}: DrawerProp) => {
               _checkInfo[2] = 0;
               setCheckInfo(_checkInfo);
 
-              Geolocation.watchPosition(
-                position => {
-                  let now = new Date();
-// linkInfo_3(); // 사고체크
-// linkInfo_4(); // 태만 체크
-// linkInfo_5(); // 졸음체크
-                  const {latitude, longitude, speed} = position.coords;
-                  const {timestamp} = position;
-                  setCoordinate({
-                    latitude: latitude,
-                    longitude: longitude,
-                    speed: speed,
-                    timestamp: timestamp,
-                  });
-                  setCamera( camera => {
-                    return ({
-                      center: {
-                        latitude: latitude,
-                        longitude: longitude
-                      },
-                      heading: 0,
-                      pitch: 0,
-                      zoom: camera.zoom,
-                      altitude: 0
-                    });
-                  });
-                },
-                error => {
-                  console.log(error);
-                },
-                {
-                  timeout: 0,
-                  maximumAge: 0,
-                  enableHighAccuracy: true,
-                  distanceFilter: 1,
-                },
-              );
+//               Geolocation.watchPosition(
+//                 position => {
+//                   let now = new Date();
+// // linkInfo_3(); // 사고체크
+// // linkInfo_4(); // 태만 체크
+// // linkInfo_5(); // 졸음체크
+//                   const {latitude, longitude, speed} = position.coords;
+//                   const {timestamp} = position;
+//                   setCoordinate({
+//                     latitude: latitude,
+//                     longitude: longitude,
+//                     speed: speed,
+//                     timestamp: timestamp,
+//                   });
+//                   setCamera( camera => {
+//                     return ({
+//                       center: {
+//                         latitude: latitude,
+//                         longitude: longitude
+//                       },
+//                       heading: 0,
+//                       pitch: 0,
+//                       zoom: camera.zoom,
+//                       altitude: 0
+//                     });
+//                   });
+//                 },
+//                 error => {
+//                   console.log(error);
+//                 },
+//                 {
+//                   timeout: 0,
+//                   maximumAge: 0,
+//                   enableHighAccuracy: true,
+//                   distanceFilter: 1,
+//                 },
+//               );
             }
 
             // 무조건 실행, 운전스위치, 기록스위치

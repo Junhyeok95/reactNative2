@@ -288,7 +288,7 @@ const MapTabNavi = () => {
           tabBarIcon: 'chart-bar',
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={"MapTest"}
         component={MapTest}
         options={{
@@ -303,7 +303,7 @@ const MapTabNavi = () => {
           tabBarLabel: 'WiFi',
           tabBarIcon: 'wifi',
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

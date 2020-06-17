@@ -75,12 +75,15 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
       setDrivingSaveDataArr(list);
       AsyncStorage.setItem('DrivingList', JSON.stringify(list));
     }
+    else{
+      console.log('운전 기록 실패');
+    }
   }
 
   const drivingRemove = async () => {
     console.log('drivingRemove');
     AsyncStorage.removeItem('DrivingList');
-    setDrivingSaveDataArr(undefined);
+    setDrivingSaveDataArr([]);
   }
 
   // const setToDay = (): void => {
