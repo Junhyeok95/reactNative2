@@ -26,6 +26,9 @@ interface IDrivingData {
   setLinkInfo: (data: any) => void;
   setCheckInfo: (data: any) => void;
 
+  // 추가
+  drivingStart: () => void;
+  // 추가
   drivingSave: (data?: IDrivingSaveData) => void;
   drivingRemove: () => void;
 }

@@ -1,5 +1,6 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
+import {UserContext} from '~/Contexts/User';
 
 interface Props { // cache 유저 있을 경우에 기록 뭉치를 부름
   cache?: boolean;
@@ -20,13 +21,21 @@ const DrivingDataContext = createContext<IDrivingData>({ // 초기값
   checkInfo: [],
   setCheckInfo: (data: any) => {},
 
+  // 추가
+  drivingStart: () => {},
+  // 추가
+  
   drivingSave: (data?: IDrivingSaveData) => {},
   drivingRemove: () => {}
 });
 
 const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이걸로 초기화됨
 
-  // ## 필요한것 ... -> 운전시작시간, 운전종료시간, 위도경도 배열, 감지 배열(위도, 경도, 급정거, 급가속, 졸음, 주시태만, 날짜, 시간)
+  // 유알엘
+  const {URL, userInfo2} = useContext<IUserContext>(UserContext);
+  const [webDrivingDBId, setWebDrivingDBId] = useState<number>(-1);
+
+  // ## 필요한것 ... -> 운전시작시간, 운전종료시간, 위도경도 배열, 감지 배열(위도, 경도, 신고, 급가속, 급정거, 졸음,  날짜, 시간)
   const [drivingSaveDataArr, setDrivingSaveDataArr] = useState<Array<IDrivingSaveData> | undefined>([]); // 따로두면 시간,라인,마커 관계힘듬
   const [drivingSaveData, setDrivingSaveData] = useState<IDrivingSaveData>(); // 따로두면 시간,라인,마커 관계힘듬
   // 라즈베리 + 아두이노 정보 -> 14개
@@ -36,8 +45,8 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // [ 공백, 위도, 경도, 링크상태, 운전상태, 현재속도, 이전속도 ] -> 7개
   const [defaultInfo, setDefaultInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1]);
   // 토탈 체크 정보 -> 10개
-  // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 가속상태, 가속횟수, 감속상태, 감속횟수, 졸음상태, 졸음횟수, 태만상태, 태만횟수 ]
-  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1]);
+  // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 신고상태, 급가속상태, 급정거상태, 졸음상태, 주시태만상태 ]
+  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1 ,-1,-1,-1,-1]);
 
   const getCacheData = async (key: string) => { // 활용해서 운전기록뭉치 (날짜 : {기록 : {위도, 경도} , 포인트 : {내용}  })
     const cacheData = await AsyncStorage.getItem(key);
@@ -66,7 +75,35 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
     }
   };
 
-  // 운전 기록 후 setDraving, 그 뒤 캐시값으로 던지기
+  const drivingStart = async () => {
+    if(userInfo2){ // 더블 분기
+      console.log("운전시작 요청입니다");
+      console.log(userInfo2.key);
+      console.log(URL);
+      fetch(
+        URL+'/app', { 
+          method: 'POST',
+          headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json;charset=UTF-8',
+          },
+          body: JSON.stringify({
+            _option: 3, // 운전시작 로직
+            _key: userInfo2.key,
+          })
+      })
+      .then(response => response.json())
+      .then(json => { // 아이디만 받음, 종료할때 사용해야함
+        setWebDrivingDBId(json);
+        console.log(webDrivingDBId);
+      })
+      .catch(error => {
+      });
+
+    }
+  }
+
+  // 종료 + 저장 ...
   const drivingSave = async (data?:IDrivingSaveData) => {
     console.log('운전 기록 시도');
     if(drivingSaveDataArr != undefined && data != undefined){
@@ -74,6 +111,39 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
       console.log('운전 기록 성공', list.length);
       setDrivingSaveDataArr(list);
       AsyncStorage.setItem('DrivingList', JSON.stringify(list));
+
+      if(userInfo2){ // 더블 분기
+        if(userInfo2.key != -1 && userInfo2.key != undefined){
+          console.log('운전 기록 웹 전송 시도');
+          console.log(webDrivingDBId);
+
+          // 운전 종료 됬을때 던진다
+
+          fetch(
+            URL+'/app', { 
+              method: 'POST',
+              headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json;charset=UTF-8',
+              },
+              body: JSON.stringify({
+                _option: 4, // 운전종료 로직
+                _key: userInfo2.key,
+                _drive_id: webDrivingDBId,
+                _sleep_count: 10, // 값 넣어야함
+                _sudden_stop_count: 5, // 값 넣어야함
+                _sudden_acceleration_count: 15, // 값 넣어야함
+              })
+          })
+          .then(response => response.json())
+          .then(json => { // 아이디만 받음, 종료할때 사용해야함
+            console.log("json");
+            console.log(json);
+          })
+          .catch(error => {
+          });
+        }
+      }
     }
     else{
       console.log('운전 기록 실패');
@@ -141,6 +211,10 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
         setLinkInfo,
         checkInfo,
         setCheckInfo,
+
+        // 추가
+        drivingStart,
+        // 추가
 
         drivingSave, // 저장 이외에 삭제도 필요함 하지만 지금은 필요하지않지
         drivingRemove

@@ -100,6 +100,9 @@ const UserContextProvider = ({children}: Props) => {
 
   const profileSearch = () => {
     if(userInfo2){
+      console.log("의료정보 요청입니다");
+      console.log(userInfo2.key);
+      console.log(URL);
       fetch(
         URL+'/app', { 
           method: 'POST',
@@ -115,6 +118,8 @@ const UserContextProvider = ({children}: Props) => {
       })
       .then(response => response.json())
       .then(json => {
+        console.log("의료정보 응답입니다");
+        console.log(json);
         setProfileSearchRes(json);
       })
       .catch(error => {

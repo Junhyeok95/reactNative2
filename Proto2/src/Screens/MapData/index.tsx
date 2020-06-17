@@ -190,6 +190,14 @@ interface IGeolocation {
   latitude: number;
   longitude: number;
 }
+interface IMarkerlocation { // web DB 기준
+  latitude: number;
+  longitude: number;
+  bool_report: boolean;
+  bool_sudden_acceleration: boolean;
+  bool_sudden_stop: boolean;
+  bool_sleep: boolean;
+}
 interface ICoordinate {
   latitude: number;
   longitude: number;
@@ -251,7 +259,7 @@ const MapData = ({navigation}: DrawerProp) => {
     return "";
   }
   
-  const {drivingSaveData, setDrivingSaveData, drivingSave, linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
+  const {drivingStart, drivingSaveData, setDrivingSaveData, drivingSave, linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
   const {userInfo2} = useContext<IUserContext>(UserContext);
   
   const [modal, setModal] = useState<boolean>(false);
@@ -295,6 +303,10 @@ const MapData = ({navigation}: DrawerProp) => {
   });
 
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
+  // 사고감지 locations
+  const [markerLocations, setMarkerLocations] = useState<Array<IMarkerlocation>>([]);
+
+
   let sound1: Sound;
   let sound2: Sound;
   let singoSetTimeout: NodeJS.Timeout;
@@ -357,7 +369,7 @@ const MapData = ({navigation}: DrawerProp) => {
     // if(driving){ // 운전상태 체크
 
     // 주시태만 체크
-    // if(checkInfo[10] != 1){ // 주시태만 상태 체크
+    // if(checkInfo[?] != 1){ // 주시태만 상태 체크
     //   if(linkInfo[10] != -1){ // 값이 들어오고 있는지 체크
         if(linkInfo[4] == 30 || linkInfo[4] == 20){
           linkInfo_4Cnt++; // sleep 체크 변수
@@ -378,12 +390,12 @@ const MapData = ({navigation}: DrawerProp) => {
 
               // // 주시태만 중
               // let _checkInfo = [...checkInfo];
-              // _checkInfo[10] = 1;
+              // _checkInfo[?] = 1;
               // setCheckInfo(_checkInfo);
 
               // setTimeout(() => {
               //   let _checkInfo = [...checkInfo];
-              //   _checkInfo[10] = 0;
+              //   _checkInfo[?] = 0;
               //   setCheckInfo(_checkInfo);
               // }, 5000);
             }
@@ -406,7 +418,7 @@ const MapData = ({navigation}: DrawerProp) => {
   let linkInfo_5 = ():void => {
     // if(driving){ // 운전상태 체크
 
-    // if(checkInfo[8] != 1){ // 졸음 상태 체크
+    // if(checkInfo[?] != 1){ // 졸음 상태 체크
     //   if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
         if(linkInfo[5] == 2 && linkInfo[6] == 2){ // 눈을 감고있는지 체크
           linkInfo_5Cnt++; // sleep 체크 변수
@@ -427,12 +439,12 @@ const MapData = ({navigation}: DrawerProp) => {
               
 
               // let _checkInfo = [...checkInfo];
-              // _checkInfo[8] = 1;
+              // _checkInfo[?] = 1;
               // setCheckInfo(_checkInfo);
 
               // setTimeout(() => {
               //   let _checkInfo = [...checkInfo];
-              //   _checkInfo[8] = 0;
+              //   _checkInfo[?] = 0;
               //   setCheckInfo(_checkInfo);
               // }, 5000);
             }
@@ -674,6 +686,12 @@ const MapData = ({navigation}: DrawerProp) => {
             } else {
 
               Alert.alert('운전을 시작합니다');
+              if(userInfo2){
+                if(userInfo2.key != -1 && userInfo2.key != undefined){
+                  console.log("아이디 확인, 운전 시작했다고 보고");
+                  drivingStart(); // 아이디만 받음
+                }
+              }
               setOnPolyline(true);
 
               // 저장해야함
