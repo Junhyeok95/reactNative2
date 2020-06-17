@@ -12,6 +12,16 @@ interface IDrivingSaveData extends IUserProfile {
   DrivingMarker: Array<any> | undefined;
 }
 
+interface IMarkerlocation { // web DB 기준
+  latitude: number;
+  longitude: number;
+  bool_report: boolean;
+  bool_sudden_acceleration: boolean;
+  bool_sudden_stop: boolean;
+  bool_sleep: boolean;
+  timestamp: number;
+}
+
 interface IDrivingData {
   drivingSaveDataArr: Array<any>  | undefined;
   setDrivingSaveDataArr: (data: any) => void;
@@ -28,6 +38,7 @@ interface IDrivingData {
 
   // 추가
   drivingStart: () => void;
+  drivingMarkerSave:(data: any) => void;
   // 추가
   drivingSave: (data?: IDrivingSaveData) => void;
   drivingRemove: () => void;

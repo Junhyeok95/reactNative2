@@ -23,6 +23,7 @@ const DrivingDataContext = createContext<IDrivingData>({ // 초기값
 
   // 추가
   drivingStart: () => {},
+  drivingMarkerSave: () => {},
   // 추가
   
   drivingSave: (data?: IDrivingSaveData) => {},
@@ -100,6 +101,84 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
       .catch(error => {
       });
 
+    }
+  }
+
+  // 위험 감지
+  const drivingMarkerSave = (_markerLocation:IMarkerlocation) => {
+    console.log("haha");
+    if(_markerLocation){
+      if(userInfo2){ // 더블 분기
+        if(userInfo2.key != -1 && userInfo2.key != undefined){
+
+          let __markerLocation = _markerLocation;
+          console.log(__markerLocation);
+
+          // 값이 있을때 던진다
+          fetch(
+            URL+'/app', { 
+              method: 'POST',
+              headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json;charset=UTF-8',
+              },
+              body: JSON.stringify({
+                _option: 5, // 운전 감지 로직
+                _key: userInfo2.key,
+                _drive_id: 1,
+                // _drive_id: webDrivingDBId,
+                _latitude: _markerLocation.latitude,
+                _longitude: _markerLocation.longitude,
+                _bool_report: _markerLocation.bool_report,
+                _bool_sudden_acceleration: _markerLocation.bool_sudden_acceleration,
+                _bool_sudden_stop: _markerLocation.bool_sudden_stop,
+                _bool_sleep: _markerLocation.bool_sleep,
+              })
+          })
+          .then(response => response.json())
+          .then(json => {
+            // 운전 감지 하고 저장하는거 웹에 던질때 씀
+            console.log(">> drivingMarkerSave json");
+            console.log(json);
+
+            console.log("이프문 드러간다");
+            if(json.bool_report == true){
+              console.log("신고 접수했다 간다");
+              // 신고 프로세스
+              fetch(
+                URL+'/app', { 
+                  method: 'POST',
+                  headers: {
+                    'Accept':'application/json',
+                    'Content-Type':'application/json;charset=UTF-8',
+                  },
+                  body: JSON.stringify({
+                    _option: 6, // 신고 로직
+                    _key: userInfo2.key,
+                    _latitude: _markerLocation.latitude,
+                    _longitude: _markerLocation.longitude,
+                  })
+              })
+              .then(response => response.json())
+              .then(json => {
+                // 운전이 잘못된 운전이라 신고가 간다
+                console.log("운전이 잘못된 운전이라 신고가 갔어");
+                console.log(json);
+              })
+              .catch(error => {
+                console.log("웹이 잘못했어");
+                console.log(error);
+              });
+            }
+            else{
+              console.log("위험을 감지했지만 신고는 안했다");
+            }
+          })
+          .catch(error => {
+          });
+
+        }
+      }
     }
   }
 
@@ -214,6 +293,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
 
         // 추가
         drivingStart,
+        drivingMarkerSave,
         // 추가
 
         drivingSave, // 저장 이외에 삭제도 필요함 하지만 지금은 필요하지않지

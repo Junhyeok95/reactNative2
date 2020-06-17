@@ -101,6 +101,13 @@ const CenterRightView = Styled.View`
   width: 40px;
   height: 12%;
 `;
+const CenterTestRightView = Styled.View`
+  position: absolute;
+  right: 2%;
+  top: 24%;
+  width: 40px;
+  height: 6%;
+`;
 const BottomLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -190,14 +197,18 @@ interface IGeolocation {
   latitude: number;
   longitude: number;
 }
-interface IMarkerlocation { // web DB 기준
-  latitude: number;
-  longitude: number;
-  bool_report: boolean;
-  bool_sudden_acceleration: boolean;
-  bool_sudden_stop: boolean;
-  bool_sleep: boolean;
-}
+
+// 이동 .. ~/Contexts/DrivingData/@types/index.d.ts
+// interface IMarkerlocation { // web DB 기준
+//   latitude: number;
+//   longitude: number;
+//   bool_report: boolean;
+//   bool_sudden_acceleration: boolean;
+//   bool_sudden_stop: boolean;
+//   bool_sleep: boolean;
+//   timestamp: number;
+// }
+
 interface ICoordinate {
   latitude: number;
   longitude: number;
@@ -259,7 +270,14 @@ const MapData = ({navigation}: DrawerProp) => {
     return "";
   }
   
-  const {drivingStart, drivingSaveData, setDrivingSaveData, drivingSave, linkInfo, setLinkInfo, defaultInfo, setDefaultInfo, checkInfo, setCheckInfo} = useContext(DrivingDataContext);
+  const {
+    drivingSaveData, setDrivingSaveData,
+    drivingStart, drivingMarkerSave, drivingSave,
+    linkInfo, setLinkInfo,
+    defaultInfo, setDefaultInfo,
+    checkInfo, setCheckInfo
+  } = useContext(DrivingDataContext);
+
   const {userInfo2} = useContext<IUserContext>(UserContext);
   
   const [modal, setModal] = useState<boolean>(false);
@@ -585,6 +603,56 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </CenterRightView>
 
+      <CenterTestRightView>
+        <IconButton
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderColor: "#AAA",
+            borderRadius: 10,
+            borderWidth: 1,
+          }}
+          icon="wifi"
+          color="#000000"
+          onPress={() => {
+            // 아래 처럼 만들어야함
+            // setLocations([...locations, {latitude, longitude}]);
+            Geolocation.getCurrentPosition(
+              async position => {
+                const {latitude, longitude} = position.coords;
+                const {timestamp} = position;
+                let _markerLocation =
+                {
+                  latitude,
+                  longitude,
+                  bool_report: true,
+                  bool_sudden_acceleration: false,
+                  bool_sudden_stop: false,
+                  bool_sleep: false,
+                  timestamp, // 이건 앱에서만 활용함
+                }
+                // 마커를 기록함
+                setMarkerLocations([...markerLocations, _markerLocation]);
+                if(userInfo2 && userInfo2.key){
+                  if(userInfo2.key != -1 && userInfo2.key != undefined){
+                    // 유저가 있으므로 마커를 웹으로 전송함
+                    drivingMarkerSave(_markerLocation);
+                  }
+                }
+              },
+              error => {
+                console.log(error.code, error.message);
+              },
+              {
+                timeout: 0,
+                maximumAge: 0,
+                enableHighAccuracy: true,
+              }
+            );
+
+          }}
+        />
+      </CenterTestRightView>
+
       <BottomLeftView>
         <IconButton
           icon="crosshairs-gps"
@@ -686,7 +754,7 @@ const MapData = ({navigation}: DrawerProp) => {
             } else {
 
               Alert.alert('운전을 시작합니다');
-              if(userInfo2){
+              if(userInfo2 && userInfo2.key){
                 if(userInfo2.key != -1 && userInfo2.key != undefined){
                   console.log("아이디 확인, 운전 시작했다고 보고");
                   drivingStart(); // 아이디만 받음
