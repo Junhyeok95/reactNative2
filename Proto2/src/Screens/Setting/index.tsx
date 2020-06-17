@@ -61,7 +61,7 @@ interface Props {
 
 const Setting = ({navigation}: Props) => {
   const {userInfo2, settingSearchRes, settingSearch} = useContext<IUserContext>(UserContext);
-  const {drivingRemove} = useContext(DrivingDataContext);
+  const {drivingDelete} = useContext(DrivingDataContext);
 
   useEffect(() => {
     console.log("--- --- Setting");
@@ -100,7 +100,7 @@ const Setting = ({navigation}: Props) => {
             
       </BackContainer>
       <BackContainer>
-        <TouchableOpacity onPress={()=>drivingRemove()}>
+        <TouchableOpacity onPress={()=>drivingDelete()}>
           <LabelContainer>
             <Label>이용약관</Label>
           </LabelContainer>

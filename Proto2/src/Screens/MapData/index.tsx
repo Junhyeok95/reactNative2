@@ -101,12 +101,19 @@ const CenterRightView = Styled.View`
   width: 40px;
   height: 12%;
 `;
+const CenterTestTestRightView = Styled.View`
+  position: absolute;
+  right: 2%;
+  top: 17%;
+  width: 40px;
+  height: 6%;
+`;
 const CenterTestRightView = Styled.View`
   position: absolute;
   right: 2%;
-  top: 24%;
+  top: 26%;
   width: 40px;
-  height: 6%;
+  height: 12%;
 `;
 const BottomLeftView = Styled.View`
   position: absolute;
@@ -330,6 +337,17 @@ const MapData = ({navigation}: DrawerProp) => {
   let singoSetTimeout: NodeJS.Timeout;
 
   useEffect(() => {
+    
+    // sound1 = new Sound(audioList[5].url, (error) => {
+    //   if(error){
+    //     return;
+    //   } else {
+    //     sound1.play((success)=>{
+    //       sound1.release();
+    //     })
+    //   }
+    // });
+
     // 지울예정
     // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]);
     androidPermissionLocation();
@@ -514,6 +532,20 @@ const MapData = ({navigation}: DrawerProp) => {
               speed: e.nativeEvent.coordinate.speed,
               timestamp: e.nativeEvent.coordinate.timestamp,
             });
+
+            setCamera( camera => {
+              return ({
+                center: {
+                  latitude: latitude,
+                  longitude: longitude
+                },
+                heading: 0,
+                pitch: 0,
+                zoom: camera.zoom,
+                altitude: 0
+              });
+            });
+
           }
         }}
       >
@@ -602,8 +634,8 @@ const MapData = ({navigation}: DrawerProp) => {
           }}
         />
       </CenterRightView>
-
-      <CenterTestRightView>
+      
+      <CenterTestTestRightView>
         <IconButton
           style={{
             backgroundColor: "#FFFFFF",
@@ -648,9 +680,42 @@ const MapData = ({navigation}: DrawerProp) => {
                 enableHighAccuracy: true,
               }
             );
+        }}
+      />
 
+      </CenterTestTestRightView>
+
+      <CenterTestRightView>
+        <IconButton
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderColor: "#AAA",
+            borderRadius: 10,
+            borderWidth: 1,
+          }}
+          icon="run-fast"
+          color="#000000"
+          onPress={() => {
           }}
         />
+        {/* airplane */}
+        {/* gauge-empty */}
+        {/* trending-up */}
+        <IconButton
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderColor: "#AAA",
+            borderRadius: 10,
+            borderWidth: 1,
+          }}
+          icon="walk"
+          color="#000000"
+          onPress={() => {
+          }}
+        />
+        {/* gauge-full */}
+        {/* tortoise */}
+        {/* trending-down */}
       </CenterTestRightView>
 
       <BottomLeftView>

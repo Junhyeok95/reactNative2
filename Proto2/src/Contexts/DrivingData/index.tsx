@@ -24,10 +24,12 @@ const DrivingDataContext = createContext<IDrivingData>({ // 초기값
   // 추가
   drivingStart: () => {},
   drivingMarkerSave: () => {},
+  dummyAdd: () => {},
+  dummyRemove: () => {},
   // 추가
   
   drivingSave: (data?: IDrivingSaveData) => {},
-  drivingRemove: () => {}
+  drivingDelete: () => {}
 });
 
 const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이걸로 초기화됨
@@ -229,10 +231,29 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
     }
   }
 
-  const drivingRemove = async () => {
-    console.log('drivingRemove');
+  const drivingDelete = async () => {
+    console.log('drivingDelete');
     AsyncStorage.removeItem('DrivingList');
     setDrivingSaveDataArr([]);
+  }
+
+  const dummyAdd = async (data?:IDrivingSaveData) => {
+    if(drivingSaveDataArr != undefined && data != undefined){
+      let list = [...drivingSaveDataArr, data];
+      setDrivingSaveDataArr(list);
+      AsyncStorage.setItem('DrivingList', JSON.stringify(list));
+    }
+    console.log('dummyAdd');
+  }
+
+  const dummyRemove = async () => {
+    if(drivingSaveDataArr != undefined){
+      let list = [...drivingSaveDataArr];
+      list.splice(list.length-1, 1);
+      setDrivingSaveDataArr(list);
+      AsyncStorage.setItem('DrivingList', JSON.stringify(list));
+    }
+    console.log('dummyRemove');
   }
 
   // const setToDay = (): void => {
@@ -294,10 +315,12 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
         // 추가
         drivingStart,
         drivingMarkerSave,
+        dummyAdd,
+        dummyRemove,
         // 추가
 
         drivingSave, // 저장 이외에 삭제도 필요함 하지만 지금은 필요하지않지
-        drivingRemove
+        drivingDelete
       }}>
       {children}
     </DrivingDataContext.Provider>

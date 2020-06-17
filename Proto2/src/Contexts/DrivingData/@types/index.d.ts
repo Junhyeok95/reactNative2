@@ -39,7 +39,10 @@ interface IDrivingData {
   // 추가
   drivingStart: () => void;
   drivingMarkerSave:(data: any) => void;
+  dummyAdd: (data?: IDrivingSaveData) => void;
+  dummyRemove: () => void;
   // 추가
+
   drivingSave: (data?: IDrivingSaveData) => void;
-  drivingRemove: () => void;
+  drivingDelete: () => void;
 }

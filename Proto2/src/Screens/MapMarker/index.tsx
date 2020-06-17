@@ -12,6 +12,9 @@ import Geolocation from 'react-native-geolocation-service';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
+import {DrivingDataContext} from '~/Contexts/DrivingData';
+import {UserContext} from '~/Contexts/User';
+
 const Text = Styled.Text`
   font-size: 16px;
 `;
@@ -41,6 +44,13 @@ const CenterRightView = Styled.View`
   position: absolute;
   right: 2%;
   top: 44%;
+  width: 40px;
+  height: 12%;
+`;
+const CenterTestRightView = Styled.View`
+  position: absolute;
+  right: 2%;
+  top: 26%;
   width: 40px;
   height: 12%;
 `;
@@ -139,11 +149,11 @@ type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
 interface DrawerProp {
   navigation: TypeDrawerProp;
 }
-import {DrivingDataContext} from '~/Contexts/DrivingData';
 
 const MapMarker = ({navigation}: DrawerProp) => {
 
-  const {drivingSaveData, drivingSaveDataArr, defaultInfo, setDefaultInfo} = useContext(DrivingDataContext);
+  const {dummyAdd, dummyRemove, drivingSaveData, drivingSaveDataArr, defaultInfo, setDefaultInfo} = useContext(DrivingDataContext);
+  const {userInfo2} = useContext<IUserContext>(UserContext);
 
   const saveLocations2 = require('./saveLocations2.json');
   let saveData = [];
@@ -163,7 +173,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
     suddenAccelerationMarker: 0
   });
 
-  const [poly, setPoly] = useState<number>(-1);
+  const [poly, setPoly] = useState<number>(-2);
   const [locationsArr, setLocationsArr] = useState<Array<any>>(saveData);
 
   const [p1, setP1] = useState<number>(0);
@@ -220,7 +230,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
         style={index<2?{borderColor:"#00F", borderWidth:3}:index<4?{borderColor:"#0AA", borderWidth:3}:index<6?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
           setPoly(num);
           let {latitude, longitude} = item.Drivingline[0];
-          console.log(item);
+          // console.log(item);
           console.log(item.endTime);
           // let saveNameTime = (new Date(item.endTime).getMonth()+1) + "월 " + new Date(item.endTime).getDate() + "일";
           // console.log(saveNameTime);
@@ -407,6 +417,91 @@ const MapMarker = ({navigation}: DrawerProp) => {
           />
         </BottomLeftView>
       
+        <CenterTestRightView>
+          <IconButton
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#AAA",
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="database-plus"
+            color="#000000"
+            size="30"
+            onPress={() => {
+              let num = Math.floor(Math.random() * 10);
+              let arr = saveLocations2[num].routes[0].geometry.coordinates.map((item: any[]) =>{ return {latitude: item[1], longitude: item[0]}});
+              let _drivingSaveData = Object.assign({}, drivingSaveData);
+              let _endT = new Date().getTime();
+              if(arr){
+                if(userInfo2 && userInfo2.key){
+                  _drivingSaveData.webUserId = userInfo2.key;
+                }
+                if(userInfo2 && userInfo2.name){
+                  _drivingSaveData.Drivingline = arr;
+                  // 탐지 객체도 넣어야함 DrivingMarker
+                  _drivingSaveData.name = userInfo2.name;
+                  _drivingSaveData.startTime = (_endT-(60000*Math.floor(Math.random() * 45 +10)));
+                  _drivingSaveData.endTime = _endT;
+                }
+                dummyAdd(_drivingSaveData);
+                console.log("dummyAdd");
+              }
+            }}
+          />
+          {/* cloud-download-outline */}
+          <IconButton
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#AAA",
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="database-remove"
+            color="#000000"
+            onPress={() => {
+              if(drivingSaveDataArr != undefined && poly>=0){
+                if(poly+1==drivingSaveDataArr.length){
+                  setPoly((poly)=>poly-1);
+                  if(poly == 0){ // 인포를 못함
+                    console.log("정지");
+                  } else { // 인포를 해도됨
+                    setDrivingInfo({
+                      stopTime: drivingSaveDataArr[poly-1].endTime,
+                      drivingTime: (drivingSaveDataArr[poly-1].endTime-drivingSaveDataArr[poly-1].startTime),
+                      sleepMarker: 0,
+                      suddenStopMarker: 0,
+                      suddenAccelerationMarker: 0
+                    });
+                    let {latitude, longitude} = drivingSaveDataArr[poly-1].Drivingline[0];
+                    setCamera( camera => {
+                      return ({
+                        center: {
+                          latitude: latitude,
+                          longitude: longitude
+                        },
+                        heading: 0,
+                        pitch: 0,
+                        zoom: camera.zoom,
+                        altitude: 0
+                      });
+                    });
+                  }
+                  console.log("같다 지운다");
+                  dummyRemove();
+                }
+                else{
+                  dummyRemove();
+                }
+              }
+              if(poly== -2){
+                dummyRemove();
+              }
+              
+            }}
+          />
+          {/* cloud-upload-outline */}
+        </CenterTestRightView>
 
 
       {/* <TopViewTEST>

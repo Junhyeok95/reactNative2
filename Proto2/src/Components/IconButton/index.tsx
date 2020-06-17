@@ -13,12 +13,17 @@ interface Props {
   style?: Object;
   color?: string;
   onPress?: () => void;
+  size?: string;
 }
 
-const IconButton = ({icon, style, color, onPress}: Props) => {
+const IconButton = ({icon, style, color, onPress, size}: Props) => {
   return (
     <Container style={style} onPress={onPress}>
-      <Icon name={icon} color={color ? color : 'white'} size={24} />
+      <Icon
+        name={icon}
+        color={color ? color : 'white'} 
+        size={size ? parseInt(size) : 30}
+      />
     </Container>
   );
 };
