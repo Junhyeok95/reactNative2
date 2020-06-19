@@ -175,7 +175,7 @@ const Profile = ({navigation}: Props) => {
       </BackContainer>
       
       {/* <Button label="Open Full Modal" onPress={() => navigation.navigate('FullModal')} /> */}
-      <CRUDButtonContainer>
+      {/* <CRUDButtonContainer>
         <Button style={{flex:1, padding:8}} color='#000' label="업데이트" onPress={() => {
           navigation.navigate("InfoList", {
             id: 123,
@@ -184,7 +184,7 @@ const Profile = ({navigation}: Props) => {
             list: ['회원정보','비상연락망','의료 정보','손해보험사']
           });
         }} />
-      </CRUDButtonContainer>
+      </CRUDButtonContainer> */}
     </Container>
   );
 };

@@ -26,7 +26,7 @@ const TopLeftView = Styled.View`
   border-radius: 16px;
   top: 1%;
   left: 2%;
-  width: 60%;
+  width: 75%;
   padding: 5% 10%;
 `;
 const TopRightView = Styled.View`
@@ -94,36 +94,14 @@ const SaveName = Styled.Text`
 `;
 // Footer -------------------------------
 
-const TopViewTEST = Styled.View`
-  position: absolute;
-  background-color: #0F0;
-  border: 5px;
-  right: 2%;
-  top: 20%;
-  width: 40px;
-  height: 5%;
-`;
-const TopViewTEST2 = Styled.View`
-  position: absolute;
-  background-color: #0F0;
-  border: 5px;
-  right: 2%;
-  top: 30%;
-  width: 40px;
-  height: 5%;
-`;
-
+interface ILocation {
+  latitude: number;
+  longitude: number;
+}
 interface IGeolocation {
   latitude: number;
   longitude: number;
 }
-interface IRegion {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-}
-
 interface ILatLng {
   latitude: number;
   longitude: number;
@@ -231,7 +209,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
           setPoly(num);
           let {latitude, longitude} = item.Drivingline[0];
           // console.log(item);
-          console.log(item.endTime);
+          // if(drivingSaveDataArr[num] != undefined) console.log(drivingSaveDataArr[num].DrivingMarker);
           // let saveNameTime = (new Date(item.endTime).getMonth()+1) + "월 " + new Date(item.endTime).getDate() + "일";
           // console.log(saveNameTime);
           setDrivingInfo({
@@ -293,8 +271,16 @@ const MapMarker = ({navigation}: DrawerProp) => {
           strokeWidth={3}
           strokeColor="#00f"
         />}
+        {poly >= 0 && drivingSaveDataArr != undefined && drivingSaveDataArr[poly].DrivingMarker && drivingSaveDataArr[poly].DrivingMarker.map((markerLocation: ILocation, index: number) => (
+          <Marker
+            key={`markerLocation-${index}`}
+            coordinate={{
+              latitude: markerLocation.latitude,
+              longitude: markerLocation.longitude,
+            }}
+          />
+        ))}
       </MapView>
-
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
           {/* <Text>
             날짜 : {defaultInfo[0].toString().substr(0,4) + 
@@ -444,6 +430,10 @@ const MapMarker = ({navigation}: DrawerProp) => {
                   _drivingSaveData.startTime = (_endT-(60000*Math.floor(Math.random() * 45 +10)));
                   _drivingSaveData.endTime = _endT;
                 }
+
+                // 랜덤 발생 위치 넣어야함
+                _drivingSaveData.DrivingMarker = [];
+
                 dummyAdd(_drivingSaveData);
                 console.log("dummyAdd");
               }
@@ -502,22 +492,6 @@ const MapMarker = ({navigation}: DrawerProp) => {
           />
           {/* cloud-upload-outline */}
         </CenterTestRightView>
-
-
-      {/* <TopViewTEST>
-        <TouchableOpacity style={{flex:1}}
-          onPress={()=>removeLocationsArr()}
-        >
-        </TouchableOpacity>
-      </TopViewTEST>
-      
-      <TopViewTEST2>
-      <TouchableOpacity style={{flex:1}}
-          onPress={()=>addLocationsArr()}
-        >
-        </TouchableOpacity>
-      </TopViewTEST2> */}
-      
       <Footer>
         <FlatList
         // data={locationsArr}
