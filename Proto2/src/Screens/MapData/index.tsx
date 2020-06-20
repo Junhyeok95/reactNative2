@@ -987,7 +987,7 @@ const MapData = ({navigation}: DrawerProp) => {
                   }
                 }
               }
-              setDrivingSaveData(_drivingSaveData);
+              setDrivingSaveData(undefined);
               setLocations([]); // 초기화
               setMarkerLocations([]);
               // 저장해야함

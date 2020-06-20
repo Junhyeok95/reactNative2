@@ -208,16 +208,30 @@ const MapMarker = ({navigation}: DrawerProp) => {
         style={index<2?{borderColor:"#00F", borderWidth:3}:index<4?{borderColor:"#0AA", borderWidth:3}:index<6?{borderColor:"#CA7", borderWidth:3}:{borderColor:"#CCC", borderWidth:3}} onPress={(index)=>{
           setPoly(num);
           let {latitude, longitude} = item.Drivingline[0];
-          // console.log(item);
+          // console.log(item.DrivingMarker[1].bool_sudden_stop);
+          let _sleepMarker = 0;
+          let _suddenStopMarker = 0;
+          let _suddenAccelerationMarker = 0;
+          // if(item.DrivingMarker!= undefined)console.log(item.DrivingMarker.length);
+          if(item.DrivingMarker!= undefined){
+            console.log("마커 수 -> ", item.DrivingMarker.length);
+            if(item.DrivingMarker && item.DrivingMarker.length > 0){
+              for(let i=0; i<item.DrivingMarker.length; i++){
+                if(item.DrivingMarker[i].bool_sleep)_sleepMarker++;
+                if(item.DrivingMarker[i].bool_sudden_stop)_suddenStopMarker++;
+                if(item.DrivingMarker[i].bool_sudden_acceleration)_suddenAccelerationMarker++;
+              }
+            }
+          }
           // if(drivingSaveDataArr[num] != undefined) console.log(drivingSaveDataArr[num].DrivingMarker);
           // let saveNameTime = (new Date(item.endTime).getMonth()+1) + "월 " + new Date(item.endTime).getDate() + "일";
           // console.log(saveNameTime);
           setDrivingInfo({
             stopTime: item.endTime,
             drivingTime: item.endTime-item.startTime,
-            sleepMarker: 0,
-            suddenStopMarker: 0,
-            suddenAccelerationMarker: 0
+            sleepMarker: _sleepMarker,
+            suddenStopMarker: _suddenStopMarker,
+            suddenAccelerationMarker: _suddenAccelerationMarker
           });
           setCamera( camera => {
             return ({
