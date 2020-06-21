@@ -6,7 +6,7 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {DrawerActions} from '@react-navigation/native';
 
 import IconButton from '~/Components/IconButton';
-import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Geolocation from 'react-native-geolocation-service';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -251,9 +251,9 @@ const MapMarker = ({navigation}: DrawerProp) => {
         }}>
           <Save>
             <Icon2
-              name="map"
+              name="map-clock-outline"
               color={'#000000'}
-              size={30}
+              size={40}
             />
           </Save>
           <SaveName numberOfLines={1}>{(new Date(item.endTime).getMonth()+1) + " / " + new Date(item.endTime).getDate() + ""}</SaveName>
@@ -427,7 +427,6 @@ const MapMarker = ({navigation}: DrawerProp) => {
             }}
             icon="database-plus"
             color="#000000"
-            size="30"
             onPress={() => {
               let num = Math.floor(Math.random() * 10);
               let arr = saveLocations2[num].routes[0].geometry.coordinates.map((item: any[]) =>{ return {latitude: item[1], longitude: item[0]}});

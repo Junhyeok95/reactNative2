@@ -22,7 +22,7 @@ const IconButton = ({icon, style, color, onPress, size}: Props) => {
       <Icon
         name={icon}
         color={color ? color : 'white'} 
-        size={size ? parseInt(size) : 30}
+        size={size ? parseInt(size) : 34}
       />
     </Container>
   );

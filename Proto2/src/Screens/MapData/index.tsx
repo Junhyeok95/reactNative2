@@ -290,6 +290,7 @@ const MapData = ({navigation}: DrawerProp) => {
   } = useContext(DrivingDataContext);
 
   const {userInfo2} = useContext<IUserContext>(UserContext);
+  const [infoTouch, setInfoTouch] = useState<number>(0);
   
   const [modal, setModal] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
@@ -788,7 +789,8 @@ const MapData = ({navigation}: DrawerProp) => {
             borderRadius: 10,
             borderWidth: 1,
           }}
-          icon="run-fast"
+          size="32"
+          icon="car-electric"
           color="#000000"
           onPress={() => {
             sound1 = new Sound(audioList[0].url, (error) => {
@@ -846,7 +848,8 @@ const MapData = ({navigation}: DrawerProp) => {
             borderRadius: 10,
             borderWidth: 1,
           }}
-          icon="walk"
+          size="32"
+          icon="car-off"
           color="#000000"
           onPress={() => {
             sound1 = new Sound(audioList[2].url, (error) => {
