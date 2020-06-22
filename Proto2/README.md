@@ -1,3 +1,6 @@
+# TEST
+react-native run-ios --simulator="iPhone X"
+
 ### styled, types, babel
 ```
 npm i -S styled-components

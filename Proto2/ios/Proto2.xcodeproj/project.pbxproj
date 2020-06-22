@@ -23,6 +23,7 @@
 		403C8FDF246FE8640083D18B /* sleep_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 403C8FDC246FE8630083D18B /* sleep_detect.mp3 */; };
 		403C8FE0246FE8640083D18B /* slow_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 403C8FDD246FE8640083D18B /* slow_detect.mp3 */; };
 		403C8FE1246FE8640083D18B /* fast_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 403C8FDE246FE8640083D18B /* fast_detect.mp3 */; };
+		404D58E624A02C7400429DD7 /* 119.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 404D58E524A02C7400429DD7 /* 119.mp3 */; };
 		40787EF6246FC0F400F70EC6 /* slow_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40787EF3246FC0F400F70EC6 /* slow_detect.mp3 */; };
 		40787EF7246FC0F400F70EC6 /* fast_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40787EF4246FC0F400F70EC6 /* fast_detect.mp3 */; };
 		40787EF8246FC0F400F70EC6 /* sleep_detect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40787EF5246FC0F400F70EC6 /* sleep_detect.mp3 */; };
@@ -94,6 +95,7 @@
 		403C8FDC246FE8630083D18B /* sleep_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sleep_detect.mp3; path = ../src/Screens/MapData/sleep_detect.mp3; sourceTree = "<group>"; };
 		403C8FDD246FE8640083D18B /* slow_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = slow_detect.mp3; path = ../src/Screens/MapData/slow_detect.mp3; sourceTree = "<group>"; };
 		403C8FDE246FE8640083D18B /* fast_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fast_detect.mp3; path = ../src/Screens/MapData/fast_detect.mp3; sourceTree = "<group>"; };
+		404D58E524A02C7400429DD7 /* 119.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 119.mp3; path = ../src/Screens/MapData/119.mp3; sourceTree = "<group>"; };
 		40787EF3246FC0F400F70EC6 /* slow_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = slow_detect.mp3; path = ../src/Screens/MapData/slow_detect.mp3; sourceTree = "<group>"; };
 		40787EF4246FC0F400F70EC6 /* fast_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fast_detect.mp3; path = ../src/Screens/MapData/fast_detect.mp3; sourceTree = "<group>"; };
 		40787EF5246FC0F400F70EC6 /* sleep_detect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sleep_detect.mp3; path = ../src/Screens/MapData/sleep_detect.mp3; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 		13B07FAE1A68108700A75B9A /* Proto2 */ = {
 			isa = PBXGroup;
 			children = (
+				404D58E524A02C7400429DD7 /* 119.mp3 */,
 				400CFB062473B3D000630DFD /* singogo.mp3 */,
 				40DB96BD2472189E009305A7 /* cancel.mp3 */,
 				400CFB082473BB2B00630DFD /* lookfront_eye.mp3 */,
@@ -433,6 +436,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				404D58E624A02C7400429DD7 /* 119.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				400CFB072473B3D000630DFD /* singogo.mp3 in Resources */,
 				40DB96BB24718A64009305A7 /* auto_singo.mp3 in Resources */,

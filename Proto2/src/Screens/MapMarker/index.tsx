@@ -26,7 +26,7 @@ const TopLeftView = Styled.View`
   border-radius: 16px;
   top: 1%;
   left: 2%;
-  width: 75%;
+  width: 70%;
   padding: 5% 10%;
 `;
 const TopRightView = Styled.View`

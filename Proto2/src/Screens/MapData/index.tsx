@@ -66,7 +66,12 @@ const audioList = [
     title: 'lookfront_eye', // 8
     isRequire: true,
     url: require('./lookfront_eye.mp3')
-  }
+  },
+  {
+    title: '119', // 9
+    isRequire: true,
+    url: require('./119.mp3')
+  },
 ]
 
 const Text = Styled.Text`
@@ -347,9 +352,25 @@ const MapData = ({navigation}: DrawerProp) => {
 
   useEffect(() => {
     // 지울예정
-    // setCheckInfo([-1,-1,-1,-1, -1,-1,-1,-1,-1,-1]);
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
+    // setModal(true);
+    
+    let _check = [...checkInfo];
+    console.log(_check);
+    
+    // setCheckInfo([0,0,0,0,0,0,0,0,0]);
+    // setLinkInfo([1,1,1,2,2,2,2,1,1,1,1,1,1,1]);
+
+    // sound1 = new Sound(audioList[9].url, (error) => {
+    //   if(error){
+    //     return;
+    //   } else {
+    //     sound1.play((success)=>{
+    //       sound1.release();
+    //     })
+    //   }
+    // });
 
     // let drivingInterval = setInterval(() => {
     //   console.log("체크");
@@ -363,193 +384,208 @@ const MapData = ({navigation}: DrawerProp) => {
   },[]);
 
   let linkInfo_3 = ():void => {
-    if(checkInfo[2] != 1){ // 사고 상태 체크
-      if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
-        if(linkInfo[3] < 70 || 130 < linkInfo[3]){ // 기울어젔는지 체크
-          console.log("기울기 사고");
+    if(driving){ // 운전상태 체크
+      if(checkInfo[2] != 1){ // 사고 상태 체크
+        if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
+          if(linkInfo[3] < 70 || 130 < linkInfo[3]){ // 기울어젔는지 체크
+            console.log("기울기 사고");
 
-            // 신고의사를 묻는 알람
-            sound1 = new Sound(audioList[5].url, (error) => {
-              if(error){
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
-              }
-            });
-
-            setModal(true);
-            singoSetTimeout = setTimeout(() => {
-
-              setModal(false);
-              // // 신고되는 http 로직 넣어야함
-
-              // 신고를 했다는 알림
-              sound2 = new Sound(audioList[7].url, (error) => {
+              // 신고의사를 묻는 알람
+              sound1 = new Sound(audioList[5].url, (error) => {
                 if(error){
                   return;
                 } else {
-                  sound2.play((success)=>{
-                    sound2.release();
+                  sound1.play((success)=>{
+                    sound1.release();
                   })
                 }
               });
 
-            }, 10000);
+              setModal(true);
+              singoSetTimeout = setTimeout(() => {
+                console.log("신고 했다는 알림 10초");
 
-            let _checkInfo = [...checkInfo];
-            _checkInfo[2] = 1;
-            setCheckInfo(_checkInfo);
+                setModal(false);
+                // // 신고되는 http 로직 넣어야함
+
+                // 신고를 했다는 알림
+                sound2 = new Sound(audioList[7].url, (error) => {
+                  if(error){
+                    return;
+                  } else {
+                    sound2.play((success)=>{
+                      sound2.release();
+                    })
+                  }
+                });
+
+              }, 10000);
+
+              let _checkInfo = [...checkInfo];
+              _checkInfo[2] = 1;
+              setCheckInfo(_checkInfo);
           }
         }
       }
+    }
   };
 
   let linkInfo_4 = ():void => {
-    // if(driving){ // 운전상태 체크
-
-    // 주시태만 체크
-    // if(checkInfo[?] != 1){ // 주시태만 상태 체크
-    //   if(linkInfo[10] != -1){ // 값이 들어오고 있는지 체크
-          if(linkInfo[4] == 30 || linkInfo[4] == 20){
-            setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
-              return (
-                linkInfo_4Cnt+1
-              );
-            });
-            console.log("태만 체크", linkInfo_4Cnt);
-            if(linkInfo_4Cnt > 5){
-              // 태만 클리어
-              setLinkInfo_4Cnt(0);
-              // 태만 감지 사운드
-              sound1 = new Sound(audioList[8].url, (error) => {
-                if(error){
-                  return;
-                } else {
-                  sound1.play((success)=>{
-                    sound1.release();
-                  })
-                }
+    if(driving){ // 운전상태 체크
+      if(checkInfo[8] != 1){ // 주시태만 상태 체크
+        if(linkInfo[4] != -1){ // 값이 들어오고 있는지 체크
+            if(linkInfo[4] == 30 || linkInfo[4] == 20){
+              setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
+                return (
+                  linkInfo_4Cnt+1
+                );
               });
+              console.log("태만 체크", linkInfo_4Cnt);
+              if(linkInfo_4Cnt > 5){
+                // 태만 클리어
+                setLinkInfo_4Cnt(0);
+                // 태만 감지 사운드
+                sound1 = new Sound(audioList[8].url, (error) => {
+                  if(error){
+                    return;
+                  } else {
+                    sound1.play((success)=>{
+                      sound1.release();
+                    })
+                  }
+                });
 
-              // // 주시태만 중
-              // let _checkInfo = [...checkInfo];
-              // _checkInfo[?] = 1;
-              // setCheckInfo(_checkInfo);
+                // 주시태만 중
+                let _checkInfo = [...checkInfo];
+                _checkInfo[8] = 1;
+                setCheckInfo(_checkInfo);
 
-              // setTimeout(() => {
-              //   let _checkInfo = [...checkInfo];
-              //   _checkInfo[?] = 0;
-              //   setCheckInfo(_checkInfo);
-              // }, 5000);
+                setTimeout(() => {
+                  let _checkInfo = [...checkInfo];
+                  _checkInfo[8] = 0;
+                  setCheckInfo(_checkInfo);
+                }, 5000);
+              }
+          } else if( linkInfo[4] == 10 ){
+            // 정면주시 보상
+            console.log("정면 성공 체크", linkInfo_4Cnt);
+            if(linkInfo_4Cnt>1){
+              setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
+                return (
+                  linkInfo_4Cnt -= 2
+                );
+              });
             }
-        } else if( linkInfo[4] == 10 ){
-          // 정면주시 보상
-          console.log("정면 성공 체크", linkInfo_4Cnt);
-          if(linkInfo_4Cnt>1){
-            setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
-              return (
-                linkInfo_4Cnt -= 2
-              );
-            });
-          }
-        } else {
+            if(linkInfo_4Cnt<0){
+              setLinkInfo_5Cnt((linkInfo_4Cnt)=>{
+                return (
+                  linkInfo_4Cnt = 0
+                );
+              });
+            }
+          } else {
 
-        }
-    //     }
-    //   }
-    // }
-      // }
+          } // 
+        } // 링크
+      } // 주시
+    } // 운전
   }
 
   let linkInfo_5 = ():void => {
-    // if(driving){ // 운전상태 체크
-
-    // if(checkInfo[?] != 1){ // 졸음 상태 체크
-    //   if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
-        if(linkInfo[5] == 2 && linkInfo[6] == 2){ // 눈을 감고있는지 체크
-          setLinkInfo_5Cnt((linkInfo_5Cnt)=>{
-            return (
-              linkInfo_5Cnt+1
-            );
-          });
-          console.log(">>        졸음 체크", linkInfo_5Cnt);
-            if(linkInfo_5Cnt > 7){
-              // 졸음 클리어
-              setLinkInfo_5Cnt(0);
-              // 졸음운전 슬립 사운드
-              sound1 = new Sound(audioList[1].url, (error) => {
-                if(error){
-                  return;
-                } else {
-                  sound1.play((success)=>{
-                    sound1.release();
-                  })
-                }
-              });
-
-              // 졸음감지
-              Geolocation.getCurrentPosition(
-                async position => {
-                  const {latitude, longitude} = position.coords;
-                  const {timestamp} = position;
-                  let _markerLocation = {
-                    latitude,
-                    longitude,
-                    bool_report: false,
-                    bool_sudden_acceleration: false,
-                    bool_sudden_stop: false,
-                    bool_sleep: true,
-                    timestamp, // 이건 앱에서만 활용함
-                  }
-                  console.log(_markerLocation);
-                  console.log(markerLocations.length);
-                  // 마커를 기록함
-                  setMarkerLocations([...markerLocations, _markerLocation]);
-                  if(onSave && userInfo2 && userInfo2.key){
-                    if(userInfo2.key != -1 && userInfo2.key != undefined){
-                      // 유저가 있으므로 마커를 웹으로 전송함
-                      drivingMarkerSave(_markerLocation);
-                    }
-                  }
-                },
-                error => {
-                  console.log(error.code, error.message);
-                },
-                {
-                  timeout: 0,
-                  maximumAge: 0,
-                  enableHighAccuracy: true,
-                }
-              );
-
-              // let _checkInfo = [...checkInfo];
-              // _checkInfo[?] = 1;
-              // setCheckInfo(_checkInfo);
-
-              // setTimeout(() => {
-              //   let _checkInfo = [...checkInfo];
-              //   _checkInfo[?] = 0;
-              //   setCheckInfo(_checkInfo);
-              // }, 5000);
-            }
-        } else if (linkInfo[5] == 1 && linkInfo[6] == 1){
-          console.log(">>        눈뜸 성공 체크", linkInfo_5Cnt);
-          if(linkInfo_5Cnt>1){
+    if(driving){ // 운전상태 체크
+      if(checkInfo[7] != 1){ // 졸음 상태 체크
+        if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
+          if(linkInfo[5] == 2 && linkInfo[6] == 2){ // 눈을 감고있는지 체크
             setLinkInfo_5Cnt((linkInfo_5Cnt)=>{
               return (
-                linkInfo_5Cnt -= 2
+                linkInfo_5Cnt+1
               );
             });
-          }
-        } else {
+            console.log(">> 졸음 체크", linkInfo_5Cnt);
+              if(linkInfo_5Cnt > 7){
+                // 졸음 클리어
+                setLinkInfo_5Cnt(0);
+                // 졸음운전 슬립 사운드
+                sound1 = new Sound(audioList[9].url, (error) => {
+                  if(error){
+                    return;
+                  } else {
+                    sound1.play((success)=>{
+                      sound1.release();
+                    })
+                  }
+                });
 
+                // 졸음감지
+                Geolocation.getCurrentPosition(
+                  async position => {
+                    const {latitude, longitude} = position.coords;
+                    const {timestamp} = position;
+                    let _markerLocation = {
+                      latitude,
+                      longitude,
+                      bool_report: false,
+                      bool_sudden_acceleration: false,
+                      bool_sudden_stop: false,
+                      bool_sleep: true,
+                      timestamp, // 이건 앱에서만 활용함
+                    }
+                    console.log(_markerLocation);
+                    console.log(markerLocations.length);
+                    // 마커를 기록함
+                    setMarkerLocations([...markerLocations, _markerLocation]);
+                    if(onSave && userInfo2 && userInfo2.key){
+                      if(userInfo2.key != -1 && userInfo2.key != undefined){
+                        // 유저가 있으므로 마커를 웹으로 전송함
+                        drivingMarkerSave(_markerLocation);
+                      }
+                    }
+                  },
+                  error => {
+                    console.log(error.code, error.message);
+                  },
+                  {
+                    timeout: 0,
+                    maximumAge: 0,
+                    enableHighAccuracy: true,
+                  }
+                );
+
+                let _checkInfo = [...checkInfo];
+                _checkInfo[7] = 1;
+                setCheckInfo(_checkInfo);
+                console.log("졸음 정보 >> ", _checkInfo);
+
+                setTimeout(() => {
+                  let _checkInfo = [...checkInfo];
+                  _checkInfo[7] = 0;
+                  setCheckInfo(_checkInfo);
+                  console.log("졸음 정보 5초후 >> ", _checkInfo);
+                }, 5000);
+              }
+          } else if (linkInfo[5] == 1 && linkInfo[6] == 1){
+            // 눈뜸 보상
+            console.log(">> 눈뜸 체크", linkInfo_5Cnt);
+            if(linkInfo_5Cnt>1){
+              setLinkInfo_5Cnt((linkInfo_5Cnt)=>{
+                return (
+                  linkInfo_5Cnt -= 2
+                );
+              });
+            }
+            if(linkInfo_5Cnt<0){
+              setLinkInfo_5Cnt((linkInfo_5Cnt)=>{
+                return (
+                  linkInfo_5Cnt = 0
+                );
+              });
+            }
+          } else {
+            // console.log(" 11 아니고 22 아닌 상황");
+          }
         }
-    //     }
-    //   }
-    // }
-      // }
+      }
+    }
   }
 
   return (
@@ -605,6 +641,9 @@ const MapData = ({navigation}: DrawerProp) => {
                 altitude: 0
               });
             });
+            
+            // console.log("checkInfo", checkInfo);
+            // console.log("linkInfo", linkInfo);
 
           }
         }}
@@ -704,7 +743,7 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </CenterRightView>
       
-      <CenterTestTestRightView>
+      {/* <CenterTestTestRightView>
         <IconButton
           style={{
             backgroundColor: "#FFFFFF",
@@ -776,10 +815,8 @@ const MapData = ({navigation}: DrawerProp) => {
                 enableHighAccuracy: true,
               }
             );
-        }}
-      />
-
-      </CenterTestTestRightView>
+        }}/>
+      </CenterTestTestRightView> */}
 
       <CenterTestRightView>
         <IconButton

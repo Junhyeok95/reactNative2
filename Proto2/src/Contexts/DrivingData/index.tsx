@@ -47,9 +47,10 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // 휴대폰 기본 확인 정보
   // [ 공백, 위도, 경도, 링크상태, 운전상태, 현재속도, 이전속도 ] -> 7개
   const [defaultInfo, setDefaultInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1]);
-  // 토탈 체크 정보 -> 10개
+
+  // 체크 정보 -> 9개
   // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 신고상태, 급가속상태, 급정거상태, 졸음상태, 주시태만상태 ]
-  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1 ,-1,-1,-1,-1]);
+  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1 ,-1,-1,-1,-1,-1]);
 
   const getCacheData = async (key: string) => { // 활용해서 운전기록뭉치 (날짜 : {기록 : {위도, 경도} , 포인트 : {내용}  })
     const cacheData = await AsyncStorage.getItem(key);
