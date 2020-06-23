@@ -77,6 +77,10 @@ const audioList = [
 const Text = Styled.Text`
   font-size: 16px;
 `;
+const Text2 = Styled.Text`
+  font-size: 24px;
+  margin-bottom: 8px;
+`;
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFFDD;
@@ -86,8 +90,16 @@ const TopLeftView = Styled.View`
   top: 1%;
   left: 2%;
   width: 50%;
-  padding: 5% 10%;
+  padding: 4% 8%;
 `;
+const TouchableOpacity = Styled.TouchableOpacity``;
+
+const TopLeftViewTouch = Styled.View`
+  flex: 1;
+`;
+const TopLeftViewTouch2 = Styled.View`
+`;
+
 const TopRightView = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -225,7 +237,7 @@ interface ICoordinate {
   latitude: number;
   longitude: number;
   speed: number | null;
-  timestamp: number;
+  timestamp: any;
 }
 
 interface ILatLng {
@@ -295,7 +307,7 @@ const MapData = ({navigation}: DrawerProp) => {
   } = useContext(DrivingDataContext);
 
   const {userInfo2} = useContext<IUserContext>(UserContext);
-  const [infoTouch, setInfoTouch] = useState<number>(0);
+  const [infoTouch, setInfoTouch] = useState<boolean>(false);
   
   const [modal, setModal] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
@@ -386,7 +398,7 @@ const MapData = ({navigation}: DrawerProp) => {
   let linkInfo_3 = ():void => {
     if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
-        if(linkInfo[3] != -1){ // 가울기 링크값이 들어오고있는지 체크
+        if(linkInfo[3] != -1 && linkInfo[3] != 0){ // 가울기 링크값이 들어오고있는지 체크
           if(linkInfo[3] < 70 || 130 < linkInfo[3]){ // 기울어젔는지 체크
             console.log("기울기 사고");
 
@@ -626,7 +638,8 @@ const MapData = ({navigation}: DrawerProp) => {
               latitude: e.nativeEvent.coordinate.latitude,
               longitude: e.nativeEvent.coordinate.longitude,
               speed: e.nativeEvent.coordinate.speed,
-              timestamp: e.nativeEvent.coordinate.timestamp,
+              // timestamp: e.nativeEvent.coordinate.timestamp,
+              timestamp: new Date(),
             });
 
             setCamera( camera => {
@@ -666,24 +679,46 @@ const MapData = ({navigation}: DrawerProp) => {
 
       {driving && (
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
-          <Text>
-            SLR : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
-          </Text>
-          <Text>
-            YPR : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
-          </Text>
-          <Text></Text>
+          <TouchableOpacity onPress={()=>{
+            setInfoTouch(!infoTouch);
+          }}>
+            <TopLeftViewTouch>
+              {infoTouch == true ? (
+                <>
+                  <Text2> {new Date(coordinate2.timestamp).getHours() + ":"+ new Date(coordinate2.timestamp).getMinutes() + ":"+ new Date(coordinate2.timestamp).getSeconds() + "   "}</Text2>
+                  <Text>
+                    시선감지 : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
+                  </Text>
+                  <Text>
+                    차량감지 : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
+                  </Text>
+                  <Text></Text>
+              </>
+              ) : (
+                <>
+                  <Text>
+                    SLR : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
+                  </Text>
+                  <Text>
+                    YPR : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
+                  </Text>
+                  <Text></Text>
+                  <Text>위도 : {coordinate2.latitude.toFixed(5)}</Text>
+                  <Text>경도 : {coordinate2.longitude.toFixed(5)}</Text>
+                  <Text>속도 : {typeof coordinate2.speed === "number" ? (coordinate2.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
+                  {/* <Text>시간 : {parseInt((coordinate2.timestamp/1000).toString())}</Text> */}
+                  <Text>시간 : {new Date(coordinate2.timestamp).getHours() + ":"+ new Date(coordinate2.timestamp).getMinutes() + ":"+ new Date(coordinate2.timestamp).getSeconds()}</Text>
+                </>
+              )}
 
-          {/* <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
-          <Text>경도 : {coordinate.longitude.toFixed(5)}</Text>
-          <Text>속도 : {typeof coordinate.speed === "number" ? (coordinate.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
-          <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
-          <Text></Text> */}
-
-          <Text>위도 : {coordinate2.latitude.toFixed(5)}</Text>
-          <Text>경도 : {coordinate2.longitude.toFixed(5)}</Text>
-          <Text>속도 : {typeof coordinate2.speed === "number" ? (coordinate2.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
-          <Text>시간 : {parseInt((coordinate2.timestamp/1000).toString())}</Text>
+              {/* <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
+              <Text>경도 : {coordinate.longitude.toFixed(5)}</Text>
+              <Text>속도 : {typeof coordinate.speed === "number" ? (coordinate.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
+              <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
+              <Text></Text> */}
+              
+            </TopLeftViewTouch>
+          </TouchableOpacity>
         </TopLeftView>
       )}
 
@@ -1048,6 +1083,8 @@ const MapData = ({navigation}: DrawerProp) => {
             } else {
 
               Alert.alert('운전을 시작합니다');
+
+setTimeout(() => {
               if(userInfo2 && userInfo2.key){
                 if(userInfo2.key != -1 && userInfo2.key != undefined){
                   console.log("아이디 확인, 운전 시작했다고 보고");
@@ -1070,43 +1107,42 @@ const MapData = ({navigation}: DrawerProp) => {
               _checkInfo[2] = 0;
               setCheckInfo(_checkInfo);
 
-//               Geolocation.watchPosition(
-//                 position => {
-//                   let now = new Date();
-// // linkInfo_3(); // 사고체크
-// // linkInfo_4(); // 태만 체크
-// // linkInfo_5(); // 졸음체크
-//                   const {latitude, longitude, speed} = position.coords;
-//                   const {timestamp} = position;
-//                   setCoordinate({
-//                     latitude: latitude,
-//                     longitude: longitude,
-//                     speed: speed,
-//                     timestamp: timestamp,
-//                   });
-//                   setCamera( camera => {
-//                     return ({
-//                       center: {
-//                         latitude: latitude,
-//                         longitude: longitude
-//                       },
-//                       heading: 0,
-//                       pitch: 0,
-//                       zoom: camera.zoom,
-//                       altitude: 0
-//                     });
-//                   });
-//                 },
-//                 error => {
-//                   console.log(error);
-//                 },
-//                 {
-//                   timeout: 0,
-//                   maximumAge: 0,
-//                   enableHighAccuracy: true,
-//                   distanceFilter: 1,
-//                 },
-//               );
+              Geolocation.watchPosition(
+                position => {
+                  let now = new Date();
+                  const {latitude, longitude, speed} = position.coords;
+                  const {timestamp} = position;
+                  setCoordinate({
+                    latitude: latitude,
+                    longitude: longitude,
+                    speed: speed,
+                    timestamp: timestamp,
+                  });
+                  setCamera( camera => {
+                    return ({
+                      center: {
+                        latitude: latitude,
+                        longitude: longitude
+                      },
+                      heading: 0,
+                      pitch: 0,
+                      zoom: camera.zoom,
+                      altitude: 0
+                    });
+                  });
+                },
+                error => {
+                  console.log(error);
+                },
+                {
+                  timeout: 0,
+                  maximumAge: 0,
+                  enableHighAccuracy: true,
+                  distanceFilter: 1,
+                },
+              );
+}, 3000);
+
             }
 
             // 무조건 실행, 운전스위치, 기록스위치

@@ -27,7 +27,7 @@ const TopLeftView = Styled.View`
   top: 1%;
   left: 2%;
   width: 70%;
-  padding: 5% 10%;
+  padding: 4% 8%;
 `;
 const TopRightView = Styled.View`
   position: absolute;
