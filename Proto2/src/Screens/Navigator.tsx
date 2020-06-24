@@ -288,14 +288,15 @@ const MapTabNavi = () => {
           tabBarIcon: 'chart-bar',
         }}
       />
-      {/* <Tab.Screen
+       <Tab.Screen
         name={"MapTest"}
         component={MapTest}
         options={{
-          tabBarLabel: '테스트 운전',
+          tabBarLabel: '테스트',
           tabBarIcon: 'car',
         }}
       />
+      {/*
       <Tab.Screen
         name={"MapDataWiFi"}
         component={MapDataWiFi}

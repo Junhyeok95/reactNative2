@@ -41,16 +41,23 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // ## 필요한것 ... -> 운전시작시간, 운전종료시간, 위도경도 배열, 감지 배열(위도, 경도, 신고, 급가속, 급정거, 졸음,  날짜, 시간)
   const [drivingSaveDataArr, setDrivingSaveDataArr] = useState<Array<IDrivingSaveData> | undefined>([]); // 따로두면 시간,라인,마커 관계힘듬
   const [drivingSaveData, setDrivingSaveData] = useState<IDrivingSaveData>(); // 따로두면 시간,라인,마커 관계힘듬
-  // 라즈베리 + 아두이노 정보 -> 14개
-  // [ 신고버튼상태, 요, 피치, 롤, 시선방향, 좌눈, 우눈, 화면x, 화면y, 왼좌표x, 왼좌표y, 우좌표x, 우좌표y , 카운터 ] // 화면, 좌표는 1/3 된 값
-  const [linkInfo, setLinkInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1 ,-1]);
+  // 라즈베리 + 아두이노 정보 -> 10개
+  // [ 신고버튼상태, 요, 피치, 롤, 시선방향, 좌눈, 우눈, 0, 0, 카운터 ]
+  const [linkInfo, setLinkInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1, 0, 0,-1]);
   // 휴대폰 기본 확인 정보
   // [ 공백, 위도, 경도, 링크상태, 운전상태, 현재속도, 이전속도 ] -> 7개
   const [defaultInfo, setDefaultInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1]);
 
-  // 체크 정보 -> 9개
-  // [ 운전시작, 운전종료, 사고상태, 신고접수카운트, 신고상태, 급가속상태, 급정거상태, 졸음상태, 주시태만상태 ]
-  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1 ,-1,-1,-1,-1,-1]);
+
+  // 신고버튼상태 1 -> 신고접수 카운터 증가
+  // 신고접수 카운트 10 -> 신고상태 on , ... 운전종료 ,
+  // 신고버튼상태 0 -> 신고접수 카운트 클리어, 전화중 애니메이션, 사고상태 클리어, 신고 취소했다는 음성, 모달창닫기
+  // 앱 취소버튼 -> 신고접수 카운트 클리어, 모달창 닫기, 사고상태 클리어, 신고 취소했다는 음성
+  // 신고상태 1 -> 운전종료 , 신고했다는 음성, 구급차 연락
+
+  // 체크 정보 -> 11개
+  // [ 운전시작, 운전종료, 사고상태, 신고접수상태, 신고접수카운트, 신고완료상태, 급가속상태, 급정거상태, 졸음상태, 주시태만상태, 버튼소모상태]
+  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1 ,-1,-1,-1,-1,-1,-1]);
 
   const getCacheData = async (key: string) => { // 활용해서 운전기록뭉치 (날짜 : {기록 : {위도, 경도} , 포인트 : {내용}  })
     const cacheData = await AsyncStorage.getItem(key);

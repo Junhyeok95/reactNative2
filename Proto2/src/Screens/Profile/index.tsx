@@ -91,11 +91,20 @@ const Profile = ({navigation}: Props) => {
             </Text>
           </>
           :
-          <Text>
-            김영진
-            {BR}
-            010-0000-0000
-          </Text>
+          <>
+            <Text>
+              이름 : 
+            </Text>
+            <Text>
+              성별 : 
+            </Text>
+            <Text>
+              생일 : 
+            </Text>
+            <Text>
+              연락처 : 
+            </Text>
+          </>
         }
       </BackContainer>
 
@@ -104,7 +113,7 @@ const Profile = ({navigation}: Props) => {
           <Label>비상연락망</Label>
         </LabelContainer>
         <Text>
-          연락처 : {profileSearchRes && profileSearchRes[1] ? profileSearchRes[1] : "010-0000-0000" }
+          연락처 : {profileSearchRes && profileSearchRes[1] ? profileSearchRes[1] : "" }
         </Text>
       </BackContainer>
 
@@ -128,15 +137,20 @@ const Profile = ({navigation}: Props) => {
             </Text>
           </>
           :
-          <Text>
-            다니는 병원 : 영진병원
-            {BR}
-            병력 : 당뇨
-            {BR}
-            복용 약 : 인슐린
-            {BR}
-            증상 : 힘이 없음
-          </Text>
+          <>
+            <Text>
+              다니는 병원 : 
+            </Text>
+            <Text>
+              병력 : 
+            </Text>
+            <Text>
+              복용 약 : 
+            </Text>
+            <Text>
+              증상 : 
+            </Text>
+          </>
         }
       </BackContainer>
       <BackContainer>
@@ -161,14 +175,16 @@ const Profile = ({navigation}: Props) => {
           :
           <>
             <Text>
-              OO손해보험
-              {BR}
-              1588 - 1588
+              보험사 : 
             </Text>
             <Text>
-              가입일 : 20XX. XX. XX
-              {BR}
-              만기일 : 20XX. XX. XX
+              연락처 : 
+            </Text>
+            <Text>
+              가입일 : 
+            </Text>
+            <Text>
+              만기일 : 
             </Text>
           </>
         }

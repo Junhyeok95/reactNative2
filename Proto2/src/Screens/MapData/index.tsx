@@ -68,9 +68,9 @@ const audioList = [
     url: require('./lookfront_eye.mp3')
   },
   {
-    title: '119', // 9
+    title: 'i119', // 9
     isRequire: true,
-    url: require('./119.mp3')
+    url: require('./i119.mp3')
   },
 ]
 
@@ -79,8 +79,15 @@ const Text = Styled.Text`
 `;
 const Text2 = Styled.Text`
   font-size: 24px;
-  margin-bottom: 8px;
 `;
+
+const Text_red = Styled.Text`
+  color: #FF0000;
+`;
+const Text_blue = Styled.Text`
+  color: #0000FF;
+`;
+
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFFDD;
@@ -89,7 +96,7 @@ const TopLeftView = Styled.View`
   border-radius: 16px;
   top: 1%;
   left: 2%;
-  width: 50%;
+  width: 55%;
   padding: 4% 8%;
 `;
 const TouchableOpacity = Styled.TouchableOpacity``;
@@ -198,7 +205,7 @@ const SingoTextView = Styled.View`
   margin-bottom: 32px;
 `;
 const SingoText = Styled.Text`
-  font-size: 32px;
+  font-size: 24px;
 `;
 const SingoCancelBtn = Styled.TouchableOpacity`
   width: 200px;
@@ -285,16 +292,22 @@ const MapData = ({navigation}: DrawerProp) => {
   };
 
   const face = (num:number) :string => {
-    if(num==0) return "X";
+    if(num==0) return " ";
     if(num==10) return "정면";
-    if(num==20) return "왼쪽";
-    if(num==30) return "오른쪽";
+    if(num==20) return " 좌 ";
+    if(num==30) return " 우 ";
     return "";
   }
   const eyePoint = (num:number) :string => {
     if(num==0) return "X";
     if(num==1) return "On";
     if(num==2) return "Off";
+    return "";
+  }
+  const eyePoint2 = (num:number) :any => {
+    if(num==0) return "X";
+    if(num==1) return "눈 뜸";
+    if(num==2) return <Text_blue>졸음</Text_blue>;
     return "";
   }
   
@@ -368,11 +381,14 @@ const MapData = ({navigation}: DrawerProp) => {
     console.log("--- --- MapData Mount");
     // setModal(true);
     
-    let _check = [...checkInfo];
-    console.log(_check);
+    // let _check = [...checkInfo];
+    // console.log(_check);
     
     // setCheckInfo([0,0,0,0,0,0,0,0,0]);
-    // setLinkInfo([1,1,1,2,2,2,2,1,1,1,1,1,1,1]);
+    // setLinkInfo([1,100,100,100,10,2,2,1,1,1,1,1,1,1]);
+
+    // setCheckInfo([-1,-1,-1,-1 ,-1,-1,-1,-1,-1]);
+    // setLinkInfo([-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1 ,-1]);
 
     // sound1 = new Sound(audioList[9].url, (error) => {
     //   if(error){
@@ -395,6 +411,164 @@ const MapData = ({navigation}: DrawerProp) => {
     };
   },[]);
 
+
+  let drivingClear_ = ():void => {
+    // 신고버튼 빼고 클리어된다
+    let _checkInfo = [...checkInfo];
+    _checkInfo[3] = 0;
+    _checkInfo[4] = 0;
+
+    _checkInfo[6] = 0;
+    _checkInfo[7] = 0;
+    _checkInfo[8] = 0;
+    _checkInfo[9] = 0;
+    setCheckInfo(_checkInfo);
+  }
+  // 도탈 체크 ... 
+  let linkInfo_ = ():void => {
+    if(driving){ // 운전상태 체크
+
+      if(checkInfo[3] == 1){
+        // 카운트 모달 열기
+        let _checkInfo = [...checkInfo];
+        _checkInfo[4] += 1; // 신고접수 온
+        console.log("신고 접수 카운트");
+        console.log(_checkInfo[4]);
+        setCheckInfo(_checkInfo);
+      }
+
+      // 전화중이다 애니메이션, 사고상태 클리어
+      // 신고접수상태 클리어, 모달창 다 닫기
+      if(checkInfo[4] > 10){
+        let _checkInfo = [...checkInfo];
+        _checkInfo[3] = 0; // 신고접수상태 클리어
+        _checkInfo[5] = 1; // 신고완료상태 시작
+        setCheckInfo(_checkInfo);
+        // 카운트 모달 닫기
+      }
+
+      // 카운트 10 이상 시
+      // 신고 완료 상태 활성화 (운전 종료, 각종 클리어, 신고한다는 음성, 모달창 닫기)
+    }
+    
+    // 신고 카운터가 꽉 차서 신고가 갔음
+    if(checkInfo[5] == 1){
+
+      // 신고음성, 신고 전화중 모달 5~10초
+      sound2 = new Sound(audioList[7].url, (error) => {
+        if(error){
+          return;
+        } else {
+          sound2.play((success)=>{
+            sound2.release();
+          })
+        }
+      });
+      
+      // 여기 신고완료 클리어 및 기록저장 및 신고
+      console.log("자동 신고로 인해 운전을 종료합니다");
+      setDriving(false);
+
+      let _drivingSaveData = Object.assign({}, drivingSaveData);
+      let _endT = new Date().getTime();
+      _setEndTime(() => _endT);
+      // console.log(locations);
+
+      if(locations){
+        if(userInfo2 && userInfo2.key){
+          _drivingSaveData.webUserId = userInfo2.key;
+        }
+        if(userInfo2 && userInfo2.name){
+          _drivingSaveData.Drivingline = locations;
+          // 탐지 객체도 넣어야함 DrivingMarker
+          _drivingSaveData.name = userInfo2.name;
+          _drivingSaveData.startTime = _startTime;
+          _drivingSaveData.endTime = _endT;
+        }
+        if(markerLocations != undefined){
+          if(markerLocations.length > 1){
+            console.log("저장한다 마크마크");
+            _drivingSaveData.DrivingMarker = markerLocations;
+          }
+        }
+        if(_drivingSaveData.endTime && _drivingSaveData.startTime){
+          if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
+            console.log("운전을 기록합니다");
+            drivingSave(_drivingSaveData);
+          }
+        }
+      }
+      setDrivingSaveData(undefined);
+      setLocations([]); // 초기화
+      setMarkerLocations([]);
+      
+
+      let _checkInfo = [...checkInfo];
+      _checkInfo[0] = 0; // 운전 종료
+      _checkInfo[1] = 1; // 운전 종료
+      _checkInfo[2] = 0; // 사고상태 클리어
+      _checkInfo[3] = 0; // 신고 접수상태 클리어
+      _checkInfo[4] = 0; // 신고 카운터 클리어
+      _checkInfo[5] = 0; // 신고 완료상태 클리어
+      _checkInfo[6] = 0; // 클리어
+      _checkInfo[7] = 0; // 클리어
+      _checkInfo[8] = 0; // 클리어
+      _checkInfo[9] = 0; // 클리어
+      setCheckInfo(_checkInfo);
+    }
+  }
+
+  let linkInfo_0 = ():void => {
+    if(driving){ // 운전상태 체크
+      if(linkInfo[0] == 119 && checkInfo[3] != 1 && checkInfo[10]!=119){ // 신고접수 상태 체크
+        // 신고버튼 on상태, 신고접수 off상태, 이전신고버튼적용 no상태
+          let _checkInfo = [...checkInfo];
+          
+          // 신고의사를 묻는 알람
+          sound1 = new Sound(audioList[5].url, (error) => {
+            if(error){
+              return;
+            } else {
+              sound1.play((success)=>{
+                sound1.release();
+              })
+            }
+          });
+
+          // 온과 동시에 카운트가 올라가고 신고접수, 버튼이 소모됨
+          _checkInfo[2] = 1; // 사고상태 온
+          _checkInfo[3] = 1; // 신고접수 온
+          _checkInfo[10] = 119; // 신고 버튼 1회성 소모
+          setCheckInfo(_checkInfo);
+      }
+
+      if(linkInfo[0] == 77 && checkInfo[3] == 1){ // 신고버튼 상태 체크
+        // 취소버튼 on상태, 신고접수 on상태, 사고상태 on상태
+        let _checkInfo = [...checkInfo];
+
+        if(_checkInfo[3]!=0){
+          // 신고취소를 알람
+          sound1 = new Sound(audioList[6].url, (error) => {
+            if(error){
+              return;
+            } else {
+              sound1.play((success)=>{
+                sound1.release();
+              })
+            }
+          });
+        }
+
+        _checkInfo[2] = 0; // 사고상태 오프
+        _checkInfo[3] = 0; // 신고접수 오프
+        _checkInfo[4] = 0; // 신고 카운터 클리어
+        _checkInfo[10] = 0; // 신고 버튼 1회성 리셋
+        setCheckInfo(_checkInfo);
+      }
+      // 신고접수상태를 보고 카운터를 토탈체크에서 올리자
+    }
+  }
+
   let linkInfo_3 = ():void => {
     if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
@@ -413,28 +587,13 @@ const MapData = ({navigation}: DrawerProp) => {
                 }
               });
 
+              // 이 모달로 2 3 을 취소시키는 뭔가를 만들어야함
               setModal(true);
-              singoSetTimeout = setTimeout(() => {
-                console.log("신고 했다는 알림 10초");
 
-                setModal(false);
-                // // 신고되는 http 로직 넣어야함
-
-                // 신고를 했다는 알림
-                sound2 = new Sound(audioList[7].url, (error) => {
-                  if(error){
-                    return;
-                  } else {
-                    sound2.play((success)=>{
-                      sound2.release();
-                    })
-                  }
-                });
-
-              }, 10000);
-
+              // 사고 접수
               let _checkInfo = [...checkInfo];
               _checkInfo[2] = 1;
+              _checkInfo[3] = 1;
               setCheckInfo(_checkInfo);
           }
         }
@@ -444,7 +603,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
   let linkInfo_4 = ():void => {
     if(driving){ // 운전상태 체크
-      if(checkInfo[8] != 1){ // 주시태만 상태 체크
+      if(checkInfo[9] != 1){ // 주시태만 상태 체크
         if(linkInfo[4] != -1){ // 값이 들어오고 있는지 체크
             if(linkInfo[4] == 30 || linkInfo[4] == 20){
               setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
@@ -469,12 +628,12 @@ const MapData = ({navigation}: DrawerProp) => {
 
                 // 주시태만 중
                 let _checkInfo = [...checkInfo];
-                _checkInfo[8] = 1;
+                _checkInfo[9] = 1;
                 setCheckInfo(_checkInfo);
 
                 setTimeout(() => {
                   let _checkInfo = [...checkInfo];
-                  _checkInfo[8] = 0;
+                  _checkInfo[9] = 0;
                   setCheckInfo(_checkInfo);
                 }, 5000);
               }
@@ -489,7 +648,7 @@ const MapData = ({navigation}: DrawerProp) => {
               });
             }
             if(linkInfo_4Cnt<0){
-              setLinkInfo_5Cnt((linkInfo_4Cnt)=>{
+              setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
                 return (
                   linkInfo_4Cnt = 0
                 );
@@ -505,7 +664,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
   let linkInfo_5 = ():void => {
     if(driving){ // 운전상태 체크
-      if(checkInfo[7] != 1){ // 졸음 상태 체크
+      if(checkInfo[8] != 1){ // 졸음 상태 체크
         if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
           if(linkInfo[5] == 2 && linkInfo[6] == 2){ // 눈을 감고있는지 체크
             setLinkInfo_5Cnt((linkInfo_5Cnt)=>{
@@ -564,13 +723,13 @@ const MapData = ({navigation}: DrawerProp) => {
                 );
 
                 let _checkInfo = [...checkInfo];
-                _checkInfo[7] = 1;
+                _checkInfo[8] = 1;
                 setCheckInfo(_checkInfo);
                 console.log("졸음 정보 >> ", _checkInfo);
 
                 setTimeout(() => {
                   let _checkInfo = [...checkInfo];
-                  _checkInfo[7] = 0;
+                  _checkInfo[8] = 0;
                   setCheckInfo(_checkInfo);
                   console.log("졸음 정보 5초후 >> ", _checkInfo);
                 }, 5000);
@@ -626,6 +785,8 @@ const MapData = ({navigation}: DrawerProp) => {
           if(onSave){
 
             // 함수 체크 로직
+            linkInfo_();
+            linkInfo_0();
             linkInfo_3();
             linkInfo_4();
             linkInfo_5();
@@ -685,9 +846,18 @@ const MapData = ({navigation}: DrawerProp) => {
             <TopLeftViewTouch>
               {infoTouch == true ? (
                 <>
-                  <Text2> {new Date(coordinate2.timestamp).getHours() + ":"+ new Date(coordinate2.timestamp).getMinutes() + ":"+ new Date(coordinate2.timestamp).getSeconds() + "   "}</Text2>
+                  {/* <Text2> {new Date(coordinate2.timestamp).getHours() + ":"+ new Date(coordinate2.timestamp).getMinutes() + ":"+ new Date(coordinate2.timestamp).getSeconds()} { typeof coordinate2.speed === "number" && coordinate2.speed > 0 ? (coordinate2.speed*3.6).toFixed(1)+" km/h" : ""}</Text2> */}
+                  <Text2>
+                    속도 : { typeof coordinate2.speed === "number" && coordinate2.speed >= 0 ? (coordinate2.speed*3.6).toFixed(1)+" km/h" : "0 km/h"}
+                  </Text2>
+                  <Text2>
+                    차량 : {linkInfo[3]==-1?"0":linkInfo[3]-100} 도
+                  </Text2>
+                  <Text2>정면 / 좌 / 우</Text2>
+                  <Text2>집중 / 졸음</Text2>
+                  <Text2></Text2>
                   <Text>
-                    시선감지 : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint(linkInfo[5])} / {linkInfo[6]==-1?"X":eyePoint(linkInfo[6])}
+                    시선감지 : {linkInfo[4]==-1?"X":face(linkInfo[4])} / {linkInfo[5]==-1?"X":eyePoint2(linkInfo[5])}
                   </Text>
                   <Text>
                     차량감지 : {linkInfo[1]==-1?"X":linkInfo[1]} / {linkInfo[2]==-1?"X":linkInfo[2]} / {linkInfo[3]==-1?"X":linkInfo[3]}
@@ -1071,8 +1241,8 @@ const MapData = ({navigation}: DrawerProp) => {
               let _checkInfo = [...checkInfo];
               _checkInfo[0] = 0;
               _checkInfo[1] = 1;
-              _checkInfo[2] = 0;
               setCheckInfo(_checkInfo);
+              drivingClear_(); // checkInfo 클리어
               // --- 사고다시 가능
               Geolocation.clearWatch(0);
 
@@ -1101,11 +1271,12 @@ setTimeout(() => {
               _setStartTime(new Date().getTime());
               // 저장해야함
               
+              // 운전시작
               let _checkInfo = [...checkInfo];
               _checkInfo[0] = 1;
               _checkInfo[1] = 0;
-              _checkInfo[2] = 0;
               setCheckInfo(_checkInfo);
+              drivingClear_(); // checkInfo 클리어
 
               Geolocation.watchPosition(
                 position => {
@@ -1141,7 +1312,7 @@ setTimeout(() => {
                   distanceFilter: 1,
                 },
               );
-}, 3000);
+}, 2000);
 
             }
 
@@ -1155,6 +1326,8 @@ setTimeout(() => {
           </BtLabel>
         </Bt>
       </BottomRightView>
+
+
       {modal &&
         <SingoView>
           <SingoTextView>

@@ -91,11 +91,15 @@ const Setting = ({navigation}: Props) => {
             </Text>
           </>
           :
-          <Text>
-            기기 코드
-            {BR}
-            ABCD - EFGH - 1234
-          </Text>
+          <>
+            <Text>
+              기기 코드 :
+            </Text>
+            <Text>
+              구입 날짜 :
+            </Text>
+          </>
+
         }
             
       </BackContainer>
@@ -126,9 +130,9 @@ const Setting = ({navigation}: Props) => {
           <Label>버전 정보</Label>
         </LabelContainer>
         <Text>
-          현재버전 : 0. 4. 8
+          현재버전 : 1. 0. 2
           {BR}
-          최신버전 : 0. 6. 2
+          최신버전 : 1. 0. 2
         </Text>
       </BackContainer>
       <View>

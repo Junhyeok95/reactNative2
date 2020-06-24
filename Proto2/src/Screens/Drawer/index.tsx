@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import Styled from 'styled-components/native';
 import {
   DrawerContentScrollView,
@@ -9,7 +9,8 @@ import {
 } from '@react-navigation/drawer';
 
 import {UserContext} from '~/Contexts/User';
-import {TouchableHighlight} from "react-native";
+const TouchableOpacity = Styled.TouchableOpacity``;
+
 
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -34,12 +35,20 @@ interface Props {
 
 const Drawer = ({props}: Props) => {
   const {userInfo2, logout, logout2} = useContext<IUserContext>(UserContext);
+  const [visible, setVisible] = useState(true);
+
   return (
     <>
       <DrawerContentScrollView {...props}>
-        <Header>
-          <Text> - {userInfo2 != undefined && userInfo2.name != null && userInfo2.name != undefined ? userInfo2.name : "회원"} / {userInfo2 != undefined && userInfo2.key != null && userInfo2.key != undefined && userInfo2.key != -1 ? userInfo2.key : "key"} - </Text>
-        </Header>
+        <TouchableOpacity onPress={()=>setVisible(!visible)}>
+          <Header>
+            {visible?
+              <Text>{userInfo2 != undefined && userInfo2.name != null && userInfo2.name != undefined ? userInfo2.name + "" : "회원"}</Text>
+              :
+              <Text>{userInfo2 != undefined && userInfo2.key != null && userInfo2.key != undefined && userInfo2.key != -1 ? userInfo2.key : "key"}</Text>
+            }
+          </Header>
+        </TouchableOpacity>
         <DrawerItemList {...props} />
         <Footer>
           <DrawerItem
