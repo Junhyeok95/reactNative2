@@ -37,7 +37,7 @@ void dmpDataReady() {
 void setup() {
   Wire.begin();
   Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (!Serial); // wait for Leonardo enumeration, others continue immediately
   Serial.println(F("Initializing I2C devices..."));
   mpu.initialize();

@@ -7,6 +7,6 @@
     printf 'pariable no\n\n'
     sleep 1
     printf 'agent on\n\n'
-    sleep 1
+    sleep 2
     printf 'exit'
 } | bluetoothctl
