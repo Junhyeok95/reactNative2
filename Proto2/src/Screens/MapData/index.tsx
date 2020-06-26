@@ -456,16 +456,18 @@ const MapData = ({navigation}: DrawerProp) => {
         // 카운트 모달 열기
         let _checkInfo = [...checkInfo];
         _checkInfo[4] += 1; // 신고접수 온
-        console.log("신고 접수 카운트");
+        console.log("신고 접수 카운트",checkInfo[4]);
         console.log(_checkInfo[4]);
         setCheckInfo(_checkInfo);
+        console.log(checkInfo[4]);
       }
 
       // 전화중이다 애니메이션, 사고상태 클리어
       // 신고접수상태 클리어, 모달창 다 닫기
-      if(checkInfo[4] > 15){
-        console.log("신고 접수 카운팅 완료 !!");
+      if(checkInfo[4] >= 15){
         let _checkInfo = [...checkInfo];
+        console.log("신고 접수 카운팅 완료 !!", checkInfo[4]);
+        console.log(_checkInfo[4]);
         _checkInfo[3] = 0; // 신고접수상태 클리어
         _checkInfo[4] = 0;
         _checkInfo[5] = 1; // 신고완료상태 시작
@@ -476,6 +478,69 @@ const MapData = ({navigation}: DrawerProp) => {
         setModal(false);
         // ############ 아아아아
 
+        // if(checkInfo[5] == 1){ 이걸 여기 흡수
+        console.log("신고 접수 완료 !! 음성 송출");
+        // 신고음성, 신고 전화중 모달 5~10초
+        sound2 = new Sound(audioList[7].url, (error) => {
+          if(error){
+            return;
+          } else {
+            sound2.play((success)=>{
+              sound2.release();
+            })
+          }
+        });
+        console.log("자동 신고로 인해 운전을 종료합니다");
+
+        let _checkInfo2 = [...checkInfo];
+        console.log("checkInfo 두개");
+        console.log(checkInfo[5]);
+        console.log(_checkInfo[5]);
+        _checkInfo2[0] = 0; // 운전 종료
+        _checkInfo2[1] = 1; // 운전 종료
+        _checkInfo2[2] = 0; // 사고상태 클리어
+        _checkInfo2[3] = 0; // 신고 접수상태 클리어
+        _checkInfo2[4] = 0; // 신고 카운터 클리어
+        _checkInfo2[5] = 0; // 신고 완료상태 클리어
+        _checkInfo2[6] = 0; // 클리어
+        _checkInfo2[7] = 0; // 클리어
+        _checkInfo2[8] = 0; // 클리어
+        _checkInfo2[9] = 0; // 클리어
+        setCheckInfo(_checkInfo2);
+
+        let _drivingSaveData = Object.assign({}, drivingSaveData);
+        let _endT = new Date().getTime();
+        _setEndTime(() => _endT);
+        // console.log(locations);
+
+        if(locations){
+          if(userInfo2 && userInfo2.key){
+            _drivingSaveData.webUserId = userInfo2.key;
+          }
+          if(userInfo2 && userInfo2.name){
+            _drivingSaveData.Drivingline = locations;
+            _drivingSaveData.name = userInfo2.name;
+            _drivingSaveData.startTime = _startTime;
+            _drivingSaveData.endTime = _endT;
+          }
+          if(markerLocations != undefined){
+            if(markerLocations.length > 1){
+              console.log("저장한다 마크마크");
+              _drivingSaveData.DrivingMarker = markerLocations;
+            }
+          }
+          if(_drivingSaveData.endTime && _drivingSaveData.startTime){
+            if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
+              console.log("운전을 기록합니다");
+              drivingSave(_drivingSaveData);
+            }
+          }
+        }
+        setDrivingSaveData(undefined);
+        setLocations([]); // 초기화
+        setMarkerLocations([]);
+        setDriving(false); // 운전
+        setOnSave(false); // 기록
       }
 
       // 카운트 10 이상 시
@@ -484,71 +549,73 @@ const MapData = ({navigation}: DrawerProp) => {
     
     // 신고 카운터가 꽉 차서 신고가 갔음
     if(checkInfo[5] == 1){
-      console.log("신고 접수 완료 !! 음성 송출");
+      console.log("check Info 5가 1입니다");
+                // console.log("신고 접수 완료 !! 음성 송출");
 
-      // 신고음성, 신고 전화중 모달 5~10초
-      sound2 = new Sound(audioList[7].url, (error) => {
-        if(error){
-          return;
-        } else {
-          sound2.play((success)=>{
-            sound2.release();
-          })
-        }
-      });
-      
-      // 여기 신고완료 클리어 및 기록저장 및 신고
-      console.log("자동 신고로 인해 운전을 종료합니다");
-      setDriving(false);
+                // // 신고음성, 신고 전화중 모달 5~10초
+                // sound2 = new Sound(audioList[7].url, (error) => {
+                //   if(error){
+                //     return;
+                //   } else {
+                //     sound2.play((success)=>{
+                //       sound2.release();
+                //     })
+                //   }
+                // });
+                
+                // // 여기 신고완료 클리어 및 기록저장 및 신고
+                // console.log("자동 신고로 인해 운전을 종료합니다");
+                // setDriving(false);
+                
+                // let _checkInfo = [...checkInfo];
+                // console.log("checkInfo 두개");
+                // console.log(checkInfo[5]);
+                // console.log(_checkInfo[5]);
+                // _checkInfo[0] = 0; // 운전 종료
+                // _checkInfo[1] = 1; // 운전 종료
+                // _checkInfo[2] = 0; // 사고상태 클리어
+                // _checkInfo[3] = 0; // 신고 접수상태 클리어
+                // _checkInfo[4] = 0; // 신고 카운터 클리어
+                // _checkInfo[5] = 0; // 신고 완료상태 클리어
+                // _checkInfo[6] = 0; // 클리어
+                // _checkInfo[7] = 0; // 클리어
+                // _checkInfo[8] = 0; // 클리어
+                // _checkInfo[9] = 0; // 클리어
+                // setCheckInfo(_checkInfo);
 
-      let _drivingSaveData = Object.assign({}, drivingSaveData);
-      let _endT = new Date().getTime();
-      _setEndTime(() => _endT);
-      // console.log(locations);
+                // let _drivingSaveData = Object.assign({}, drivingSaveData);
+                // let _endT = new Date().getTime();
+                // _setEndTime(() => _endT);
+                // // console.log(locations);
 
-      if(locations){
-        if(userInfo2 && userInfo2.key){
-          _drivingSaveData.webUserId = userInfo2.key;
-        }
-        if(userInfo2 && userInfo2.name){
-          _drivingSaveData.Drivingline = locations;
-          _drivingSaveData.name = userInfo2.name;
-          _drivingSaveData.startTime = _startTime;
-          _drivingSaveData.endTime = _endT;
-        }
-        if(markerLocations != undefined){
-          if(markerLocations.length > 1){
-            console.log("저장한다 마크마크");
-            _drivingSaveData.DrivingMarker = markerLocations;
-          }
-        }
-        if(_drivingSaveData.endTime && _drivingSaveData.startTime){
-          if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
-            console.log("운전을 기록합니다");
-            drivingSave(_drivingSaveData);
-          }
-        }
-      }
-      setDrivingSaveData(undefined);
-      setLocations([]); // 초기화
-      setMarkerLocations([]);
-      
-
-      let _checkInfo = [...checkInfo];
-      _checkInfo[0] = 0; // 운전 종료
-      _checkInfo[1] = 1; // 운전 종료
-      _checkInfo[2] = 0; // 사고상태 클리어
-      _checkInfo[3] = 0; // 신고 접수상태 클리어
-      _checkInfo[4] = 0; // 신고 카운터 클리어
-      _checkInfo[5] = 0; // 신고 완료상태 클리어
-      _checkInfo[6] = 0; // 클리어
-      _checkInfo[7] = 0; // 클리어
-      _checkInfo[8] = 0; // 클리어
-      _checkInfo[9] = 0; // 클리어
-      setCheckInfo(_checkInfo);
-
-      setDriving(false); // 운전
-      setOnSave(false); // 기록
+                // if(locations){
+                //   if(userInfo2 && userInfo2.key){
+                //     _drivingSaveData.webUserId = userInfo2.key;
+                //   }
+                //   if(userInfo2 && userInfo2.name){
+                //     _drivingSaveData.Drivingline = locations;
+                //     _drivingSaveData.name = userInfo2.name;
+                //     _drivingSaveData.startTime = _startTime;
+                //     _drivingSaveData.endTime = _endT;
+                //   }
+                //   if(markerLocations != undefined){
+                //     if(markerLocations.length > 1){
+                //       console.log("저장한다 마크마크");
+                //       _drivingSaveData.DrivingMarker = markerLocations;
+                //     }
+                //   }
+                //   if(_drivingSaveData.endTime && _drivingSaveData.startTime){
+                //     if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
+                //       console.log("운전을 기록합니다");
+                //       drivingSave(_drivingSaveData);
+                //     }
+                //   }
+                // }
+                // setDrivingSaveData(undefined);
+                // setLocations([]); // 초기화
+                // setMarkerLocations([]);
+                // setDriving(false); // 운전
+                // setOnSave(false); // 기록
     }
   }
 
@@ -712,68 +779,43 @@ const MapData = ({navigation}: DrawerProp) => {
               );
             });
             console.log(">> 졸음 체크", linkInfo_5Cnt);
-              if(linkInfo_5Cnt > 6){
-                // 졸음 클리어
-                setLinkInfo_5Cnt(0);
-                // 졸음운전 슬립 사운드
-                sound1 = new Sound(audioList[9].url, (error) => {
-                  if(error){
-                    return;
-                  } else {
-                    sound1.play((success)=>{
-                      sound1.release();
-                    })
-                  }
-                });
-
-                // let _checkInfo = [...checkInfo];
-                // _checkInfo[8] = 1;
-                // setCheckInfo(_checkInfo);
-                // console.log("졸음 정보 >> ", _checkInfo);
-
-                // setTimeout((checkInfo) => {
-                //   let _checkInfo = [...checkInfo];
-                //   _checkInfo[8] = 0;
-                //   setCheckInfo(_checkInfo);
-                //   console.log("졸음 정보 5초후 >> ", _checkInfo);
-                // }, 5000);
-
-                // 졸음감지
-                Geolocation.getCurrentPosition(
-                  async position => {
-                    const {latitude, longitude} = position.coords;
-                    const {timestamp} = position;
-                    let _markerLocation = {
-                      latitude,
-                      longitude,
-                      bool_report: false,
-                      bool_sudden_acceleration: false,
-                      bool_sudden_stop: false,
-                      bool_sleep: true,
-                      timestamp, // 이건 앱에서만 활용함
-                    }
-                    console.log(_markerLocation);
-                    console.log(markerLocations.length);
-                    // 마커를 기록함
-                    setMarkerLocations([...markerLocations, _markerLocation]);
-                    if(onSave && userInfo2 && userInfo2.key){
-                      if(userInfo2.key != -1 && userInfo2.key != undefined){
-                        // 유저가 있으므로 마커를 웹으로 전송함
-                        drivingMarkerSave(_markerLocation);
-                      }
-                    }
-                  },
-                  error => {
-                    console.log(error.code, error.message);
-                  },
-                  {
-                    timeout: 0,
-                    maximumAge: 0,
-                    enableHighAccuracy: true,
-                  }
-                );
-
+            if(linkInfo_5Cnt > 6){
+              // 졸음 클리어
+              setLinkInfo_5Cnt(0);
+              
+              // 졸음감지
+              sound1 = new Sound(audioList[9].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+              let {latitude, longitude, timestamp} = coordinate2;
+              let _markerLocation = {
+                latitude,
+                longitude,
+                bool_report: false,
+                bool_sudden_acceleration: false,
+                bool_sudden_stop: false,
+                bool_sleep: true,
+                timestamp, // 이건 앱에서만 활용함
               }
+              console.log(_markerLocation);
+              console.log(markerLocations.length);
+              // 마커를 기록함
+              setMarkerLocations([...markerLocations, _markerLocation]);
+              if(onSave && userInfo2 && userInfo2.key){
+                if(userInfo2.key != -1 && userInfo2.key != undefined){
+                  // 유저가 있으므로 마커를 웹으로 전송함
+                  console.log(_markerLocation);
+                  drivingMarkerSave(_markerLocation);
+                }
+              }
+
+            }
           } else if (linkInfo[5] == 1){
             // 눈뜸 보상
             console.log(">> 눈뜸 체크", linkInfo_5Cnt);
@@ -1346,16 +1388,16 @@ setTimeout(() => {
                 _checkInfo[3] = 0; // 신고접수 오프
                 _checkInfo[4] = 0; // 신고카운터 클리어
                 setCheckInfo(_checkInfo);
-                // // 신고취소
-                // sound1 = new Sound(audioList[6].url, (error) => {
-                //   if(error){
-                //     return;
-                //   } else {
-                //     sound1.play((success)=>{
-                //       sound1.release();
-                //     })
-                //   }
-                // });
+                // 신고취소
+                sound1 = new Sound(audioList[6].url, (error) => {
+                  if(error){
+                    return;
+                  } else {
+                    sound1.play((success)=>{
+                      sound1.release();
+                    })
+                  }
+                });
                 // setTimeout(() => {
                 //   let _checkInfo = [...checkInfo];
                 //   _checkInfo[2] = 0;
@@ -1368,7 +1410,7 @@ setTimeout(() => {
         </SingoView>
       }
 
-      <CenteredView>
+      {/* <CenteredView>
         <Modal
           animationType="slide"
           transparent={true}
@@ -1377,7 +1419,7 @@ setTimeout(() => {
         </Modal>
         <ModalView>
         </ModalView>
-      </CenteredView>
+      </CenteredView> */}
     </>
   );
 };
