@@ -27,10 +27,14 @@ void dmpDataReady() {
 
   // 추가 부분
     
-  int report = 0;
+  int report = 50;
   int cnt = 0;
   int read7 = 0;
   int read6 = 0;
+
+  // ## 추가한다
+  int read_check = 0;
+  // ## 추가한다
   
   // 추가 부분
 
@@ -83,7 +87,10 @@ void loop() {
   // 추가 부분
 
     cnt++; // 위에서 선언
-    if(cnt>50) cnt = 0;
+    if(cnt>2000){
+      cnt = 0;
+      report = 50;
+    }
 
     ////////// button //////////
     read7 = digitalRead(7); // 위에서 선언
@@ -92,16 +99,16 @@ void loop() {
       report = 119; // 위에서 선언
     }
     if(read6 == HIGH) {
-      report = 50;
+      report = 77;
     }
     ////////// button //////////
     ////////// buzzer //////////
     // if(report){
     //   digitalWrite(5, HIGH);
-    //   if(cnt>25){
-    //     tone(9 , 800, 1500);
+    //   if(cnt>1000){
+    //     tone(5 , 800, 1500);
     //   } else {
-    //     tone(9 , 600, 1500);
+    //     tone(5 , 600, 1500);
     //   }
     // } else {
     //   digitalWrite(5, LOW);

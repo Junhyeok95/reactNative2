@@ -21,6 +21,8 @@ import Sound from 'react-native-sound';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
+import ReactInterval from 'react-interval';
+
 const audioList = [
   {
     title: 'fast', // 0
@@ -373,19 +375,26 @@ const MapData = ({navigation}: DrawerProp) => {
 
   let sound1: Sound;
   let sound2: Sound;
-  let singoSetTimeout: NodeJS.Timeout;
 
   useEffect(() => {
+    // 장터발
+    // setTimeout(jang, 1000);
+
     // 지울예정
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
+
+    return () => {
+      console.log("--- --- MapData return");
+    };
+
     // setModal(true);
     
     // let _check = [...checkInfo];
     // console.log(_check);
     
     // setCheckInfo([0,0,0,0,0,0,0,0,0]);
-    // setLinkInfo([1,100,100,100,10,2,2,1,1,1,1,1,1,1]);
+    // setLinkInfo([1,100,100,160,10,2,2,1,1,1,1,1,1,1]);
 
     // setCheckInfo([-1,-1,-1,-1 ,-1,-1,-1,-1,-1]);
     // setLinkInfo([-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1 ,-1]);
@@ -400,15 +409,6 @@ const MapData = ({navigation}: DrawerProp) => {
     //   }
     // });
 
-    // let drivingInterval = setInterval(() => {
-    //   console.log("체크");
-    //   linkInfo_3();
-    //   linkInfo_4();
-    //   linkInfo_5();
-    // }, 1000);
-
-    return () => {
-    };
   },[]);
 
 
@@ -439,12 +439,18 @@ const MapData = ({navigation}: DrawerProp) => {
 
       // 전화중이다 애니메이션, 사고상태 클리어
       // 신고접수상태 클리어, 모달창 다 닫기
-      if(checkInfo[4] > 10){
+      if(checkInfo[4] > 100){
+        console.log("신고 접수 카운팅 완료 !!");
         let _checkInfo = [...checkInfo];
         _checkInfo[3] = 0; // 신고접수상태 클리어
         _checkInfo[5] = 1; // 신고완료상태 시작
         setCheckInfo(_checkInfo);
         // 카운트 모달 닫기
+
+        // ############ 아아아아
+        setModal(false);
+        // ############ 아아아아
+
       }
 
       // 카운트 10 이상 시
@@ -453,6 +459,7 @@ const MapData = ({navigation}: DrawerProp) => {
     
     // 신고 카운터가 꽉 차서 신고가 갔음
     if(checkInfo[5] == 1){
+      console.log("신고 접수 완료 !! 음성 송출");
 
       // 신고음성, 신고 전화중 모달 5~10초
       sound2 = new Sound(audioList[7].url, (error) => {
@@ -515,6 +522,9 @@ const MapData = ({navigation}: DrawerProp) => {
       _checkInfo[8] = 0; // 클리어
       _checkInfo[9] = 0; // 클리어
       setCheckInfo(_checkInfo);
+
+      setDriving(false); // 운전
+      setOnSave(false); // 기록
     }
   }
 
@@ -534,6 +544,7 @@ const MapData = ({navigation}: DrawerProp) => {
               })
             }
           });
+        setModal(true);
 
           // 온과 동시에 카운트가 올라가고 신고접수, 버튼이 소모됨
           _checkInfo[2] = 1; // 사고상태 온
@@ -545,6 +556,7 @@ const MapData = ({navigation}: DrawerProp) => {
       if(linkInfo[0] == 77 && checkInfo[3] == 1){ // 신고버튼 상태 체크
         // 취소버튼 on상태, 신고접수 on상태, 사고상태 on상태
         let _checkInfo = [...checkInfo];
+        setModal(false);
 
         if(_checkInfo[3]!=0){
           // 신고취소를 알람
@@ -570,6 +582,7 @@ const MapData = ({navigation}: DrawerProp) => {
   }
 
   let linkInfo_3 = ():void => {
+
     if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
         if(linkInfo[3] != -1 && linkInfo[3] != 0){ // 가울기 링크값이 들어오고있는지 체크
@@ -590,6 +603,8 @@ const MapData = ({navigation}: DrawerProp) => {
               // 이 모달로 2 3 을 취소시키는 뭔가를 만들어야함
               setModal(true);
 
+              // 기울기 사고로 인한 사고접수 완료 !!
+
               // 사고 접수
               let _checkInfo = [...checkInfo];
               _checkInfo[2] = 1;
@@ -603,7 +618,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
   let linkInfo_4 = ():void => {
     if(driving){ // 운전상태 체크
-      if(checkInfo[9] != 1){ // 주시태만 상태 체크
+      // if(checkInfo[9] != 1){ // 주시태만 상태 체크
         if(linkInfo[4] != -1){ // 값이 들어오고 있는지 체크
             if(linkInfo[4] == 30 || linkInfo[4] == 20){
               setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
@@ -612,7 +627,7 @@ const MapData = ({navigation}: DrawerProp) => {
                 );
               });
               console.log("태만 체크", linkInfo_4Cnt);
-              if(linkInfo_4Cnt > 5){
+              if(linkInfo_4Cnt > 6){
                 // 태만 클리어
                 setLinkInfo_4Cnt(0);
                 // 태만 감지 사운드
@@ -626,16 +641,16 @@ const MapData = ({navigation}: DrawerProp) => {
                   }
                 });
 
-                // 주시태만 중
-                let _checkInfo = [...checkInfo];
-                _checkInfo[9] = 1;
-                setCheckInfo(_checkInfo);
+                // // 주시태만 중
+                // let _checkInfo = [...checkInfo];
+                // _checkInfo[9] = 1;
+                // setCheckInfo(_checkInfo);
 
-                setTimeout(() => {
-                  let _checkInfo = [...checkInfo];
-                  _checkInfo[9] = 0;
-                  setCheckInfo(_checkInfo);
-                }, 5000);
+                // setTimeout(() => {
+                //   let _checkInfo = [...checkInfo];
+                //   _checkInfo[9] = 0;
+                //   setCheckInfo(_checkInfo);
+                // }, 5000);
               }
           } else if( linkInfo[4] == 10 ){
             // 정면주시 보상
@@ -658,22 +673,22 @@ const MapData = ({navigation}: DrawerProp) => {
 
           } // 
         } // 링크
-      } // 주시
+      // } // 주시
     } // 운전
   }
 
   let linkInfo_5 = ():void => {
     if(driving){ // 운전상태 체크
-      if(checkInfo[8] != 1){ // 졸음 상태 체크
+      // if(checkInfo[8] != 1){ // 졸음 상태 체크
         if(linkInfo[5] != -1){ // 눈 값이 들어오고 있는지 체크
-          if(linkInfo[5] == 2 && linkInfo[6] == 2){ // 눈을 감고있는지 체크
+          if(linkInfo[5] == 2){ // 눈을 감고있는지 체크
             setLinkInfo_5Cnt((linkInfo_5Cnt)=>{
               return (
                 linkInfo_5Cnt+1
               );
             });
             console.log(">> 졸음 체크", linkInfo_5Cnt);
-              if(linkInfo_5Cnt > 7){
+              if(linkInfo_5Cnt > 6){
                 // 졸음 클리어
                 setLinkInfo_5Cnt(0);
                 // 졸음운전 슬립 사운드
@@ -686,6 +701,18 @@ const MapData = ({navigation}: DrawerProp) => {
                     })
                   }
                 });
+
+                // let _checkInfo = [...checkInfo];
+                // _checkInfo[8] = 1;
+                // setCheckInfo(_checkInfo);
+                // console.log("졸음 정보 >> ", _checkInfo);
+
+                // setTimeout((checkInfo) => {
+                //   let _checkInfo = [...checkInfo];
+                //   _checkInfo[8] = 0;
+                //   setCheckInfo(_checkInfo);
+                //   console.log("졸음 정보 5초후 >> ", _checkInfo);
+                // }, 5000);
 
                 // 졸음감지
                 Geolocation.getCurrentPosition(
@@ -722,19 +749,8 @@ const MapData = ({navigation}: DrawerProp) => {
                   }
                 );
 
-                let _checkInfo = [...checkInfo];
-                _checkInfo[8] = 1;
-                setCheckInfo(_checkInfo);
-                console.log("졸음 정보 >> ", _checkInfo);
-
-                setTimeout(() => {
-                  let _checkInfo = [...checkInfo];
-                  _checkInfo[8] = 0;
-                  setCheckInfo(_checkInfo);
-                  console.log("졸음 정보 5초후 >> ", _checkInfo);
-                }, 5000);
               }
-          } else if (linkInfo[5] == 1 && linkInfo[6] == 1){
+          } else if (linkInfo[5] == 1){
             // 눈뜸 보상
             console.log(">> 눈뜸 체크", linkInfo_5Cnt);
             if(linkInfo_5Cnt>1){
@@ -755,7 +771,7 @@ const MapData = ({navigation}: DrawerProp) => {
             // console.log(" 11 아니고 22 아닌 상황");
           }
         }
-      }
+      // }
     }
   }
 
@@ -783,13 +799,12 @@ const MapData = ({navigation}: DrawerProp) => {
 // console.log("-> defaultInfo ", defaultInfo);
 // console.log("-> checkInfo ", checkInfo);
           if(onSave){
+            // console.log("지터발   ", linkInfo);
+            // console.log("장터발변수확인 > " , jangCnt);
+
 
             // 함수 체크 로직
-            linkInfo_();
-            linkInfo_0();
-            linkInfo_3();
-            linkInfo_4();
-            linkInfo_5();
+            
 
             // console.log("onUserLocationChange !!");
             const {latitude, longitude} = e.nativeEvent.coordinate;
@@ -837,6 +852,19 @@ const MapData = ({navigation}: DrawerProp) => {
           />
         ))}
       </MapView>
+      {driving && (
+        <ReactInterval
+        timeout={1000} enabled={true}
+        callback={() => {
+          console.log("짱 터발", linkInfo);
+          linkInfo_();
+          linkInfo_0();
+          linkInfo_3();
+          linkInfo_4();
+          linkInfo_5();
+        }}
+        />
+      )}
 
       {driving && (
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
@@ -1249,6 +1277,9 @@ const MapData = ({navigation}: DrawerProp) => {
               // --- 운전 시작시간 클리어 ...
               _setStartTime(0);
               // --- 운전 시작시간 클리어 ...
+
+              setDriving(false); // 운전
+              setOnSave(false); // 기록
               
             } else {
 
@@ -1312,13 +1343,16 @@ setTimeout(() => {
                   distanceFilter: 1,
                 },
               );
+            setDriving(true); // 운전
+            setOnSave(true); // 기록
+
 }, 2000);
 
             }
 
             // 무조건 실행, 운전스위치, 기록스위치
-            setDriving(!driving); // 운전
-            setOnSave(!onSave); // 기록
+            // setDriving(!driving); // 운전
+            // setOnSave(!onSave); // 기록
           }}
         >
           <BtLabel style={driving?{color:"#FFFFFF"}:{}}>
@@ -1337,29 +1371,35 @@ setTimeout(() => {
           </SingoTextView>
             <SingoCancelBtn
               onPress={()=>{
-                clearTimeout(singoSetTimeout);
                 setModal(false);
-                // 신고취소
-                sound1 = new Sound(audioList[6].url, (error) => {
-                  if(error){
-                    return;
-                  } else {
-                    sound1.play((success)=>{
-                      sound1.release();
-                    })
-                  }
-                });
-                setTimeout(() => {
-                  let _checkInfo = [...checkInfo];
-                  _checkInfo[2] = 0;
-                  setCheckInfo(_checkInfo);
-                }, 5000);
+                let _checkInfo = [...checkInfo];
+                _checkInfo[2] = 0; // 사고상태 오프
+                _checkInfo[3] = 0; // 신고접수 오프
+                _checkInfo[4] = 0; // 신고카운터 클리어
+                setCheckInfo(_checkInfo);
+                // // 신고취소
+                // sound1 = new Sound(audioList[6].url, (error) => {
+                //   if(error){
+                //     return;
+                //   } else {
+                //     sound1.play((success)=>{
+                //       sound1.release();
+                //     })
+                //   }
+                // });
+                // setTimeout(() => {
+                //   let _checkInfo = [...checkInfo];
+                //   _checkInfo[2] = 0;
+                //   setCheckInfo(_checkInfo);
+                // }, 5000);
               }}
             >
             <SingoCancelBtnText>취소</SingoCancelBtnText>
           </SingoCancelBtn>
         </SingoView>
       }
+
+      
     </>
   );
 };
