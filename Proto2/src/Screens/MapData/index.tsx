@@ -493,9 +493,6 @@ const MapData = ({navigation}: DrawerProp) => {
         console.log("자동 신고로 인해 운전을 종료합니다");
 
         let _checkInfo2 = [...checkInfo];
-        console.log("checkInfo 두개");
-        console.log(checkInfo[5]);
-        console.log(_checkInfo[5]);
         _checkInfo2[0] = 0; // 운전 종료
         _checkInfo2[1] = 1; // 운전 종료
         _checkInfo2[2] = 0; // 사고상태 클리어
@@ -507,6 +504,36 @@ const MapData = ({navigation}: DrawerProp) => {
         _checkInfo2[8] = 0; // 클리어
         _checkInfo2[9] = 0; // 클리어
         setCheckInfo(_checkInfo2);
+
+        let reportCheckId = false;
+        if(onSave && userInfo2 && userInfo2.key){
+          if(userInfo2.key != -1 && userInfo2.key != undefined){
+            if(userInfo2.key >= 3){
+              reportCheckId = true;
+            }
+          }
+        }
+        let {latitude, longitude, timestamp} = coordinate2;
+        let _markerLocation = {
+          latitude,
+          longitude,
+          bool_report: reportCheckId,
+          bool_sudden_acceleration: false,
+          bool_sudden_stop: false,
+          bool_sleep: false,
+          timestamp, // 이건 앱에서만 활용함
+        }
+        console.log(_markerLocation);
+        console.log(markerLocations.length);
+        // 마커를 기록함
+        setMarkerLocations([...markerLocations, _markerLocation]);
+        if(onSave && userInfo2 && userInfo2.key){
+          if(userInfo2.key != -1 && userInfo2.key != undefined){
+            // 유저가 있으므로 마커를 웹으로 전송함
+            console.log(_markerLocation);
+            drivingMarkerSave(_markerLocation);
+          }
+        }
 
         let _drivingSaveData = Object.assign({}, drivingSaveData);
         let _endT = new Date().getTime();
@@ -532,15 +559,16 @@ const MapData = ({navigation}: DrawerProp) => {
           if(_drivingSaveData.endTime && _drivingSaveData.startTime){
             if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
               console.log("운전을 기록합니다");
-              drivingSave(_drivingSaveData);
+              drivingSave(_drivingSaveData); // 운전 종료 로직 4번으로 씀
             }
           }
         }
+        
         setDrivingSaveData(undefined);
         setLocations([]); // 초기화
         setMarkerLocations([]);
         setDriving(false); // 운전
-        setOnSave(false); // 기록
+        setOnSave(false); // 기록        
       }
 
       // 카운트 10 이상 시
