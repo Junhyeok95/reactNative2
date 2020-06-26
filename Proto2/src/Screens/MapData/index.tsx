@@ -8,7 +8,7 @@ import IconButton from '~/Components/IconButton';
 import Button from '~/Components/Button';
 
 import {
-  FlatList, Platform, Alert,
+  FlatList, Platform, Alert, Modal,
   PermissionsAndroid, AppState, StatusBar,
   NativeModules, NativeEventEmitter,} from 'react-native';
 
@@ -22,6 +22,7 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 import ReactInterval from 'react-interval';
+import LottieView from 'lottie-react-native';
 
 const audioList = [
   {
@@ -223,6 +224,28 @@ const SingoCancelBtnText = Styled.Text`
   font-size: 96px;
 `;
 
+const CenteredView = Styled.View`
+  position: absolute;
+  flex: 1;
+  justifyContent: center;
+  alignItems: center;
+`;
+const ModalView = Styled.View`
+  margin: 20px;
+  backgroundColor: #000;
+  borderRadius: 20px;
+  padding: 35px;
+  alignItems: center;
+  shadowColor: #00F;
+  shadowOffset: {
+    width: 0px;
+    height: 2px;
+  };
+  shadowOpacity: 0.5;
+  shadowRadius: 5;
+  elevation: 5;
+`;
+
 
 // position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#0008", borderRadius:30, paddingTop:2
 
@@ -372,9 +395,10 @@ const MapData = ({navigation}: DrawerProp) => {
   // 사고감지 locations
   const [markerLocations, setMarkerLocations] = useState<Array<IMarkerlocation>>([]);
 
-
   let sound1: Sound;
   let sound2: Sound;
+
+  const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
 
   useEffect(() => {
     // 장터발
@@ -439,10 +463,11 @@ const MapData = ({navigation}: DrawerProp) => {
 
       // 전화중이다 애니메이션, 사고상태 클리어
       // 신고접수상태 클리어, 모달창 다 닫기
-      if(checkInfo[4] > 100){
+      if(checkInfo[4] > 15){
         console.log("신고 접수 카운팅 완료 !!");
         let _checkInfo = [...checkInfo];
         _checkInfo[3] = 0; // 신고접수상태 클리어
+        _checkInfo[4] = 0;
         _checkInfo[5] = 1; // 신고완료상태 시작
         setCheckInfo(_checkInfo);
         // 카운트 모달 닫기
@@ -487,7 +512,6 @@ const MapData = ({navigation}: DrawerProp) => {
         }
         if(userInfo2 && userInfo2.name){
           _drivingSaveData.Drivingline = locations;
-          // 탐지 객체도 넣어야함 DrivingMarker
           _drivingSaveData.name = userInfo2.name;
           _drivingSaveData.startTime = _startTime;
           _drivingSaveData.endTime = _endT;
@@ -586,7 +610,7 @@ const MapData = ({navigation}: DrawerProp) => {
     if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
         if(linkInfo[3] != -1 && linkInfo[3] != 0){ // 가울기 링크값이 들어오고있는지 체크
-          if(linkInfo[3] < 70 || 130 < linkInfo[3]){ // 기울어젔는지 체크
+          if(linkInfo[3] < 50 || 150 < linkInfo[3]){ // 기울어젔는지 체크
             console.log("기울기 사고");
 
               // 신고의사를 묻는 알람
@@ -620,38 +644,38 @@ const MapData = ({navigation}: DrawerProp) => {
     if(driving){ // 운전상태 체크
       // if(checkInfo[9] != 1){ // 주시태만 상태 체크
         if(linkInfo[4] != -1){ // 값이 들어오고 있는지 체크
-            if(linkInfo[4] == 30 || linkInfo[4] == 20){
-              setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
-                return (
-                  linkInfo_4Cnt+1
-                );
+          if(linkInfo[4] == 30 || linkInfo[4] == 20){
+            setLinkInfo_4Cnt((linkInfo_4Cnt)=>{
+              return (
+                linkInfo_4Cnt+1
+              );
+            });
+            console.log("태만 체크", linkInfo_4Cnt);
+            if(linkInfo_4Cnt > 6){
+              // 태만 클리어
+              setLinkInfo_4Cnt(0);
+              // 태만 감지 사운드
+              sound1 = new Sound(audioList[8].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
               });
-              console.log("태만 체크", linkInfo_4Cnt);
-              if(linkInfo_4Cnt > 6){
-                // 태만 클리어
-                setLinkInfo_4Cnt(0);
-                // 태만 감지 사운드
-                sound1 = new Sound(audioList[8].url, (error) => {
-                  if(error){
-                    return;
-                  } else {
-                    sound1.play((success)=>{
-                      sound1.release();
-                    })
-                  }
-                });
 
-                // // 주시태만 중
-                // let _checkInfo = [...checkInfo];
-                // _checkInfo[9] = 1;
-                // setCheckInfo(_checkInfo);
+              // // 주시태만 중
+              // let _checkInfo = [...checkInfo];
+              // _checkInfo[9] = 1;
+              // setCheckInfo(_checkInfo);
 
-                // setTimeout(() => {
-                //   let _checkInfo = [...checkInfo];
-                //   _checkInfo[9] = 0;
-                //   setCheckInfo(_checkInfo);
-                // }, 5000);
-              }
+              // setTimeout(() => {
+              //   let _checkInfo = [...checkInfo];
+              //   _checkInfo[9] = 0;
+              //   setCheckInfo(_checkInfo);
+              // }, 5000);
+            }
           } else if( linkInfo[4] == 10 ){
             // 정면주시 보상
             console.log("정면 성공 체크", linkInfo_4Cnt);
@@ -854,9 +878,9 @@ const MapData = ({navigation}: DrawerProp) => {
       </MapView>
       {driving && (
         <ReactInterval
-        timeout={1000} enabled={true}
+        timeout={1000} enabled={driving}
         callback={() => {
-          console.log("짱 터발", linkInfo);
+          // console.log("짱 터발", linkInfo);
           linkInfo_();
           linkInfo_0();
           linkInfo_3();
@@ -976,7 +1000,7 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </CenterRightView>
       
-      {/* <CenterTestTestRightView>
+      <CenterTestTestRightView>
         <IconButton
           style={{
             backgroundColor: "#FFFFFF",
@@ -987,71 +1011,41 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="wifi"
           color="#000000"
           onPress={() => {
-            // 아래 처럼 만들어야함
-            // setLocations([...locations, {latitude, longitude}]);
-            Geolocation.getCurrentPosition(
-              async position => {
-                const {latitude, longitude} = position.coords;
-                const {timestamp} = position;
-                let randomNum = Math.floor(Math.random() * 3);
-                let _markerLocation = {
-                  latitude,
-                  longitude,
-                  bool_report: false,
-                  bool_sudden_acceleration: true,
-                  bool_sudden_stop: false,
-                  bool_sleep: false,
-                  timestamp, // 이건 앱에서만 활용함
-                }
-                if (randomNum == 2) {
-                  _markerLocation = {
-                    latitude,
-                    longitude,
-                    bool_report: false,
-                    bool_sudden_acceleration: false,
-                    bool_sudden_stop: true,
-                    bool_sleep: false,
-                    timestamp, // 이건 앱에서만 활용함
-                  }
-                }
-                else if (randomNum == 1) {
-                  _markerLocation = {
-                    latitude,
-                    longitude,
-                    bool_report: false,
-                    bool_sudden_acceleration: false,
-                    bool_sudden_stop: false,
-                    bool_sleep: true,
-                    timestamp, // 이건 앱에서만 활용함
-                  }
-                }
-                else {
-                }
-                console.log("감지 발생", randomNum);
-                console.log(_markerLocation);
-                console.log(markerLocations.length);
-                // 마커를 기록함
-                setMarkerLocations([...markerLocations, _markerLocation]);
-                if(onSave && userInfo2 && userInfo2.key){
-                  if(userInfo2.key != -1 && userInfo2.key != undefined){
-                    // 유저가 있으므로 마커를 웹으로 전송함
-                    drivingMarkerSave(_markerLocation);
-                  }
-                }
-              },
-              error => {
-                console.log(error.code, error.message);
-              },
-              {
-                timeout: 0,
-                maximumAge: 0,
-                enableHighAccuracy: true,
+            sound1 = new Sound(audioList[1].url, (error) => {
+              if(error){
+                return;
+              } else {
+                sound1.play((success)=>{
+                  sound1.release();
+                })
               }
-            );
+            });
+            let {latitude, longitude, timestamp} = coordinate2;
+            let _markerLocation = {
+              latitude,
+              longitude,
+              bool_report: false,
+              bool_sudden_acceleration: false,
+              bool_sudden_stop: false,
+              bool_sleep: true,
+              timestamp, // 이건 앱에서만 활용함
+            }
+            console.log(_markerLocation);
+            console.log(markerLocations.length);
+            // 마커를 기록함
+            setMarkerLocations([...markerLocations, _markerLocation]);
+            if(onSave && userInfo2 && userInfo2.key){
+              if(userInfo2.key != -1 && userInfo2.key != undefined){
+                // 유저가 있으므로 마커를 웹으로 전송함
+                console.log(_markerLocation);
+                drivingMarkerSave(_markerLocation);
+              }
+            }
         }}/>
-      </CenterTestTestRightView> */}
+      </CenterTestTestRightView>
 
       <CenterTestRightView>
+        {/* 급가속 */}
         <IconButton
           style={{
             backgroundColor: "#FFFFFF",
@@ -1072,45 +1066,34 @@ const MapData = ({navigation}: DrawerProp) => {
                 })
               }
             });
-
-            Geolocation.getCurrentPosition(
-              async position => {
-                const {latitude, longitude} = position.coords;
-                const {timestamp} = position;
-                let _markerLocation = {
-                  latitude,
-                  longitude,
-                  bool_report: false,
-                  bool_sudden_acceleration: true,
-                  bool_sudden_stop: false,
-                  bool_sleep: false,
-                  timestamp, // 이건 앱에서만 활용함
-                }
+            let {latitude, longitude, timestamp} = coordinate2;
+            let _markerLocation = {
+              latitude,
+              longitude,
+              bool_report: false,
+              bool_sudden_acceleration: true,
+              bool_sudden_stop: false,
+              bool_sleep: false,
+              timestamp, // 이건 앱에서만 활용함
+            }
+            console.log(_markerLocation);
+            console.log(markerLocations.length);
+            // 마커를 기록함
+            setMarkerLocations([...markerLocations, _markerLocation]);
+            if(onSave && userInfo2 && userInfo2.key){
+              if(userInfo2.key != -1 && userInfo2.key != undefined){
+                // 유저가 있으므로 마커를 웹으로 전송함
                 console.log(_markerLocation);
-                console.log(markerLocations.length);
-                // 마커를 기록함
-                setMarkerLocations([...markerLocations, _markerLocation]);
-                if(onSave && userInfo2 && userInfo2.key){
-                  if(userInfo2.key != -1 && userInfo2.key != undefined){
-                    // 유저가 있으므로 마커를 웹으로 전송함
-                    drivingMarkerSave(_markerLocation);
-                  }
-                }
-              },
-              error => {
-                console.log(error.code, error.message);
-              },
-              {
-                timeout: 0,
-                maximumAge: 0,
-                enableHighAccuracy: true,
+                drivingMarkerSave(_markerLocation);
               }
-            );
+            }
           }}
         />
         {/* airplane */}
         {/* gauge-empty */}
         {/* trending-up */}
+
+        {/* 급감속 */}
         <IconButton
           style={{
             backgroundColor: "#FFFFFF",
@@ -1131,40 +1114,27 @@ const MapData = ({navigation}: DrawerProp) => {
                 })
               }
             });
-
-            Geolocation.getCurrentPosition(
-              async position => {
-                const {latitude, longitude} = position.coords;
-                const {timestamp} = position;
-                let _markerLocation = {
-                  latitude,
-                  longitude,
-                  bool_report: false,
-                  bool_sudden_acceleration: false,
-                  bool_sudden_stop: true,
-                  bool_sleep: false,
-                  timestamp, // 이건 앱에서만 활용함
-                }
+            let {latitude, longitude, timestamp} = coordinate2;
+            let _markerLocation = {
+              latitude,
+              longitude,
+              bool_report: false,
+              bool_sudden_acceleration: false,
+              bool_sudden_stop: true,
+              bool_sleep: false,
+              timestamp, // 이건 앱에서만 활용함
+            }
+            console.log(_markerLocation);
+            console.log(markerLocations.length);
+            // 마커를 기록함
+            setMarkerLocations([...markerLocations, _markerLocation]);
+            if(onSave && userInfo2 && userInfo2.key){
+              if(userInfo2.key != -1 && userInfo2.key != undefined){
+                // 유저가 있으므로 마커를 웹으로 전송함
                 console.log(_markerLocation);
-                console.log(markerLocations.length);
-                // 마커를 기록함
-                setMarkerLocations([...markerLocations, _markerLocation]);
-                if(onSave && userInfo2 && userInfo2.key){
-                  if(userInfo2.key != -1 && userInfo2.key != undefined){
-                    // 유저가 있으므로 마커를 웹으로 전송함
-                    drivingMarkerSave(_markerLocation);
-                  }
-                }
-              },
-              error => {
-                console.log(error.code, error.message);
-              },
-              {
-                timeout: 0,
-                maximumAge: 0,
-                enableHighAccuracy: true,
+                drivingMarkerSave(_markerLocation);
               }
-            );
+            }
           }}
         />
         {/* gauge-full */}
@@ -1242,7 +1212,6 @@ const MapData = ({navigation}: DrawerProp) => {
                 }
                 if(userInfo2 && userInfo2.name){
                   _drivingSaveData.Drivingline = locations;
-                  // 탐지 객체도 넣어야함 DrivingMarker
                   _drivingSaveData.name = userInfo2.name;
                   _drivingSaveData.startTime = _startTime;
                   _drivingSaveData.endTime = _endT;
@@ -1399,7 +1368,16 @@ setTimeout(() => {
         </SingoView>
       }
 
-      
+      <CenteredView>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisibleSleep}
+        >
+        </Modal>
+        <ModalView>
+        </ModalView>
+      </CenteredView>
     </>
   );
 };

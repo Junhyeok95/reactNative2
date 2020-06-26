@@ -105,7 +105,10 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
       })
       .then(response => response.json())
       .then(json => { // 아이디만 받음, 종료할때 사용해야함
+        console.log("json");
+        console.log(json);
         setWebDrivingDBId(json);
+        console.log("webDrivingDBId");
         console.log(webDrivingDBId);
       })
       .catch(error => {
@@ -116,14 +119,11 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
 
   // 위험 감지
   const drivingMarkerSave = (_markerLocation:IMarkerlocation) => {
-    console.log("haha");
+    console.log(">> 위험 감지");
     if(_markerLocation){
       if(userInfo2){ // 더블 분기
         if(userInfo2.key != -1 && userInfo2.key != undefined){
-
-          let __markerLocation = _markerLocation;
-          console.log(__markerLocation);
-
+          console.log(">> 위험 감지 시도");
           // 값이 있을때 던진다
           fetch(
             URL+'/app', { 
@@ -135,7 +135,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
               body: JSON.stringify({
                 _option: 5, // 운전 감지 로직
                 _key: userInfo2.key,
-                _drive_id: 1,
+                _drive_id: webDrivingDBId,
                 // _drive_id: webDrivingDBId,
                 _latitude: _markerLocation.latitude,
                 _longitude: _markerLocation.longitude,
@@ -226,7 +226,7 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
           })
           .then(response => response.json())
           .then(json => { // 아이디만 받음, 종료할때 사용해야함
-            console.log("json");
+            console.log("운전 종료 + 저장 json");
             console.log(json);
           })
           .catch(error => {

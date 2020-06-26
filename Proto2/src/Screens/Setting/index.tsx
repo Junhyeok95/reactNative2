@@ -67,7 +67,7 @@ const Setting = ({navigation}: Props) => {
     console.log("--- --- Setting");
     if(userInfo2){
       if(userInfo2.key != -1 && userInfo2.key != undefined){
-        
+        settingSearch();
       }
     }
     return () => {
