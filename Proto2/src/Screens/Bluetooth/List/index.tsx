@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-
+import {StackNavigationProp} from '@react-navigation/stack';
 import {
   FlatList, Platform, Alert,
   PermissionsAndroid, AppState,
@@ -55,9 +55,13 @@ const TestText = Styled.Text`
   font-size: 24px;
 `;
 
-interface Props {}
+type NavigationProp = StackNavigationProp<MainThirdStackNavi, 'List'>;
 
-const List = ({  }: Props) => {
+interface Props {
+  navigation: NavigationProp;
+}
+
+const List = ({navigation}: Props) => {
 
   // 안드로이드 블루투스 요청
   const androidPermissionBluetooth = () => {
@@ -327,6 +331,10 @@ const List = ({  }: Props) => {
                       let _defaultInfo = [...defaultInfo];
                       _defaultInfo[3] = 1;
                       setDefaultInfo(_defaultInfo);
+
+                      setTimeout(() => {
+                        navigation.navigate('MainFirstStackNavi');
+                      }, 2000);
 
                   }).catch((error) => { // startNotification
                     console.log('Notification error', error);

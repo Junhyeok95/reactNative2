@@ -20,6 +20,8 @@ type MainSecondStackNavi = {
 type MainThirdStackNavi = {
   Bluetooth: undefined;
   MapStackNavi: undefined;
+  MainFirstStackNavi: undefined | any;
+  List: undefined | any;
 };
 
 type MainFourthStackNavi = {
@@ -31,4 +33,5 @@ type MainFourthStackNavi = {
 type DrawNaviParamList = {
   MainTabNavi: undefined;
   MapStackNavi: undefined;
+  Bluetooth: undefined;
 };

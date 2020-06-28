@@ -1,13 +1,20 @@
 import React, {useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import List from '~/Screens/Bluetooth/List';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const Container = Styled.View`
   flex: 1;
   background-color: #EFEFEF;
 `;
 
-const Bluetooth = () => {
+type NavigationProp = StackNavigationProp<MainThirdStackNavi, 'List'>;
+
+interface Props {
+  navigation: NavigationProp;
+}
+
+const Bluetooth = ({navigation}: Props) => {
 
   useEffect(() => {
     console.log("--- --- Bluetooth");
@@ -15,7 +22,7 @@ const Bluetooth = () => {
 
   return (
     <Container>
-      <List />
+      <List navigation={navigation} />
     </Container>
   );
 };

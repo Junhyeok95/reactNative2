@@ -107,7 +107,7 @@ const Driving = ({navigation}: Props) => {
       </Text> */}
         {defaultInfo[3] == 1? (
           <TextNew>
-            안전하게 달려볼까 ~!
+            안전하게 달려볼까요 ~!
           </TextNew>
         ):(
           <TextOld>

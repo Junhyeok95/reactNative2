@@ -83,14 +83,14 @@ const Text = Styled.Text`
 const Text2 = Styled.Text`
   font-size: 24px;
 `;
-
 const Text_red = Styled.Text`
   color: #FF0000;
 `;
 const Text_blue = Styled.Text`
   color: #0000FF;
 `;
-
+const MapInfoTouchableOpacity = Styled.TouchableOpacity`
+`;
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFFDD;
@@ -102,7 +102,6 @@ const TopLeftView = Styled.View`
   width: 55%;
   padding: 4% 8%;
 `;
-
 
 const TopLeftViewTouch = Styled.View`
   flex: 1;
@@ -118,6 +117,7 @@ const TopRightView = Styled.View`
   width: 50px;
   height: 50px;
 `;
+
 const CenterRightView = Styled.View`
   position: absolute;
   right: 2%;
@@ -139,7 +139,8 @@ const CenterTestRightView = Styled.View`
   width: 40px;
   height: 12%;
 `;
-const BottomLeftView = Styled.View`
+
+const BottomLeftViewGPS = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
   border-radius: 25px;
@@ -150,7 +151,7 @@ const BottomLeftView = Styled.View`
   width: 50px;
   height: 50px;
 `;
-const BottomLeftView2 = Styled.View`
+const BottomLeftViewEye = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
   border-radius: 25px;
@@ -185,69 +186,67 @@ const BtLabel = Styled.Text`
   font-size: 22px;
   font-weight: 900;
 `;
-const SingoView = Styled.View`
-  position: absolute;
-  background-color: #FFFFFF;
-  border-radius: 20px;
-  border-width: 5px;
-  border-color: #F00;
-  top: 10%;
-  left: 5%;
-  right: 5%;
-  bottom: 10%;
-  justify-content: center;
-  align-items: center;
-  padding: 10%;
-`;
+
 const SingoTextView = Styled.View`
+  width: 100%;
+  padding-top: 16px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
+  background-color: #FFFFFF;
 `;
 const SingoText = Styled.Text`
   font-size: 24px;
 `;
-const SingoCancelBtn = Styled.TouchableOpacity`
-  width: 200px;
-  height: 200px;
-  border-radius: 20px;
-  border-width: 5px;
-  border-color: #F00;
-  justify-content: center;
-  background-color: #DDDD;
-  align-items: center;
-`;
-const SingoCancelBtnText = Styled.Text`
-  font-size: 96px;
+const SingoTextCount = Styled.Text`
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  font-size: 50px;
+  color: #FF0000;
 `;
 const LottieViewMyView = Styled.View`
-  width: 50%%;
-  height: 50%%;
+  width: 100%;
+  height: 40%;
+  padding: 100px;
 `;
 const ModalView = Styled.View`
+  background-color: #FFFFFF;
   width: 96%;
   height: 66%;
   marginTop: 30%;
   marginLeft: 2%;
   marginRight: 2%;
 
-  border-width: 5px;
-  border-radius: 5px;
-  border-color: #00F;
+  border-width: 8px;
+  border-radius: 8px;
+  border-color: #FF0000;
 
   justify-content: center;
   align-items: center;
 
-  shadowColor: #F00;
-  shadowOpacity: 1;
-  shadowRadius: 20px;
 `;
-// 이건 변경하지말자
-const TouchableOpacity = Styled.TouchableOpacity``;
+const TouchableOpacity = Styled.TouchableOpacity`
+  align-items: center;
+
+`;
 const TouchableOpacityView = Styled.View`
-  width: 100px;
-  height: 200px;
-  backgroundColor: #0000FF;
+  background-color: #FFFFFF;
+  justify-content: center;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+
+  border-width: 3px;
+  border-color: #FF0000;
+  border-radius: 10px;
+
+`;
+const ReportCancelBt = Styled.Text`
+  font-size: 40px;
+  text-align: center;
+  font-weight: 900;
+  
+  background-color: #FF0000;
+  color: #FFFFFF;
+  padding: 5px;
 `;
 
 interface IGeolocation {
@@ -385,10 +384,13 @@ const MapData = ({navigation}: DrawerProp) => {
   let sound1: Sound;
   let sound2: Sound;
 
-  const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
+  const [modalVisibleSleep, setModalVisibleSleep] = useState(true);
 
   useEffect(() => {
     androidPermissionLocation();
+
+    // //## 지워야함
+    // setCheckInfo([-1,-1,-1,1 ,-1,-1,-1,-1,-1,-1])
     console.log("--- --- MapData Mount");
     return () => {
       console.log("--- --- MapData return");
@@ -409,7 +411,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
       // 전화중이다 애니메이션, 사고상태 클리어
       // 신고접수상태 클리어, 모달창 다 닫기
-      if(checkInfo[4] >= 5){
+      if(checkInfo[4] >= 10){
         let _checkInfo = [...checkInfo];
         console.log("신고 접수 카운팅 완료 !!", checkInfo[4]);
         console.log(_checkInfo[4]);
@@ -818,7 +820,7 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       {driving && (
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
-          <TouchableOpacity onPress={()=>{
+          <MapInfoTouchableOpacity onPress={()=>{
             setInfoTouch(!infoTouch);
           }}>
             <TopLeftViewTouch>
@@ -866,7 +868,7 @@ const MapData = ({navigation}: DrawerProp) => {
               <Text></Text> */}
               
             </TopLeftViewTouch>
-          </TouchableOpacity>
+          </MapInfoTouchableOpacity>
         </TopLeftView>
       )}
 
@@ -934,7 +936,7 @@ const MapData = ({navigation}: DrawerProp) => {
             borderRadius: 10,
             borderWidth: 1,
           }}
-          icon="wifi"
+          icon="sleep"
           color="#000000"
           onPress={() => {
             sound1 = new Sound(audioList[1].url, (error) => {
@@ -1068,7 +1070,7 @@ const MapData = ({navigation}: DrawerProp) => {
         {/* trending-down */}
       </CenterTestRightView>
 
-      <BottomLeftView>
+      <BottomLeftViewGPS>
         <IconButton
           icon="crosshairs-gps"
           color="#000000"
@@ -1107,8 +1109,8 @@ const MapData = ({navigation}: DrawerProp) => {
             );
           }}
         />
-      </BottomLeftView>
-      {driving && (<BottomLeftView2>
+      </BottomLeftViewGPS>
+      {driving && (<BottomLeftViewEye>
         <IconButton
           icon={onPolyline?"eye":"eye-off"}
           color={onPolyline?"#00FA":"#AAAA"}
@@ -1117,7 +1119,7 @@ const MapData = ({navigation}: DrawerProp) => {
             setOnMarker(!onMarker);
           }}
         />
-      </BottomLeftView2>)}
+      </BottomLeftViewEye>)}
 
       <BottomRightView style={driving?{backgroundColor:"#00F"}:{backgroundColor:"#FFF"}}>
         <Bt
@@ -1283,70 +1285,61 @@ setTimeout(() => {
         </Bt>
       </BottomRightView>
 
+      {checkInfo[3] == 1 ?
+        (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisibleSleep}
+          >
+            <ModalView>
+              <LottieViewMyView>
+                <LottieView
+                  style={{backgroundColor:'#FFFFFF'}}
+                  resizeMode={'contain'}
+                  source={require('~/Assets/Lottie2/i119_count.json')}
+                  autoPlay
+                  imageAssetsFolder={'images'}
+                />
+              </LottieViewMyView>
 
-      {modal &&
-        <SingoView>
-          <SingoTextView>
-            <SingoText>사고가 감지되었습니다</SingoText>
-            <SingoText>취소 버튼을 누르지않으면</SingoText>
-            <SingoText>자동 신고를 하겠습니다</SingoText>
-          </SingoTextView>
-            <SingoCancelBtn
-              onPress={()=>{
-                setModal(false);
-                let _checkInfo = [...checkInfo];
-                _checkInfo[2] = 0; // 사고상태 오프
-                _checkInfo[3] = 0; // 신고접수 오프
-                _checkInfo[4] = 0; // 신고카운터 클리어
-                setCheckInfo(_checkInfo);
-                // 신고취소
-                sound1 = new Sound(audioList[6].url, (error) => {
-                  if(error){
-                    return;
-                  } else {
-                    sound1.play((success)=>{
-                      sound1.release();
-                    })
-                  }
-                });
-                // setTimeout(() => {
-                //   let _checkInfo = [...checkInfo];
-                //   _checkInfo[2] = 0;
-                //   setCheckInfo(_checkInfo);
-                // }, 5000);
-              }}
-            >
-            <SingoCancelBtnText>취소</SingoCancelBtnText>
-          </SingoCancelBtn>
-        </SingoView>
-      }
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisibleSleep}
-      >
-        <ModalView>
-          <LottieViewMyView>
-            <LottieView
-              style={{backgroundColor:'#EFEF00'}}
-              resizeMode={'contain'}
-              source={require('~/Assets/Lottie/nodata2.json')}
-              autoPlay
-              imageAssetsFolder={'images'}
-            />
-          </LottieViewMyView>
+                <SingoTextView>
+                  <SingoText>사고가 감지되었습니다</SingoText>
+                  <SingoText>취소 버튼을 누르지않으면</SingoText>
+                  <SingoText>자동 신고를 하겠습니다</SingoText>
+                  <SingoTextCount>
+                    {checkInfo[4]>=0 && checkInfo[4]<10 ? (10-checkInfo[4]) : " "}
+                  </SingoTextCount>
+                </SingoTextView>
+                <TouchableOpacityView>
+                  <TouchableOpacity // 신고 취소 버튼
+                    onPress={() => {
+                      console.log("신고 취소");
 
-            <TouchableOpacityView>
-              <TouchableOpacity // 신고 취소 버튼
-                style={{ backgroundColor: "#00F0C0", padding: 50 }}
-                onPress={() => {
-                  setModalVisibleSleep(!modalVisibleSleep);
-                }}
-              >
-              </TouchableOpacity>
-            </TouchableOpacityView>
-        </ModalView>
-      </Modal>
+                      setModalVisibleSleep(false);
+                      let _checkInfo = [...checkInfo];
+                      _checkInfo[2] = 0;
+                      _checkInfo[3] = 0;
+                      _checkInfo[4] = 0;
+                      setCheckInfo(_checkInfo);
+
+                      sound1 = new Sound(audioList[6].url, (error) => {
+                        if(error){
+                          return;
+                        } else {
+                          sound1.play((success)=>{
+                            sound1.release();
+                          })
+                        }
+                      });
+                    }}
+                  >
+                    <ReportCancelBt>신고취소</ReportCancelBt>
+                  </TouchableOpacity>
+                </TouchableOpacityView>
+            </ModalView>
+          </Modal>
+        ) : null}
     </>
   );
 };

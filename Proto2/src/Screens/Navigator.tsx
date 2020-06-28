@@ -236,19 +236,19 @@ const MainTabNavi = () => {
         }}
       />
       <Tab.Screen
-        name="MainSecondStackNavi"
-        component={MainSecondStackNavi}
-        options={{
-          tabBarLabel: '정보',
-          tabBarIcon: 'account-outline',
-        }}
-      />
-      <Tab.Screen
         name="MainThirdStackNavi"
         component={MainThirdStackNavi}
         options={{
           tabBarLabel: '연결',
           tabBarIcon: 'bluetooth',
+        }}
+      />
+      <Tab.Screen
+        name="MainSecondStackNavi"
+        component={MainSecondStackNavi}
+        options={{
+          tabBarLabel: '정보',
+          tabBarIcon: 'account-outline',
         }}
       />
       <Tab.Screen
@@ -288,23 +288,6 @@ const MapTabNavi = () => {
           tabBarIcon: 'chart-bar',
         }}
       />
-       <Tab.Screen
-        name={"MapTest"}
-        component={MapTest}
-        options={{
-          tabBarLabel: '테스트',
-          tabBarIcon: 'car',
-        }}
-      />
-      {/*
-      <Tab.Screen
-        name={"MapDataWiFi"}
-        component={MapDataWiFi}
-        options={{
-          tabBarLabel: 'WiFi',
-          tabBarIcon: 'wifi',
-        }}
-      /> */}
     </Tab.Navigator>
   );
 };
