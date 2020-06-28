@@ -56,8 +56,8 @@ const DrivingDataProvider = ({cache, children}: Props) => { // 선언하면 이�
   // 신고상태 1 -> 운전종료 , 신고했다는 음성, 구급차 연락
 
   // 체크 정보 -> 11개
-  // [ 운전시작, 운전종료, 사고상태, 신고접수상태, 신고접수카운트, 신고완료상태, 급가속상태, 급정거상태, 졸음상태, 주시태만상태, 버튼소모상태]
-  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1 ,-1,-1,-1,-1,-1,-1]);
+  // [ 운전시작, 운전종료, 사고상태, 신고접수상태, 신고접수카운트, 신고완료상태, 급가속상태, 급정거상태, 졸음상태, 주시태만상태, 버튼소모상태, 터치소모상태]
+  const [checkInfo, setCheckInfo] = useState<Array<number>>([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 11]);
 
   const getCacheData = async (key: string) => { // 활용해서 운전기록뭉치 (날짜 : {기록 : {위도, 경도} , 포인트 : {내용}  })
     const cacheData = await AsyncStorage.getItem(key);

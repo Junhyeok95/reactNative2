@@ -188,12 +188,12 @@ const SignIn = ({navigation}: Props) => {
               </TouchableOpacity2>
               <TouchableOpacity2 onPress={()=>updateURL("http://kurumamori.iptime.org:80")}>
                 <Label>
-                  reset URL{'\n'}kurumamori{'\n'}:80
+                  reset URL{'\n'}kuru:80
                 </Label>
               </TouchableOpacity2>
               <TouchableOpacity2 onPress={()=>updateURL("http://kurumamori.iptime.org:8080")}>
                 <Label>
-                  reset URL{'\n'}kurumamori{'\n'}:8080
+                  reset URL{'\n'}kuru:8080
                 </Label>
               </TouchableOpacity2>
             </TouchableOpacityViewRow>

@@ -77,6 +77,14 @@ const audioList = [
   },
 ]
 
+const audioListNew = [
+  {
+    title: 'real_singo', // 0
+    isRequire: true,
+    url: require('./real_singo.mp3')
+  }
+]
+
 const Text = Styled.Text`
   font-size: 16px;
 `;
@@ -195,12 +203,11 @@ const SingoTextView = Styled.View`
   background-color: #FFFFFF;
 `;
 const SingoText = Styled.Text`
-  font-size: 24px;
+  font-size: 28px;
 `;
 const SingoTextCount = Styled.Text`
   padding-top: 8px;
   padding-bottom: 8px;
-
   font-size: 50px;
   color: #FF0000;
 `;
@@ -227,7 +234,6 @@ const ModalView = Styled.View`
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
   align-items: center;
-
 `;
 const TouchableOpacityView = Styled.View`
   background-color: #FFFFFF;
@@ -314,6 +320,42 @@ const DrivingStartSaveText = Styled.Text`
 `;
 
 // ------------- start, save modal ------------
+// ------------- report_ok modal ------------
+const ReportOkModalView = Styled.View`
+  background-color: #FFFFFF;
+  width: 96%;
+  height: 66%;
+  marginTop: 30%;
+  marginLeft: 2%;
+  marginRight: 2%;
+
+  border-width: 8px;
+  border-radius: 8px;
+  border-color: #FF0000;
+
+  justify-content: center;
+  align-items: center;
+`;
+const ReportOKImage = Styled.Image`
+  width: 100%;
+  height: 100%;
+`;
+const ReportOKText = Styled.Text`
+  margin-top: 8px;
+  font-size: 28px;
+  font-weight: 600;
+`;
+const ReportOKText2 = Styled.Text`
+  margin-top: 16px;
+  font-size: 36px;
+  font-weight: 800;
+`;
+const ReportTouchableOpacity = Styled.TouchableOpacity`
+  width: 80%;
+  height: 60%;
+`;
+
+// ------------- report_ok modal ------------
 interface IGeolocation {
   latitude: number;
   longitude: number;
@@ -399,10 +441,9 @@ const MapData = ({navigation}: DrawerProp) => {
   } = useContext(DrivingDataContext);
 
   const {userInfo2} = useContext<IUserContext>(UserContext);
-  const [infoTouch, setInfoTouch] = useState<boolean>(false);
   
-  const [modal, setModal] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
+  const [infoTouch, setInfoTouch] = useState<boolean>(false);
 
   const [linkInfo_4Cnt, setLinkInfo_4Cnt] = useState<number>(0);
   const [linkInfo_5Cnt, setLinkInfo_5Cnt] = useState<number>(0);
@@ -447,7 +488,6 @@ const MapData = ({navigation}: DrawerProp) => {
   const [markerLocations, setMarkerLocations] = useState<Array<IMarkerlocation>>([]);
 
   let sound1: Sound;
-  let sound2: Sound;
 
   const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
   const [modalVisibleReportCount, setModalVisibleReportCount] = useState(false);
@@ -455,13 +495,20 @@ const MapData = ({navigation}: DrawerProp) => {
   const [modalVisibleStart, setModalVisibleStart] = useState(false);
   const [modalVisibleSave, setModalVisibleSave] = useState(false);
 
-  useEffect(() => {
+  const [modalVisibleReportOk, setModalVisibleReportOk] = useState(false);
+
+
+  const [soundReal, setSoundReal3] = useState(
+    new Sound(audioListNew[0].url, (error) => {})
+  );
+
+  useEffect(() => { 
     androidPermissionLocation();
 
     // //## 지워야함
-    // setCheckInfo([-1,-1,-1,1 ,-1,-1,-1,-1,-1,-1]);
+    // setCheckInfo([-1,-1,-1, 1 ,-1,-1,-1,-1,-1,-1,-1]);
     // ## 지워야함
-    // setLinkInfo([-1,-1,-1,-1,-1,1,-1, 0, 0,-1]);
+    setLinkInfo([-1,-1,-1, 151, 10, 1,-1, 0, 0,-1]);
     console.log("--- --- MapData Mount");
     return () => {
       console.log("--- --- MapData return");
@@ -470,14 +517,29 @@ const MapData = ({navigation}: DrawerProp) => {
 
   // 도탈 체크 ... 
   let linkInfo_ = ():void => {
+    // console.log(checkInfo);
+    // console.log(linkInfo);
     if(driving){ // 운전상태 체크
 
-      if(checkInfo[3] == 1){
+      if(checkInfo[11] == 11 && checkInfo[3] == 1){
         let _checkInfo = [...checkInfo];
         _checkInfo[4] += 1; // 신고접수 온
         console.log("신고 접수 카운트",checkInfo[4]);
         setCheckInfo(_checkInfo);
-        
+
+        if(checkInfo[3] == 1 && checkInfo[4] == 0){
+          // 신고의사를 묻는 알람
+          sound1 = new Sound(audioList[5].url, (error) => {
+            if(error){
+              return;
+            } else {
+              sound1.play((success)=>{
+                sound1.release();
+              })
+            }
+          });
+        }
+
         // 카운트 모달 열기
         setModalVisibleReportCount(true);
       }
@@ -495,22 +557,34 @@ const MapData = ({navigation}: DrawerProp) => {
 
         // 카운트 모달 닫기
         setModalVisibleReportCount(false);
+
         // 구급차 모달 열기
-
-
         // if(checkInfo[5] == 1){ 이걸 여기 흡수
         console.log("신고 접수 완료 !! 음성 송출");
         // 신고음성, 신고 전화중 모달 5~10초
-        sound2 = new Sound(audioList[7].url, (error) => {
-          if(error){
-            return;
-          } else {
-            sound2.play((success)=>{
-              sound2.release();
-            })
-          }
-        });
+        setTimeout(() => {
+          sound1 = new Sound(audioList[7].url, (error) => {
+            if(error){
+              return;
+            } else {
+              sound1.play((success)=>{
+                sound1.release();
+              })
+            }
+          });
+          setTimeout(() => {
+            setModalVisibleReportOk(true);
+            setTimeout(() => {
+              setModalVisibleReportOk(false);
+            }, 14000);
+            if(soundReal){
+              // 신고음성
+              soundReal.play();
+            }
+          }, 2000);
+        }, 1000);
         console.log("자동 신고로 인해 운전을 종료합니다");
+
         let _checkInfo2 = [...checkInfo];
         console.log(_checkInfo2);
         _checkInfo2[0] = 0; // 운전 종료
@@ -614,30 +688,18 @@ const MapData = ({navigation}: DrawerProp) => {
       if(linkInfo[0] == 119 && checkInfo[3] != 1 && checkInfo[10]!=119){ // 신고접수 상태 체크
         // 신고버튼 on상태, 신고접수 off상태, 이전신고버튼적용 no상태
         let _checkInfo = [...checkInfo];
-        
-        // 신고의사를 묻는 알람
-        sound1 = new Sound(audioList[5].url, (error) => {
-          if(error){
-            return;
-          } else {
-            sound1.play((success)=>{
-              sound1.release();
-            })
-          }
-        });
-        setModal(true);
 
         // 온과 동시에 카운트가 올라가고 신고접수, 버튼이 소모됨
         _checkInfo[2] = 1; // 사고상태 온
         _checkInfo[3] = 1; // 신고접수 온
         _checkInfo[10] = 119; // 신고 버튼 1회성 소모
+        _checkInfo[11] = 11;
         setCheckInfo(_checkInfo);
       }
 
       if(linkInfo[0] == 77 && checkInfo[3] == 1){ // 신고버튼 상태 체크
         // 취소버튼 on상태, 신고접수 on상태, 사고상태 on상태
         let _checkInfo = [...checkInfo];
-        setModal(false);
 
         if(_checkInfo[3]!=0){
           // 신고취소를 알람
@@ -656,6 +718,7 @@ const MapData = ({navigation}: DrawerProp) => {
         _checkInfo[3] = 0; // 신고접수 오프
         _checkInfo[4] = 0; // 신고 카운터 클리어
         _checkInfo[10] = 0; // 신고 버튼 1회성 리셋
+        _checkInfo[11] = 11;
         setCheckInfo(_checkInfo);
       }
       // 신고접수상태를 보고 카운터를 토탈체크에서 올리자
@@ -666,29 +729,13 @@ const MapData = ({navigation}: DrawerProp) => {
     if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
         if(linkInfo[3] != -1 && linkInfo[3] != 0){ // 가울기 링크값이 들어오고있는지 체크
-          if(linkInfo[3] < 50 || 150 < linkInfo[3]){ // 기울어젔는지 체크
+          if(!(50 <= linkInfo[3] && linkInfo[3] <= 150)){ // 기울어젔는지 체크
             console.log("기울기 사고");
-
-              // 신고의사를 묻는 알람
-              sound1 = new Sound(audioList[5].url, (error) => {
-                if(error){
-                  return;
-                } else {
-                  sound1.play((success)=>{
-                    sound1.release();
-                  })
-                }
-              });
-
-              // 이 모달로 2 3 을 취소시키는 뭔가를 만들어야함
-              setModal(true);
-              // 기울기 사고로 인한 사고접수 완료 !!
-
               // 사고 접수
-              let _checkInfo = [...checkInfo];
-              _checkInfo[2] = 1;
-              _checkInfo[3] = 1;
-              setCheckInfo(_checkInfo);
+            let _checkInfo = [...checkInfo];
+            _checkInfo[2] = 1;
+            _checkInfo[3] = 1;
+            setCheckInfo(_checkInfo);
           }
         }
       }
@@ -1259,6 +1306,7 @@ const MapData = ({navigation}: DrawerProp) => {
               _checkInfo[8] = 0;
               _checkInfo[9] = 0;
               _checkInfo[10] = 0;
+              _checkInfo[11] = 11;
               setCheckInfo(_checkInfo);
               // // --- 사고다시 가능
               Geolocation.clearWatch(0);
@@ -1280,7 +1328,7 @@ const MapData = ({navigation}: DrawerProp) => {
               setModalVisibleStart(true);
               setTimeout(() => {
                 setModalVisibleStart(false);
-              }, 2000);
+              }, 1500);
               setTimeout(() => {
                 if(userInfo2 && userInfo2.key){
                   if(userInfo2.key != -1 && userInfo2.key != undefined){
@@ -1311,6 +1359,7 @@ const MapData = ({navigation}: DrawerProp) => {
                 _checkInfo[8] = 0;
                 _checkInfo[9] = 0;
                 _checkInfo[10] = 0;
+                _checkInfo[11] = 11;
                 setCheckInfo(_checkInfo);
 
                 // 메인페이지 운전중 체크
@@ -1330,18 +1379,20 @@ const MapData = ({navigation}: DrawerProp) => {
                       speed: speed,
                       timestamp: timestamp,
                     });
-                    setCamera( camera => {
-                      return ({
-                        center: {
-                          latitude: latitude,
-                          longitude: longitude
-                        },
-                        heading: 0,
-                        pitch: 0,
-                        zoom: camera.zoom,
-                        altitude: 0
+                    if(driving){
+                      setCamera( camera => {
+                        return ({
+                          center: {
+                            latitude: latitude,
+                            longitude: longitude
+                          },
+                          heading: 0,
+                          pitch: 0,
+                          zoom: camera.zoom,
+                          altitude: 0
+                        });
                       });
-                    });
+                    }
                   },
                   error => {
                     console.log(error);
@@ -1383,7 +1434,7 @@ const MapData = ({navigation}: DrawerProp) => {
             </LottieViewMyView>
             <SingoTextView>
               <SingoText>사고가 감지되었습니다</SingoText>
-              <SingoText>취소 버튼을 누르지않으면</SingoText>
+              <SingoText>취소 버튼을 누르지 않으면</SingoText>
               <SingoText>자동 신고를 하겠습니다</SingoText>
               <SingoTextCount>
                 {checkInfo[4]>=0 && checkInfo[4]<10 ? (10-checkInfo[4]) : " "}
@@ -1398,7 +1449,18 @@ const MapData = ({navigation}: DrawerProp) => {
                   _checkInfo[2] = 0;
                   _checkInfo[3] = 0;
                   _checkInfo[4] = 0;
+                  _checkInfo[11] = 119;
                   setCheckInfo(_checkInfo);
+
+                  setTimeout(() => {
+                    let __checkInfo = [...checkInfo];
+                    __checkInfo[2] = 0;
+                    __checkInfo[3] = 0;
+                    __checkInfo[4] = 0;
+                    __checkInfo[11] = 11;
+                    setCheckInfo(__checkInfo);
+                  }, 10000);
+
                   sound1 = new Sound(audioList[6].url, (error) => {
                     if(error){
                       return;
@@ -1409,7 +1471,7 @@ const MapData = ({navigation}: DrawerProp) => {
                     }
                   });
                 }}>
-                <ReportCancelBtn>신고취소</ReportCancelBtn>
+                <ReportCancelBtn>신고 취소</ReportCancelBtn>
               </TouchableOpacity>
             </TouchableOpacityView>
           </ModalView>
@@ -1474,6 +1536,32 @@ const MapData = ({navigation}: DrawerProp) => {
             </DrivingStartSaveTextView>
           </DrivingStartSaveModalView>
         </ModalViewBack>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisibleReportOk}
+      >
+        <ReportOkModalView>
+          <ReportOKText2>Kurumamori 119</ReportOKText2>
+          <ReportTouchableOpacity
+            onPress={()=>{
+              if(soundReal){
+                soundReal.pause();
+                soundReal.setCurrentTime(0);
+                soundReal.getCurrentTime((seconds) => console.log('at ' + seconds));
+                setModalVisibleReportOk(false);
+              }
+            }}
+          >
+            <ReportOKImage
+              resizeMode="contain"
+              source={require('~/Assets/Images/reportOK.png')}
+            />
+          </ReportTouchableOpacity>
+          <ReportOKText>위치정보, 의료정보 전송</ReportOKText>
+          <ReportOKText2>신고가 완료됬습니다</ReportOKText2>
+        </ReportOkModalView>
       </Modal>
     </>
   );
