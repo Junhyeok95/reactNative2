@@ -102,14 +102,11 @@ const TopLeftView = Styled.View`
   width: 55%;
   padding: 4% 8%;
 `;
-const TouchableOpacity = Styled.TouchableOpacity``;
+
 
 const TopLeftViewTouch = Styled.View`
   flex: 1;
 `;
-const TopLeftViewTouch2 = Styled.View`
-`;
-
 const TopRightView = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -223,27 +220,34 @@ const SingoCancelBtn = Styled.TouchableOpacity`
 const SingoCancelBtnText = Styled.Text`
   font-size: 96px;
 `;
-
-const CenteredView = Styled.View`
-  position: absolute;
-  flex: 1;
-  justifyContent: center;
-  alignItems: center;
+const LottieViewMyView = Styled.View`
+  width: 50%%;
+  height: 50%%;
 `;
 const ModalView = Styled.View`
-  margin: 20px;
-  backgroundColor: #000;
-  borderRadius: 20px;
-  padding: 35px;
-  alignItems: center;
-  shadowColor: #00F;
-  shadowOffset: {
-    width: 0px;
-    height: 2px;
-  };
-  shadowOpacity: 0.5;
-  shadowRadius: 5;
-  elevation: 5;
+  width: 96%;
+  height: 66%;
+  marginTop: 30%;
+  marginLeft: 2%;
+  marginRight: 2%;
+
+  border-width: 5px;
+  border-radius: 5px;
+  border-color: #00F;
+
+  justify-content: center;
+  align-items: center;
+
+  shadowColor: #F00;
+  shadowOpacity: 1;
+  shadowRadius: 20px;
+`;
+// 이건 변경하지말자
+const TouchableOpacity = Styled.TouchableOpacity``;
+const TouchableOpacityView = Styled.View`
+  width: 100px;
+  height: 200px;
+  backgroundColor: #0000FF;
 `;
 
 interface IGeolocation {
@@ -391,19 +395,6 @@ const MapData = ({navigation}: DrawerProp) => {
     };
   },[]);
 
-
-  let drivingClear_ = ():void => {
-    // 신고버튼 빼고 클리어된다
-    let _checkInfo = [...checkInfo];
-    _checkInfo[3] = 0;
-    _checkInfo[4] = 0;
-
-    _checkInfo[6] = 0;
-    _checkInfo[7] = 0;
-    _checkInfo[8] = 0;
-    _checkInfo[9] = 0;
-    setCheckInfo(_checkInfo);
-  }
   // 도탈 체크 ... 
   let linkInfo_ = ():void => {
     if(driving){ // 운전상태 체크
@@ -519,6 +510,12 @@ const MapData = ({navigation}: DrawerProp) => {
             }
           }
         }
+
+        // 메인페이지 운전중 체크
+        let _defaultInfo = [...defaultInfo];
+        _defaultInfo[4] = 0;
+        setDefaultInfo(_defaultInfo);
+        // 메인페이지 운전중 체크
         
         setDrivingSaveData(undefined);
         setLocations([]); // 초기화
@@ -806,6 +803,7 @@ const MapData = ({navigation}: DrawerProp) => {
             }}
           />
         ))}
+        
       </MapView>
         <ReactInterval
           timeout={1000}
@@ -1161,6 +1159,12 @@ const MapData = ({navigation}: DrawerProp) => {
               setLocations([]); // 초기화
               setMarkerLocations([]);
               // 저장해야함
+
+              // 메인페이지 운전중 체크
+              let _defaultInfo = [...defaultInfo];
+              _defaultInfo[4] = 0;
+              setDefaultInfo(_defaultInfo);
+              // 메인페이지 운전중 체크
               
               // // --- 사고다시 가능
               let _checkInfo = [...checkInfo];
@@ -1220,6 +1224,12 @@ setTimeout(() => {
               _checkInfo[9] = 0;
               _checkInfo[10] = 0;
               setCheckInfo(_checkInfo);
+
+              // 메인페이지 운전중 체크
+              let _defaultInfo = [...defaultInfo];
+              _defaultInfo[4] = 1;
+              setDefaultInfo(_defaultInfo);
+              // 메인페이지 운전중 체크
 
               Geolocation.watchPosition(
                 position => {
@@ -1310,17 +1320,33 @@ setTimeout(() => {
           </SingoCancelBtn>
         </SingoView>
       }
-
-      {/* <CenteredView>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisibleSleep}
-        >
-        </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleSleep}
+      >
         <ModalView>
+          <LottieViewMyView>
+            <LottieView
+              style={{backgroundColor:'#EFEF00'}}
+              resizeMode={'contain'}
+              source={require('~/Assets/Lottie/nodata2.json')}
+              autoPlay
+              imageAssetsFolder={'images'}
+            />
+          </LottieViewMyView>
+
+            <TouchableOpacityView>
+              <TouchableOpacity // 신고 취소 버튼
+                style={{ backgroundColor: "#00F0C0", padding: 50 }}
+                onPress={() => {
+                  setModalVisibleSleep(!modalVisibleSleep);
+                }}
+              >
+              </TouchableOpacity>
+            </TouchableOpacityView>
         </ModalView>
-      </CenteredView> */}
+      </Modal>
     </>
   );
 };

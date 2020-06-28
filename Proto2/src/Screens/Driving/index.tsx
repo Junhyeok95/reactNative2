@@ -4,6 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 import Button from '~/Components/Button';
 import {DrivingDataContext} from '~/Contexts/DrivingData';
+import IconButton from '~/Components/IconButton';
 
 const Container = Styled.View`
   flex: 1;
@@ -11,28 +12,44 @@ const Container = Styled.View`
   justify-content: center;
   background-color: #EFEFEF;
 `;
-const Text = Styled.Text`
+const TextNew = Styled.Text`
   font-size: 32px;
 `;
-
+const TextOld = Styled.Text`
+  font-size: 30px;
+  color: #FF0000;
+`;
 const View = Styled.View`
   background-color: #00F3;
-  height: 40%;
-  width: 80%;
-  margin: 16px;
+  height: 55%;
+  width: 90%;
+  margin-top: 40px;
+  margin-bottom: 5%;
 `;
 
 const DrivingButtonContainer = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
   border-radius: 10px;
-  border-width: 8px;
+  border-width: 3px;
   bottom: 2%;
-  right: 2%;
-  width: 120px;
-  height: 60px;
+  right: 4%;
+  padding: 8px;
   justify-content: center;
   align-items: center;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+`;
+const DeviceButtonContainer = Styled.View`
+  position: absolute;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border-width: 3px;
+  bottom: 2%;
+  left: 4%;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
 `;
 const Bt = Styled.TouchableOpacity`
   flex: 1;
@@ -41,20 +58,8 @@ const Bt = Styled.TouchableOpacity`
   align-items: center;
 `;
 const BtLabel = Styled.Text`
-  font-size: 24px;
-`;
-
-const DeviceButtonContainer = Styled.View`
-  position: absolute;
-  background-color: #FFFFFF;
-  border-radius: 10px;
-  border-width: 8px;
-  bottom: 2%;
-  left: 2%;
-  width: 120px;
-  height: 60px;
-  justify-content: center;
-  align-items: center;
+  font-size: 20px;
+  font-weight: 900;
 `;
 
 const TText = Styled.Text`
@@ -100,20 +105,27 @@ const Driving = ({navigation}: Props) => {
       {/* <Text>
         오늘의 운전점수
       </Text> */}
+        {defaultInfo[3] == 1? (
+          <TextNew>
+            안전하게 달려볼까 ~!
+          </TextNew>
+        ):(
+          <TextOld>
+            블루투스를 연결해 주세요
+          </TextOld>
+        )}
       <View>
         <LottieView
           style={{flex:1, backgroundColor:'#EFEFEF'}}
           resizeMode={'contain'}
-          source={require('~/Assets/Lottie/nodata2.json')}
-          autoPlay
+          source={require('~/Assets/Lottie2/main_car.json')}
+          autoPlay={true}
           imageAssetsFolder={'images'}
         />
       </View>
-      <Text>
-        운전기록이 없습니다 
-      </Text>
+      
       <TText>{onTime}</TText>
-      <DeviceButtonContainer style={{borderColor: defaultInfo[3] == 1?'#00F':'#111111'}}>
+      <DeviceButtonContainer style={{borderColor: defaultInfo[3] == 1?'#000000':'#111111'}}>
         <Bt
           onPress={() => {
             if(defaultInfo[3] != 1){
@@ -122,16 +134,76 @@ const Driving = ({navigation}: Props) => {
             }
           }}
         >
+          {defaultInfo[3] == 1? (
+            <IconButton
+              style={{
+                backgroundColor: "#FFFFFF",
+              }}
+              size="72"
+              icon="bluetooth-connect"
+              color="#0000FF"
+              onPress={() => {
+                navigation.navigate('MainThirdStackNavi');
+              }}
+            />
+          ) : (
+            <IconButton
+              style={{
+                backgroundColor: "#FFFFFF",
+              }}
+              size="72"
+              icon="bluetooth-off"
+              color="#000000"
+              onPress={() => {
+                navigation.navigate('MainThirdStackNavi');
+              }}
+            />
+          )}
           <BtLabel>{defaultInfo[3] == 1?'페어링':'신호없음'}</BtLabel>
         </Bt>
       </DeviceButtonContainer>
-      <DrivingButtonContainer style={{borderColor: defaultInfo[4] == 1?'#00F':'#111111'}}>
+      <DrivingButtonContainer style={{borderColor: defaultInfo[4] == 1?'#000000':'#000000'}}>
         <Bt
           onPress={() => {
-            navigation.navigate('MapTabNavi');
+            if(defaultInfo[3] == 1){
+              navigation.navigate('MapTabNavi');
+            }
+            else{
+              navigation.navigate('MainThirdStackNavi');
+            }
           }}
         >
-          <BtLabel>{defaultInfo[4] == 1?'운전중':'운전'}</BtLabel>
+          {defaultInfo[3] == 1? (
+            <IconButton
+              style={{
+                backgroundColor: "#FFFFFF",
+              }}
+              size="72"
+              icon="car"
+              color="#008800"
+              onPress={() => {
+                navigation.navigate('MapTabNavi');
+              }}
+            />
+          ) : (
+            <IconButton
+              style={{
+                backgroundColor: "#FFFFFF",
+              }}
+              size="72"
+              icon="car"
+              color="#000000"
+              onPress={() => {
+                if(defaultInfo[3] == 1){
+                  navigation.navigate('MapTabNavi');
+                }
+                else{
+                  navigation.navigate('MainThirdStackNavi');
+                }
+              }}
+            />
+          )}
+          <BtLabel>{defaultInfo[4] == 1?'운전중':'운전하기'}</BtLabel>
         </Bt>
       </DrivingButtonContainer>
     </Container>

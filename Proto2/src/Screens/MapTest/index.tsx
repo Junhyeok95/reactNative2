@@ -16,7 +16,7 @@ const MapTest = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={false}
         onRequestClose={() => {
           // Alert.alert("Modal has been closed.");
         }}
@@ -71,6 +71,7 @@ const MapTest = () => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
+    backgroundColor: "blue",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22
