@@ -176,7 +176,7 @@ const BottomRightView = Styled.View`
   justify-content: center;
   align-items: center;
 `;
-const Bt = Styled.TouchableOpacity`
+const Btn = Styled.TouchableOpacity`
   flex: 1;
   width: 100%;
   justify-content: center;
@@ -249,6 +249,33 @@ const ReportCancelBt = Styled.Text`
   padding: 5px;
 `;
 
+// ------------- sleep modal ------------
+const SleepModalView = Styled.View`
+  flex: 1;
+  width: 70%;
+  margin-left: 15%;
+  justify-content: center;
+  align-items: center;
+`;
+const SleepModalImageTextView = Styled.View`
+  padding: 16px;
+  background-color: #FFFFFF;
+  border-width: 8px;
+  border-radius: 8px;
+  border-color: #FF0000;
+  align-items: center;
+`;
+const SleepAlertImage = Styled.Image`
+`;
+const SleepAlertText = Styled.Text`
+  margin-top: 8px;
+  font-size: 32px;
+  font-weight: 900;
+`;
+// ------------- sleep modal ------------
+// ------------- start, save modal ------------
+
+// ------------- start, save modal ------------
 interface IGeolocation {
   latitude: number;
   longitude: number;
@@ -384,13 +411,16 @@ const MapData = ({navigation}: DrawerProp) => {
   let sound1: Sound;
   let sound2: Sound;
 
-  const [modalVisibleSleep, setModalVisibleSleep] = useState(true);
+  const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
+  const [modalVisibleReportCount, setModalVisibleReportCount] = useState(false);
 
   useEffect(() => {
     androidPermissionLocation();
 
     // //## 지워야함
-    // setCheckInfo([-1,-1,-1,1 ,-1,-1,-1,-1,-1,-1])
+    // setCheckInfo([-1,-1,-1,1 ,-1,-1,-1,-1,-1,-1]);
+    // ## 지워야함
+    // setLinkInfo([-1,-1,-1,-1,-1,2,-1, 0, 0,-1]);
     console.log("--- --- MapData Mount");
     return () => {
       console.log("--- --- MapData return");
@@ -402,11 +432,13 @@ const MapData = ({navigation}: DrawerProp) => {
     if(driving){ // 운전상태 체크
 
       if(checkInfo[3] == 1){
-        // 카운트 모달 열기
         let _checkInfo = [...checkInfo];
         _checkInfo[4] += 1; // 신고접수 온
         console.log("신고 접수 카운트",checkInfo[4]);
         setCheckInfo(_checkInfo);
+        
+        // 카운트 모달 열기
+        setModalVisibleReportCount(true);
       }
 
       // 전화중이다 애니메이션, 사고상태 클리어
@@ -419,11 +451,11 @@ const MapData = ({navigation}: DrawerProp) => {
         _checkInfo[4] = 0;
         _checkInfo[5] = 1; // 신고완료상태 시작
         setCheckInfo(_checkInfo);
-        // 카운트 모달 닫기
 
-        // ############ 아아아아
-        setModal(false);
-        // ############ 아아아아
+        // 카운트 모달 닫기
+        setModalVisibleReportCount(false);
+        // 구급차 모달 열기
+
 
         // if(checkInfo[5] == 1){ 이걸 여기 흡수
         console.log("신고 접수 완료 !! 음성 송출");
@@ -697,6 +729,11 @@ const MapData = ({navigation}: DrawerProp) => {
                   })
                 }
               });
+              setModalVisibleSleep(true);
+              setTimeout(() => {
+                setModalVisibleSleep(false);
+              }, 2000);
+
               let {latitude, longitude, timestamp} = coordinate2;
               let _markerLocation = {
                 latitude,
@@ -1122,10 +1159,12 @@ const MapData = ({navigation}: DrawerProp) => {
       </BottomLeftViewEye>)}
 
       <BottomRightView style={driving?{backgroundColor:"#00F"}:{backgroundColor:"#FFF"}}>
-        <Bt
+        <Btn
           onPress={()=>{
             if(driving){
               Alert.alert('운전을 종료합니다');
+
+
               console.log("운전을 종료합니다");
               // 저장해야함
               // _drivingSaveData.Drivingline = [...locations];
@@ -1195,151 +1234,154 @@ const MapData = ({navigation}: DrawerProp) => {
 
               Alert.alert('운전을 시작합니다');
 
-setTimeout(() => {
-              if(userInfo2 && userInfo2.key){
-                if(userInfo2.key != -1 && userInfo2.key != undefined){
-                  console.log("아이디 확인, 운전 시작했다고 보고");
-                  drivingStart(); // 아이디만 받음
+              setTimeout(() => {
+                if(userInfo2 && userInfo2.key){
+                  if(userInfo2.key != -1 && userInfo2.key != undefined){
+                    console.log("아이디 확인, 운전 시작했다고 보고");
+                    drivingStart(); // 아이디만 받음
+                  }
                 }
-              }
-              setOnPolyline(true);
-              setOnMarker(true);
+                setOnPolyline(true);
+                setOnMarker(true);
 
-              // 저장해야함
-              // save 전에 클리어
-              setLocations([]);
-              setMarkerLocations([]);
-              _setStartTime(new Date().getTime());
-              // 저장해야함
-              
-              // 운전시작
-              let _checkInfo = [...checkInfo];
-              _checkInfo[0] = 0;
-              _checkInfo[1] = 1;
-              _checkInfo[2] = 0;
-              _checkInfo[3] = 0;
-              _checkInfo[4] = 0;
-              _checkInfo[5] = 0;
-              _checkInfo[6] = 0;
-              _checkInfo[7] = 0;
-              _checkInfo[8] = 0;
-              _checkInfo[9] = 0;
-              _checkInfo[10] = 0;
-              setCheckInfo(_checkInfo);
+                // 저장해야함
+                // save 전에 클리어
+                setLocations([]);
+                setMarkerLocations([]);
+                _setStartTime(new Date().getTime());
+                // 저장해야함
+                
+                // 운전시작
+                let _checkInfo = [...checkInfo];
+                _checkInfo[0] = 0;
+                _checkInfo[1] = 1;
+                _checkInfo[2] = 0;
+                _checkInfo[3] = 0;
+                _checkInfo[4] = 0;
+                _checkInfo[5] = 0;
+                _checkInfo[6] = 0;
+                _checkInfo[7] = 0;
+                _checkInfo[8] = 0;
+                _checkInfo[9] = 0;
+                _checkInfo[10] = 0;
+                setCheckInfo(_checkInfo);
 
-              // 메인페이지 운전중 체크
-              let _defaultInfo = [...defaultInfo];
-              _defaultInfo[4] = 1;
-              setDefaultInfo(_defaultInfo);
-              // 메인페이지 운전중 체크
+                // 메인페이지 운전중 체크
+                let _defaultInfo = [...defaultInfo];
+                _defaultInfo[4] = 1;
+                setDefaultInfo(_defaultInfo);
+                // 메인페이지 운전중 체크
 
-              Geolocation.watchPosition(
-                position => {
-                  let now = new Date();
-                  const {latitude, longitude, speed} = position.coords;
-                  const {timestamp} = position;
-                  setCoordinate({
-                    latitude: latitude,
-                    longitude: longitude,
-                    speed: speed,
-                    timestamp: timestamp,
-                  });
-                  setCamera( camera => {
-                    return ({
-                      center: {
-                        latitude: latitude,
-                        longitude: longitude
-                      },
-                      heading: 0,
-                      pitch: 0,
-                      zoom: camera.zoom,
-                      altitude: 0
+                Geolocation.watchPosition(
+                  position => {
+                    let now = new Date();
+                    const {latitude, longitude, speed} = position.coords;
+                    const {timestamp} = position;
+                    setCoordinate({
+                      latitude: latitude,
+                      longitude: longitude,
+                      speed: speed,
+                      timestamp: timestamp,
                     });
-                  });
-                },
-                error => {
-                  console.log(error);
-                },
-                {
-                  timeout: 0,
-                  maximumAge: 0,
-                  enableHighAccuracy: true,
-                  distanceFilter: 1,
-                },
-              );
-            setDriving(true); // 운전
-            setOnSave(true); // 기록
-
-}, 2000);
-
+                    setCamera( camera => {
+                      return ({
+                        center: {
+                          latitude: latitude,
+                          longitude: longitude
+                        },
+                        heading: 0,
+                        pitch: 0,
+                        zoom: camera.zoom,
+                        altitude: 0
+                      });
+                    });
+                  },
+                  error => {
+                    console.log(error);
+                  },
+                  {
+                    timeout: 0,
+                    maximumAge: 0,
+                    enableHighAccuracy: true,
+                    distanceFilter: 1,
+                  },
+                );
+                setDriving(true); // 운전
+                setOnSave(true); // 기록
+              }, 2000);
             }
-
-            // 무조건 실행, 운전스위치, 기록스위치
-            // setDriving(!driving); // 운전
-            // setOnSave(!onSave); // 기록
           }}
         >
           <BtLabel style={driving?{color:"#FFFFFF"}:{}}>
             {driving?"운전 종료":"운전 시작"}
           </BtLabel>
-        </Bt>
+        </Btn>
       </BottomRightView>
 
-      {checkInfo[3] == 1 ?
-        (
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisibleSleep}
-          >
-            <ModalView>
-              <LottieViewMyView>
-                <LottieView
-                  style={{backgroundColor:'#FFFFFF'}}
-                  resizeMode={'contain'}
-                  source={require('~/Assets/Lottie2/i119_count.json')}
-                  autoPlay
-                  imageAssetsFolder={'images'}
-                />
-              </LottieViewMyView>
-
-                <SingoTextView>
-                  <SingoText>사고가 감지되었습니다</SingoText>
-                  <SingoText>취소 버튼을 누르지않으면</SingoText>
-                  <SingoText>자동 신고를 하겠습니다</SingoText>
-                  <SingoTextCount>
-                    {checkInfo[4]>=0 && checkInfo[4]<10 ? (10-checkInfo[4]) : " "}
-                  </SingoTextCount>
-                </SingoTextView>
-                <TouchableOpacityView>
-                  <TouchableOpacity // 신고 취소 버튼
-                    onPress={() => {
-                      console.log("신고 취소");
-
-                      setModalVisibleSleep(false);
-                      let _checkInfo = [...checkInfo];
-                      _checkInfo[2] = 0;
-                      _checkInfo[3] = 0;
-                      _checkInfo[4] = 0;
-                      setCheckInfo(_checkInfo);
-
-                      sound1 = new Sound(audioList[6].url, (error) => {
-                        if(error){
-                          return;
-                        } else {
-                          sound1.play((success)=>{
-                            sound1.release();
-                          })
-                        }
-                      });
-                    }}
-                  >
-                    <ReportCancelBt>신고취소</ReportCancelBt>
-                  </TouchableOpacity>
-                </TouchableOpacityView>
-            </ModalView>
-          </Modal>
-        ) : null}
+      {checkInfo[3] == 1 ?(
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisibleReportCount}
+        >
+          <ModalView>
+            <LottieViewMyView>
+              <LottieView
+                style={{backgroundColor:'#FFFFFF'}}
+                resizeMode={'contain'}
+                source={require('~/Assets/Lottie2/i119_count.json')}
+                autoPlay
+                imageAssetsFolder={'images'}
+              />
+            </LottieViewMyView>
+            <SingoTextView>
+              <SingoText>사고가 감지되었습니다</SingoText>
+              <SingoText>취소 버튼을 누르지않으면</SingoText>
+              <SingoText>자동 신고를 하겠습니다</SingoText>
+              <SingoTextCount>
+                {checkInfo[4]>=0 && checkInfo[4]<10 ? (10-checkInfo[4]) : " "}
+              </SingoTextCount>
+            </SingoTextView>
+            <TouchableOpacityView>
+              <TouchableOpacity // 신고 취소 버튼
+                onPress={() => {
+                  console.log("신고 취소");
+                  setModalVisibleReportCount(false);
+                  let _checkInfo = [...checkInfo];
+                  _checkInfo[2] = 0;
+                  _checkInfo[3] = 0;
+                  _checkInfo[4] = 0;
+                  setCheckInfo(_checkInfo);
+                  sound1 = new Sound(audioList[6].url, (error) => {
+                    if(error){
+                      return;
+                    } else {
+                      sound1.play((success)=>{
+                        sound1.release();
+                      })
+                    }
+                  });
+                }}>
+                <ReportCancelBt>신고취소</ReportCancelBt>
+              </TouchableOpacity>
+            </TouchableOpacityView>
+          </ModalView>
+        </Modal>
+      ) : null }
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleSleep}
+      >
+        <SleepModalView>
+          <SleepModalImageTextView>
+            <SleepAlertImage
+              source={require('~/Assets/Images/sleepAlertIcon.png')}
+            />
+            <SleepAlertText>졸음 감지 !</SleepAlertText>
+          </SleepModalImageTextView>
+        </SleepModalView>
+      </Modal>
     </>
   );
 };
