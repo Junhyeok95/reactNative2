@@ -246,24 +246,10 @@ const ModalView = Styled.View`
   elevation: 5;
 `;
 
-
-// position:"absolute", top:60, right:24, width:50, height:50, backgroundColor:"#0008", borderRadius:30, paddingTop:2
-
 interface IGeolocation {
   latitude: number;
   longitude: number;
 }
-
-// 이동 .. ~/Contexts/DrivingData/@types/index.d.ts
-// interface IMarkerlocation { // web DB 기준
-//   latitude: number;
-//   longitude: number;
-//   bool_report: boolean;
-//   bool_sudden_acceleration: boolean;
-//   bool_sudden_stop: boolean;
-//   bool_sleep: boolean;
-//   timestamp: number;
-// }
 
 interface ICoordinate {
   latitude: number;
@@ -350,9 +336,6 @@ const MapData = ({navigation}: DrawerProp) => {
   const [modal, setModal] = useState<boolean>(false);
   const [marginTop, setMarginTop] = useState<number>(1);
 
-  const [onTime, setOnTime] = useState<any>();
-  const [speed, setSpeed] = useState<number>(0);
-
   const [linkInfo_4Cnt, setLinkInfo_4Cnt] = useState<number>(0);
   const [linkInfo_5Cnt, setLinkInfo_5Cnt] = useState<number>(0);
 
@@ -401,38 +384,11 @@ const MapData = ({navigation}: DrawerProp) => {
   const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
 
   useEffect(() => {
-    // 장터발
-    // setTimeout(jang, 1000);
-
-    // 지울예정
     androidPermissionLocation();
     console.log("--- --- MapData Mount");
-
     return () => {
       console.log("--- --- MapData return");
     };
-
-    // setModal(true);
-    
-    // let _check = [...checkInfo];
-    // console.log(_check);
-    
-    // setCheckInfo([0,0,0,0,0,0,0,0,0]);
-    // setLinkInfo([1,100,100,160,10,2,2,1,1,1,1,1,1,1]);
-
-    // setCheckInfo([-1,-1,-1,-1 ,-1,-1,-1,-1,-1]);
-    // setLinkInfo([-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1 ,-1]);
-
-    // sound1 = new Sound(audioList[9].url, (error) => {
-    //   if(error){
-    //     return;
-    //   } else {
-    //     sound1.play((success)=>{
-    //       sound1.release();
-    //     })
-    //   }
-    // });
-
   },[]);
 
 
@@ -457,14 +413,12 @@ const MapData = ({navigation}: DrawerProp) => {
         let _checkInfo = [...checkInfo];
         _checkInfo[4] += 1; // 신고접수 온
         console.log("신고 접수 카운트",checkInfo[4]);
-        console.log(_checkInfo[4]);
         setCheckInfo(_checkInfo);
-        console.log(checkInfo[4]);
       }
 
       // 전화중이다 애니메이션, 사고상태 클리어
       // 신고접수상태 클리어, 모달창 다 닫기
-      if(checkInfo[4] >= 15){
+      if(checkInfo[4] >= 5){
         let _checkInfo = [...checkInfo];
         console.log("신고 접수 카운팅 완료 !!", checkInfo[4]);
         console.log(_checkInfo[4]);
@@ -491,8 +445,8 @@ const MapData = ({navigation}: DrawerProp) => {
           }
         });
         console.log("자동 신고로 인해 운전을 종료합니다");
-
         let _checkInfo2 = [...checkInfo];
+        console.log(_checkInfo2);
         _checkInfo2[0] = 0; // 운전 종료
         _checkInfo2[1] = 1; // 운전 종료
         _checkInfo2[2] = 0; // 사고상태 클리어
@@ -504,6 +458,8 @@ const MapData = ({navigation}: DrawerProp) => {
         _checkInfo2[8] = 0; // 클리어
         _checkInfo2[9] = 0; // 클리어
         setCheckInfo(_checkInfo2);
+        console.log(_checkInfo2);
+        console.log("자동 신고로 인해 운전을 종료합니다");
 
         let reportCheckId = false;
         if(onSave && userInfo2 && userInfo2.key){
@@ -568,9 +524,9 @@ const MapData = ({navigation}: DrawerProp) => {
         setLocations([]); // 초기화
         setMarkerLocations([]);
         setDriving(false); // 운전
-        setOnSave(false); // 기록        
+        setOnSave(false); // 기록
+        console.log("!!!!!!!!!!!!!!!! 운전 종료했다 !!!!!!!!!!!!!!!!!!!!!");
       }
-
       // 카운트 10 이상 시
       // 신고 완료 상태 활성화 (운전 종료, 각종 클리어, 신고한다는 음성, 모달창 닫기)
     }
@@ -578,72 +534,6 @@ const MapData = ({navigation}: DrawerProp) => {
     // 신고 카운터가 꽉 차서 신고가 갔음
     if(checkInfo[5] == 1){
       console.log("check Info 5가 1입니다");
-                // console.log("신고 접수 완료 !! 음성 송출");
-
-                // // 신고음성, 신고 전화중 모달 5~10초
-                // sound2 = new Sound(audioList[7].url, (error) => {
-                //   if(error){
-                //     return;
-                //   } else {
-                //     sound2.play((success)=>{
-                //       sound2.release();
-                //     })
-                //   }
-                // });
-                
-                // // 여기 신고완료 클리어 및 기록저장 및 신고
-                // console.log("자동 신고로 인해 운전을 종료합니다");
-                // setDriving(false);
-                
-                // let _checkInfo = [...checkInfo];
-                // console.log("checkInfo 두개");
-                // console.log(checkInfo[5]);
-                // console.log(_checkInfo[5]);
-                // _checkInfo[0] = 0; // 운전 종료
-                // _checkInfo[1] = 1; // 운전 종료
-                // _checkInfo[2] = 0; // 사고상태 클리어
-                // _checkInfo[3] = 0; // 신고 접수상태 클리어
-                // _checkInfo[4] = 0; // 신고 카운터 클리어
-                // _checkInfo[5] = 0; // 신고 완료상태 클리어
-                // _checkInfo[6] = 0; // 클리어
-                // _checkInfo[7] = 0; // 클리어
-                // _checkInfo[8] = 0; // 클리어
-                // _checkInfo[9] = 0; // 클리어
-                // setCheckInfo(_checkInfo);
-
-                // let _drivingSaveData = Object.assign({}, drivingSaveData);
-                // let _endT = new Date().getTime();
-                // _setEndTime(() => _endT);
-                // // console.log(locations);
-
-                // if(locations){
-                //   if(userInfo2 && userInfo2.key){
-                //     _drivingSaveData.webUserId = userInfo2.key;
-                //   }
-                //   if(userInfo2 && userInfo2.name){
-                //     _drivingSaveData.Drivingline = locations;
-                //     _drivingSaveData.name = userInfo2.name;
-                //     _drivingSaveData.startTime = _startTime;
-                //     _drivingSaveData.endTime = _endT;
-                //   }
-                //   if(markerLocations != undefined){
-                //     if(markerLocations.length > 1){
-                //       console.log("저장한다 마크마크");
-                //       _drivingSaveData.DrivingMarker = markerLocations;
-                //     }
-                //   }
-                //   if(_drivingSaveData.endTime && _drivingSaveData.startTime){
-                //     if(_drivingSaveData.endTime-_drivingSaveData.startTime > 500){
-                //       console.log("운전을 기록합니다");
-                //       drivingSave(_drivingSaveData);
-                //     }
-                //   }
-                // }
-                // setDrivingSaveData(undefined);
-                // setLocations([]); // 초기화
-                // setMarkerLocations([]);
-                // setDriving(false); // 운전
-                // setOnSave(false); // 기록
     }
   }
 
@@ -651,25 +541,25 @@ const MapData = ({navigation}: DrawerProp) => {
     if(driving){ // 운전상태 체크
       if(linkInfo[0] == 119 && checkInfo[3] != 1 && checkInfo[10]!=119){ // 신고접수 상태 체크
         // 신고버튼 on상태, 신고접수 off상태, 이전신고버튼적용 no상태
-          let _checkInfo = [...checkInfo];
-          
-          // 신고의사를 묻는 알람
-          sound1 = new Sound(audioList[5].url, (error) => {
-            if(error){
-              return;
-            } else {
-              sound1.play((success)=>{
-                sound1.release();
-              })
-            }
-          });
+        let _checkInfo = [...checkInfo];
+        
+        // 신고의사를 묻는 알람
+        sound1 = new Sound(audioList[5].url, (error) => {
+          if(error){
+            return;
+          } else {
+            sound1.play((success)=>{
+              sound1.release();
+            })
+          }
+        });
         setModal(true);
 
-          // 온과 동시에 카운트가 올라가고 신고접수, 버튼이 소모됨
-          _checkInfo[2] = 1; // 사고상태 온
-          _checkInfo[3] = 1; // 신고접수 온
-          _checkInfo[10] = 119; // 신고 버튼 1회성 소모
-          setCheckInfo(_checkInfo);
+        // 온과 동시에 카운트가 올라가고 신고접수, 버튼이 소모됨
+        _checkInfo[2] = 1; // 사고상태 온
+        _checkInfo[3] = 1; // 신고접수 온
+        _checkInfo[10] = 119; // 신고 버튼 1회성 소모
+        setCheckInfo(_checkInfo);
       }
 
       if(linkInfo[0] == 77 && checkInfo[3] == 1){ // 신고버튼 상태 체크
@@ -701,7 +591,6 @@ const MapData = ({navigation}: DrawerProp) => {
   }
 
   let linkInfo_3 = ():void => {
-
     if(driving){ // 운전상태 체크
       if(checkInfo[2] != 1){ // 사고 상태 체크
         if(linkInfo[3] != -1 && linkInfo[3] != 0){ // 가울기 링크값이 들어오고있는지 체크
@@ -721,7 +610,6 @@ const MapData = ({navigation}: DrawerProp) => {
 
               // 이 모달로 2 3 을 취소시키는 뭔가를 만들어야함
               setModal(true);
-
               // 기울기 사고로 인한 사고접수 완료 !!
 
               // 사고 접수
@@ -759,17 +647,6 @@ const MapData = ({navigation}: DrawerProp) => {
                   })
                 }
               });
-
-              // // 주시태만 중
-              // let _checkInfo = [...checkInfo];
-              // _checkInfo[9] = 1;
-              // setCheckInfo(_checkInfo);
-
-              // setTimeout(() => {
-              //   let _checkInfo = [...checkInfo];
-              //   _checkInfo[9] = 0;
-              //   setCheckInfo(_checkInfo);
-              // }, 5000);
             }
           } else if( linkInfo[4] == 10 ){
             // 정면주시 보상
@@ -888,19 +765,7 @@ const MapData = ({navigation}: DrawerProp) => {
 
         camera={camera}
         onUserLocationChange={ e => {
-// 각종 값을 체크하는 함수를 만들어야함
-// console.log("-> linkInfo ", linkInfo);
-// console.log("-> defaultInfo ", defaultInfo);
-// console.log("-> checkInfo ", checkInfo);
           if(onSave){
-            // console.log("지터발   ", linkInfo);
-            // console.log("장터발변수확인 > " , jangCnt);
-
-
-            // 함수 체크 로직
-            
-
-            // console.log("onUserLocationChange !!");
             const {latitude, longitude} = e.nativeEvent.coordinate;
             setLocations([...locations, {latitude, longitude}]);
 
@@ -924,10 +789,6 @@ const MapData = ({navigation}: DrawerProp) => {
                 altitude: 0
               });
             });
-            
-            // console.log("checkInfo", checkInfo);
-            // console.log("linkInfo", linkInfo);
-
           }
         }}
       >
@@ -946,20 +807,17 @@ const MapData = ({navigation}: DrawerProp) => {
           />
         ))}
       </MapView>
-      {driving && (
         <ReactInterval
-        timeout={1000} enabled={driving}
-        callback={() => {
-          // console.log("짱 터발", linkInfo);
-          linkInfo_();
-          linkInfo_0();
-          linkInfo_3();
-          linkInfo_4();
-          linkInfo_5();
-        }}
+          timeout={1000}
+          enabled={driving}
+          callback={() => {
+            linkInfo_();
+            linkInfo_0();
+            linkInfo_3();
+            linkInfo_4();
+            linkInfo_5();
+          }}
         />
-      )}
-
       {driving && (
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
           <TouchableOpacity onPress={()=>{
@@ -1304,13 +1162,20 @@ const MapData = ({navigation}: DrawerProp) => {
               setMarkerLocations([]);
               // 저장해야함
               
-              // --- 사고다시 가능
+              // // --- 사고다시 가능
               let _checkInfo = [...checkInfo];
               _checkInfo[0] = 0;
               _checkInfo[1] = 1;
+              _checkInfo[2] = 0;
+              _checkInfo[3] = 0;
+              _checkInfo[4] = 0;
+              _checkInfo[6] = 0;
+              _checkInfo[7] = 0;
+              _checkInfo[8] = 0;
+              _checkInfo[9] = 0;
+              _checkInfo[10] = 0;
               setCheckInfo(_checkInfo);
-              drivingClear_(); // checkInfo 클리어
-              // --- 사고다시 가능
+              // // --- 사고다시 가능
               Geolocation.clearWatch(0);
 
               // --- 운전 시작시간 클리어 ...
@@ -1343,10 +1208,18 @@ setTimeout(() => {
               
               // 운전시작
               let _checkInfo = [...checkInfo];
-              _checkInfo[0] = 1;
-              _checkInfo[1] = 0;
+              _checkInfo[0] = 0;
+              _checkInfo[1] = 1;
+              _checkInfo[2] = 0;
+              _checkInfo[3] = 0;
+              _checkInfo[4] = 0;
+              _checkInfo[5] = 0;
+              _checkInfo[6] = 0;
+              _checkInfo[7] = 0;
+              _checkInfo[8] = 0;
+              _checkInfo[9] = 0;
+              _checkInfo[10] = 0;
               setCheckInfo(_checkInfo);
-              drivingClear_(); // checkInfo 클리어
 
               Geolocation.watchPosition(
                 position => {
