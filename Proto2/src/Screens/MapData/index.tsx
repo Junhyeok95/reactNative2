@@ -508,7 +508,7 @@ const MapData = ({navigation}: DrawerProp) => {
     // //## 지워야함
     // setCheckInfo([-1,-1,-1, 1 ,-1,-1,-1,-1,-1,-1,-1]);
     // ## 지워야함
-    setLinkInfo([-1,-1,-1, 151, 10, 1,-1, 0, 0,-1]);
+    // setLinkInfo([-1,-1,-1, 151, 10, 1,-1, 0, 0,-1]);
     console.log("--- --- MapData Mount");
     return () => {
       console.log("--- --- MapData return");
