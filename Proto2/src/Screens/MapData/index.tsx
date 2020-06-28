@@ -81,7 +81,7 @@ const Text = Styled.Text`
   font-size: 16px;
 `;
 const Text2 = Styled.Text`
-  font-size: 24px;
+  font-size: 20px;
 `;
 const Text_red = Styled.Text`
   color: #FF0000;
@@ -239,7 +239,7 @@ const TouchableOpacityView = Styled.View`
   border-radius: 10px;
 
 `;
-const ReportCancelBt = Styled.Text`
+const ReportCancelBtn = Styled.Text`
   font-size: 40px;
   text-align: center;
   font-weight: 900;
@@ -274,6 +274,44 @@ const SleepAlertText = Styled.Text`
 `;
 // ------------- sleep modal ------------
 // ------------- start, save modal ------------
+const ModalViewBack = Styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #00000055;
+`;
+const DrivingStartSaveModalView = Styled.View`
+  background-color: #FFFFFF;
+  width: 72%;
+  height: 51%;
+  marginTop: 45%;
+  marginLeft: 14%;
+  marginRight: 14%;
+  
+  border-width: 4px;
+  border-radius: 32px;
+  
+  justify-content: center;
+  align-items: center;
+  `;
+const LottieStartSaveView = Styled.View`
+  width: 100%;
+  height: 40%;
+  padding: 100px;
+`;
+const DrivingStartSaveTextView = Styled.View`
+  width: 100%;
+  padding-top: 16px;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+`;
+const DrivingStartSaveText = Styled.Text`
+  font-size: 32px;
+  font-weight: bold;
+`;
 
 // ------------- start, save modal ------------
 interface IGeolocation {
@@ -414,13 +452,16 @@ const MapData = ({navigation}: DrawerProp) => {
   const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
   const [modalVisibleReportCount, setModalVisibleReportCount] = useState(false);
 
+  const [modalVisibleStart, setModalVisibleStart] = useState(false);
+  const [modalVisibleSave, setModalVisibleSave] = useState(false);
+
   useEffect(() => {
     androidPermissionLocation();
 
     // //## 지워야함
     // setCheckInfo([-1,-1,-1,1 ,-1,-1,-1,-1,-1,-1]);
     // ## 지워야함
-    // setLinkInfo([-1,-1,-1,-1,-1,2,-1, 0, 0,-1]);
+    // setLinkInfo([-1,-1,-1,-1,-1,1,-1, 0, 0,-1]);
     console.log("--- --- MapData Mount");
     return () => {
       console.log("--- --- MapData return");
@@ -965,49 +1006,51 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </CenterRightView>
       
-      <CenterTestTestRightView>
-        <IconButton
-          style={{
-            backgroundColor: "#FFFFFF",
-            borderColor: "#AAA",
-            borderRadius: 10,
-            borderWidth: 1,
-          }}
-          icon="sleep"
-          color="#000000"
-          onPress={() => {
-            sound1 = new Sound(audioList[1].url, (error) => {
-              if(error){
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
+      {infoTouch == true ? (
+        <CenterTestTestRightView>
+          <IconButton
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#AAA",
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="sleep"
+            color="#000000"
+            onPress={() => {
+              sound1 = new Sound(audioList[1].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+              let {latitude, longitude, timestamp} = coordinate2;
+              let _markerLocation = {
+                latitude,
+                longitude,
+                bool_report: false,
+                bool_sudden_acceleration: false,
+                bool_sudden_stop: false,
+                bool_sleep: true,
+                timestamp, // 이건 앱에서만 활용함
               }
-            });
-            let {latitude, longitude, timestamp} = coordinate2;
-            let _markerLocation = {
-              latitude,
-              longitude,
-              bool_report: false,
-              bool_sudden_acceleration: false,
-              bool_sudden_stop: false,
-              bool_sleep: true,
-              timestamp, // 이건 앱에서만 활용함
-            }
-            console.log(_markerLocation);
-            console.log(markerLocations.length);
-            // 마커를 기록함
-            setMarkerLocations([...markerLocations, _markerLocation]);
-            if(onSave && userInfo2 && userInfo2.key){
-              if(userInfo2.key != -1 && userInfo2.key != undefined){
-                // 유저가 있으므로 마커를 웹으로 전송함
-                console.log(_markerLocation);
-                drivingMarkerSave(_markerLocation);
+              console.log(_markerLocation);
+              console.log(markerLocations.length);
+              // 마커를 기록함
+              setMarkerLocations([...markerLocations, _markerLocation]);
+              if(onSave && userInfo2 && userInfo2.key){
+                if(userInfo2.key != -1 && userInfo2.key != undefined){
+                  // 유저가 있으므로 마커를 웹으로 전송함
+                  console.log(_markerLocation);
+                  drivingMarkerSave(_markerLocation);
+                }
               }
-            }
-        }}/>
-      </CenterTestTestRightView>
+          }}/>
+        </CenterTestTestRightView>
+      ) : null }
 
       <CenterTestRightView>
         {/* 급가속 */}
@@ -1162,10 +1205,7 @@ const MapData = ({navigation}: DrawerProp) => {
         <Btn
           onPress={()=>{
             if(driving){
-              Alert.alert('운전을 종료합니다');
-
-
-              console.log("운전을 종료합니다");
+              
               // 저장해야함
               // _drivingSaveData.Drivingline = [...locations];
               let _drivingSaveData = Object.assign({}, drivingSaveData);
@@ -1229,11 +1269,18 @@ const MapData = ({navigation}: DrawerProp) => {
 
               setDriving(false); // 운전
               setOnSave(false); // 기록
+
+              setModalVisibleSave(true);
+              setTimeout(() => {
+                setModalVisibleSave(false);
+              }, 2000);
+              console.log("운전을 종료합니다");
               
             } else {
-
-              Alert.alert('운전을 시작합니다');
-
+              setModalVisibleStart(true);
+              setTimeout(() => {
+                setModalVisibleStart(false);
+              }, 2000);
               setTimeout(() => {
                 if(userInfo2 && userInfo2.key){
                   if(userInfo2.key != -1 && userInfo2.key != undefined){
@@ -1362,25 +1409,71 @@ const MapData = ({navigation}: DrawerProp) => {
                     }
                   });
                 }}>
-                <ReportCancelBt>신고취소</ReportCancelBt>
+                <ReportCancelBtn>신고취소</ReportCancelBtn>
               </TouchableOpacity>
             </TouchableOpacityView>
           </ModalView>
         </Modal>
       ) : null }
+      {driving ? (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisibleSleep}
+        >
+          <SleepModalView>
+            <SleepModalImageTextView>
+              <SleepAlertImage
+                source={require('~/Assets/Images/sleepAlertIcon.png')}
+              />
+              <SleepAlertText>졸음 감지 !</SleepAlertText>
+            </SleepModalImageTextView>
+          </SleepModalView>
+        </Modal>
+      ) : null }
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
-        visible={modalVisibleSleep}
+        visible={modalVisibleStart}
       >
-        <SleepModalView>
-          <SleepModalImageTextView>
-            <SleepAlertImage
-              source={require('~/Assets/Images/sleepAlertIcon.png')}
-            />
-            <SleepAlertText>졸음 감지 !</SleepAlertText>
-          </SleepModalImageTextView>
-        </SleepModalView>
+        <ModalViewBack>
+          <DrivingStartSaveModalView style={{borderColor: "#008800"}}>
+            <LottieStartSaveView>
+              <LottieView
+                style={{backgroundColor:'#FFFFFF'}}
+                resizeMode={'contain'}
+                source={require('~/Assets/Lottie2/car_start.json')}
+                autoPlay
+                imageAssetsFolder={'images'}
+              />
+            </LottieStartSaveView>
+            <DrivingStartSaveTextView>
+              <DrivingStartSaveText>운전을 시작합니다</DrivingStartSaveText>
+            </DrivingStartSaveTextView>
+          </DrivingStartSaveModalView>
+        </ModalViewBack>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisibleSave}
+      >
+        <ModalViewBack>
+          <DrivingStartSaveModalView style={{borderColor: "#0000FF"}}>
+            <LottieStartSaveView>
+              <LottieView
+                style={{backgroundColor:'#FFFFFF'}}
+                resizeMode={'contain'}
+                source={require('~/Assets/Lottie2/car_save.json')}
+                autoPlay
+                imageAssetsFolder={'images'}
+              />
+            </LottieStartSaveView>
+            <DrivingStartSaveTextView>
+              <DrivingStartSaveText>운전을 종료합니다</DrivingStartSaveText>
+            </DrivingStartSaveTextView>
+          </DrivingStartSaveModalView>
+        </ModalViewBack>
       </Modal>
     </>
   );
