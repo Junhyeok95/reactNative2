@@ -105,17 +105,17 @@ void loop() {
     }
     ////////// button //////////
     ////////// buzzer //////////
-    // if(report == 119){
-    //   digitalWrite(9, HIGH); // 엘이디
-    //   if(cnt>1000){
-    //     tone(5 , 800, 1500);
-    //   } else {
-    //     tone(5 , 600, 1500);
-    //   }
-    // } else {
-    //   digitalWrite(5, LOW);
-    //   noTone(9);
-    // }
+    if(reportPushState == 119){
+      digitalWrite(9, HIGH); // LED
+      // if(cnt>1000){
+      //   tone(5 , 800, 1500);
+      // } else {
+      //   tone(5 , 600, 1500);
+      // }
+    } else {
+      digitalWrite(9, LOW);
+      // noTone(5);
+    }
     ////////// buzzer //////////
 
   // 추가 부분
