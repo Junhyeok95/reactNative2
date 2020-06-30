@@ -85,9 +85,7 @@ const audioListNew = [
   }
 ]
 
-const NewTextView = Styled.View``;
 const NewTextViewData = Styled.View``;
-const NewTextViewEye = Styled.View``;
 const NewTextViewRow = Styled.View`
   flex-direction: row;
 `;
@@ -103,23 +101,23 @@ const NewTextViewRow60 = Styled.View`
 `;
 
 const NewTextRight = Styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   text-align: right;
 `;
 const NewTextCenter = Styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
 `;
 const NewTextLeft = Styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   text-align: left;
 `;
 const NewTextColor = Styled.Text`
-  font-size: 18px;
+  font-size: 20px;
 `;
 
 const Text = Styled.Text`
-  font-size: 16px;
+  font-size: 20px;
 `;
 const MapInfoTouchableOpacity = Styled.TouchableOpacity`
 `;
@@ -135,7 +133,7 @@ const TopLeftView = Styled.View`
   padding: 4% 0;
 `;
 const TopLeftPadding = Styled.View`
-  padding: 0 8%;
+  padding: 0 10%;
 `;
 const TopLeftViewTouch = Styled.View`
   flex: 1;
@@ -621,6 +619,7 @@ const MapData = ({navigation}: DrawerProp) => {
         _checkInfo2[8] = 0; // 클리어
         _checkInfo2[9] = 0; // 클리어
         setCheckInfo(_checkInfo2);
+        setLinkInfo([-1,-1,-1, -1,  -1,-1,-1, 0, 0,-1]);
         console.log(_checkInfo2);
         console.log("자동 신고로 인해 운전을 종료합니다");
 
@@ -1026,9 +1025,9 @@ const MapData = ({navigation}: DrawerProp) => {
                       </NewTextViewRow40>
                       <NewTextViewRow60>
                         <NewTextCenter>
-                          {linkInfo[4]==10?<NewTextColor style={{fontWeight:"bold"}}>정면</NewTextColor>:<NewTextColor style={{color:"#00000099"}}>정면</NewTextColor>} /
-                          {linkInfo[4]==20?<NewTextColor style={{fontWeight:"bold"}}> 좌</NewTextColor>:<NewTextColor style={{color:"#00000099"}}> 좌</NewTextColor>} /
-                          {linkInfo[4]==30?<NewTextColor style={{fontWeight:"bold"}}> 우</NewTextColor>:<NewTextColor style={{color:"#00000099"}}> 우</NewTextColor>}
+                          {linkInfo[4]==10?<NewTextColor style={{fontWeight:"bold"}}>정면</NewTextColor>:<NewTextColor style={{color:"#00000077"}}>정면</NewTextColor>} /
+                          {linkInfo[4]==20?<NewTextColor style={{fontWeight:"bold"}}> 좌</NewTextColor>:<NewTextColor style={{color:"#00000077"}}> 좌</NewTextColor>} /
+                          {linkInfo[4]==30?<NewTextColor style={{fontWeight:"bold"}}> 우</NewTextColor>:<NewTextColor style={{color:"#00000077"}}> 우</NewTextColor>}
                         </NewTextCenter>
                       </NewTextViewRow60>
                     </NewTextViewRow>
@@ -1038,8 +1037,8 @@ const MapData = ({navigation}: DrawerProp) => {
                       </NewTextViewRow40>
                       <NewTextViewRow60>
                         <NewTextCenter>
-                          {linkInfo[5]==1?<NewTextColor style={{fontWeight:"bold"}}>정상</NewTextColor>:<NewTextColor style={{color:"#00000099"}}>정상</NewTextColor>} /
-                          {linkInfo[5]==2?<NewTextColor style={{fontWeight:"bold"}}> 졸음</NewTextColor>:<NewTextColor style={{color:"#00000099"}}> 졸음</NewTextColor>}
+                          {linkInfo[5]==1?<NewTextColor style={{fontWeight:"bold"}}>정상</NewTextColor>:<NewTextColor style={{color:"#00000077"}}>정상</NewTextColor>} /
+                          {linkInfo[5]==2?<NewTextColor style={{fontWeight:"bold"}}> 졸음</NewTextColor>:<NewTextColor style={{color:"#00000077"}}> 졸음</NewTextColor>}
                         </NewTextCenter>
                       </NewTextViewRow60>
                     </NewTextViewRow>
@@ -1141,6 +1140,7 @@ const MapData = ({navigation}: DrawerProp) => {
             color="#BB0000"
             onPress={() => {
               console.log("report");
+              setLinkInfo([-1,-1,-1, 151, 10, 1,-1, 0, 0,-1]);
           }}/>
           <IconButton
             style={{
@@ -1415,6 +1415,7 @@ const MapData = ({navigation}: DrawerProp) => {
               _checkInfo[10] = 0;
               _checkInfo[11] = 11;
               setCheckInfo(_checkInfo);
+              setLinkInfo([-1,-1,-1, -1,  -1,-1,-1, 0, 0,-1]);
               // // --- 사고다시 가능
               Geolocation.clearWatch(0);
 
@@ -1468,6 +1469,7 @@ const MapData = ({navigation}: DrawerProp) => {
                 _checkInfo[10] = 0;
                 _checkInfo[11] = 11;
                 setCheckInfo(_checkInfo);
+                setLinkInfo([-1,-1,-1, -1,  -1,-1,-1, 0, 0,-1]);
 
                 // 메인페이지 운전중 체크
                 let _defaultInfo = [...defaultInfo];
@@ -1558,6 +1560,7 @@ const MapData = ({navigation}: DrawerProp) => {
                   _checkInfo[4] = 0;
                   _checkInfo[11] = 119;
                   setCheckInfo(_checkInfo);
+                  setLinkInfo([-1,-1,-1, -1,  -1,-1,-1, 0, 0,-1]);
 
                   setTimeout(() => {
                     let __checkInfo = [...checkInfo];

@@ -16,7 +16,7 @@ import {DrivingDataContext} from '~/Contexts/DrivingData';
 import {UserContext} from '~/Contexts/User';
 
 const Text = Styled.Text`
-  font-size: 16px;
+  font-size: 18px;
 `;
 const TopLeftView = Styled.View`
   position: absolute;
@@ -27,7 +27,7 @@ const TopLeftView = Styled.View`
   top: 1%;
   left: 2%;
   width: 70%;
-  padding: 4% 8%;
+  padding: 4% 6%;
 `;
 const TopRightView = Styled.View`
   position: absolute;
@@ -43,14 +43,14 @@ const TopRightView = Styled.View`
 const CenterRightView = Styled.View`
   position: absolute;
   right: 2%;
-  top: 44%;
+  top: 46%;
   width: 40px;
   height: 12%;
 `;
 const CenterTestRightView = Styled.View`
   position: absolute;
   right: 2%;
-  top: 26%;
+  top: 30%;
   width: 40px;
   height: 12%;
 `;
@@ -302,29 +302,26 @@ const MapMarker = ({navigation}: DrawerProp) => {
             " - " + defaultInfo[0].toString().substr(6,2)}
           </Text> */}
           <Text>
-            운행종료 :   {drivingInfo.stopTime != 0 ? 
+            운행종료 :  {drivingInfo.stopTime != 0 ? 
             (new Date(drivingInfo.stopTime).getMonth()+1) + "월 " +
-            (new Date(drivingInfo.stopTime).getDate() + "일  ") +
-            (new Date(drivingInfo.stopTime).getHours() + ":") +
-            (new Date(drivingInfo.stopTime).getMinutes()) : ""}
+            (new Date(drivingInfo.stopTime).getDate() + "일  -  ") +
+            (new Date(drivingInfo.stopTime).getHours() + "시 ") +
+            (new Date(drivingInfo.stopTime).getMinutes())+ "분": ""}
           </Text>
           <Text>
-            주행시간 :   {drivingInfo.drivingTime != 0 ? 
-            (new Date(drivingInfo.drivingTime).getHours()-9) + " : " +
-            (new Date(drivingInfo.drivingTime).getMinutes() + " : ") +
-            (new Date(drivingInfo.drivingTime).getSeconds())+" " : ""}
+            주행시간 :  {drivingInfo.drivingTime != 0 ? 
+            (new Date(drivingInfo.drivingTime).getHours()-9) + "시간 " +
+            (new Date(drivingInfo.drivingTime).getMinutes() + "분 ") +
+            (new Date(drivingInfo.drivingTime).getSeconds() +"초") : ""}
+          </Text>
+          <Text style={{marginTop:8}}>
+            급정거 :  {drivingInfo.stopTime != 0 ? drivingInfo.suddenStopMarker : ""} 회  -  졸음 :  {drivingInfo.stopTime != 0 ? drivingInfo.sleepMarker : ""} 회
           </Text>
           <Text>
-            급정거 : {drivingInfo.stopTime != 0 ? drivingInfo.suddenStopMarker : ""}
+            급가속 :  {drivingInfo.stopTime != 0 ? drivingInfo.suddenAccelerationMarker : ""} 회
           </Text>
-          <Text>
-            급가속 : {drivingInfo.stopTime != 0 ? drivingInfo.suddenAccelerationMarker : ""}
-          </Text>
-          <Text>
-            졸음 : {drivingInfo.stopTime != 0 ? drivingInfo.sleepMarker : ""}
-          </Text>
-        </TopLeftView>
 
+        </TopLeftView>
         <TopRightView
           style={{marginTop:getStatusBarHeight()}}
         >
