@@ -31,6 +31,7 @@ void dmpDataReady() {
   int cnt = 0;
   int read7 = 0;
   int read6 = 0;
+  int reportPushState = 0;
 
   // ## 추가한다
   int read_check = 0;
@@ -97,14 +98,15 @@ void loop() {
     read6 = digitalRead(6); // 위에서 선언
     if(read7 == HIGH) {
       report = 119; // 위에서 선언
+      reportPushState = 119;
     }
     if(read6 == HIGH) {
       report = 77;
     }
     ////////// button //////////
     ////////// buzzer //////////
-    // if(report){
-    //   digitalWrite(5, HIGH);
+    // if(report == 119){
+    //   digitalWrite(9, HIGH); // 엘이디
     //   if(cnt>1000){
     //     tone(5 , 800, 1500);
     //   } else {

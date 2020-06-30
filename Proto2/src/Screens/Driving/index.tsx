@@ -2,9 +2,10 @@ import React, {useState, useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
-import Button from '~/Components/Button';
+import { Text, Button } from 'react-native';
 import {DrivingDataContext} from '~/Contexts/DrivingData';
 import IconButton from '~/Components/IconButton';
+import ReactInterval from 'react-interval';
 
 const Container = Styled.View`
   flex: 1;
@@ -63,7 +64,9 @@ const BtLabel = Styled.Text`
 `;
 
 const TText = Styled.Text`
-  color: #F00;
+  color: #080;
+  font-size: 24px;
+  font-weight: 900;
 `;
 // color: #EFEFEF;
 
@@ -76,35 +79,36 @@ interface Props {
 const Driving = ({navigation}: Props) => {
 
   const {defaultInfo} = useContext<IDrivingData>(DrivingDataContext);
-  const [onTime, setOnTime] = useState<any>();
-  let driving: NodeJS.Timeout;
-
-  // const ha = () => {
-  //   if(defaultInfo[3] ==1){
-  //     console.log("그만 갱신");
-  //     clearInterval(driving);
-  //   }
-  // }
+  const [inter, setInter] = useState<boolean>(false);
+  const [num, setNum] = useState<number>(0);
   useEffect(() => {
-    // console.log("화면");
-    // driving = setInterval(() => {
-    //   let now = new Date();
-    //     console.log(now.getHours());
-    //     console.log(now.getMinutes());
-    //     console.log(now.getSeconds());
-    //     setOnTime(now.getSeconds()); // 화면 갱신
-    //     ha();
-    // }, 1000);
-    // return () => {
-    //   clearInterval(driving);
-    // };
   },[]);
 
   return (
     <Container>
-      {/* <Text>
-        오늘의 운전점수
-      </Text> */}
+      <ReactInterval
+        timeout={5}
+        enabled={inter}
+        callback={() => {
+          console.log("즐겁다");
+          setNum(num+1);
+        }}
+      />
+      <TText> 카운터 {num} </TText>
+      <Button title="GoGo" onPress={()=>{
+        console.log("GoGo");
+        setNum(-200);
+
+        setInter(true);
+        setTimeout(()=>{
+          console.log("haha hoho");
+
+          setInter(false);
+          setTimeout(()=>{
+            setNum(0);
+          }, 2000);
+        }, 2000);
+      }} />
         {defaultInfo[3] == 1? (
           <TextNew>
             안전하게 달려볼까요 ~!
@@ -123,8 +127,6 @@ const Driving = ({navigation}: Props) => {
           imageAssetsFolder={'images'}
         />
       </View>
-      
-      <TText>{onTime}</TText>
       <DeviceButtonContainer style={{borderColor: defaultInfo[3] == 1?'#000000':'#111111'}}>
         <Bt
           onPress={() => {
