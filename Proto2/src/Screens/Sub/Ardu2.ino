@@ -88,9 +88,10 @@ void loop() {
   // 추가 부분
 
     cnt++; // 위에서 선언
-    if(cnt>2000){
+    if(cnt>10000){
       cnt = 0;
       report = 50;
+      reportPushState = 50;
     }
 
     ////////// button //////////
@@ -99,22 +100,26 @@ void loop() {
     if(read7 == HIGH) {
       report = 119; // 위에서 선언
       reportPushState = 119;
+      cnt = 1;
     }
     if(read6 == HIGH) {
       report = 77;
+      reportPushState = 77;
     }
     ////////// button //////////
     ////////// buzzer //////////
     if(reportPushState == 119){
+      if(cnt % 700 == 0){
+        if((cnt/700)%2 == 1){
+          tone(5 , 622, 500);
+        } else {
+          tone(5 , 523, 500);
+        }
+      }
       digitalWrite(9, HIGH); // LED
-      // if(cnt>1000){
-      //   tone(5 , 800, 1500);
-      // } else {
-      //   tone(5 , 600, 1500);
-      // }
     } else {
       digitalWrite(9, LOW);
-      // noTone(5);
+      noTone(5);
     }
     ////////// buzzer //////////
 
