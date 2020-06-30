@@ -79,36 +79,11 @@ interface Props {
 const Driving = ({navigation}: Props) => {
 
   const {defaultInfo} = useContext<IDrivingData>(DrivingDataContext);
-  const [inter, setInter] = useState<boolean>(false);
-  const [num, setNum] = useState<number>(0);
   useEffect(() => {
   },[]);
 
   return (
     <Container>
-      <ReactInterval
-        timeout={5}
-        enabled={inter}
-        callback={() => {
-          console.log("즐겁다");
-          setNum(num+1);
-        }}
-      />
-      <TText> 카운터 {num} </TText>
-      <Button title="GoGo" onPress={()=>{
-        console.log("GoGo");
-        setNum(-200);
-
-        setInter(true);
-        setTimeout(()=>{
-          console.log("haha hoho");
-
-          setInter(false);
-          setTimeout(()=>{
-            setNum(0);
-          }, 2000);
-        }, 2000);
-      }} />
         {defaultInfo[3] == 1? (
           <TextNew>
             안전하게 달려볼까요 ~!

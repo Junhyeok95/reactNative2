@@ -103,18 +103,19 @@ const NewTextViewRow60 = Styled.View`
 `;
 
 const NewTextRight = Styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   text-align: right;
 `;
 const NewTextCenter = Styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
 `;
 const NewTextLeft = Styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   text-align: left;
 `;
 const NewTextColor = Styled.Text`
+  font-size: 18px;
 `;
 
 const Text = Styled.Text`
@@ -519,6 +520,10 @@ const MapData = ({navigation}: DrawerProp) => {
   const [soundReal, setSoundReal] = useState(
     new Sound(audioListNew[0].url, (error) => {})
   );
+
+  const [interPlus, setInterPlus] = useState<boolean>(false);
+  const [interMinus, setInterMinus] = useState<boolean>(false);
+  const [pushNum, setPushNum] = useState<number>(0);
 
   useEffect(() => { 
     androidPermissionLocation();
@@ -961,6 +966,28 @@ const MapData = ({navigation}: DrawerProp) => {
             linkInfo_5();
           }}
         />
+        {interPlus && (
+          <ReactInterval
+            timeout={30}
+            enabled={interPlus}
+            callback={() => {
+              console.log("가속", pushNum);
+              if(pushNum<80) setPushNum(pushNum+2);
+            }}
+          />
+        )}
+
+        {interMinus && (
+          <ReactInterval
+            timeout={30}
+            enabled={interMinus}
+            callback={() => {
+              console.log("감속", pushNum);
+              if(pushNum>20) setPushNum(pushNum-2);
+            }}
+          />
+        )}
+
       {driving && (
         <TopLeftView style={{marginTop:getStatusBarHeight()}}>
           <MapInfoTouchableOpacity onPress={()=>{
@@ -975,7 +1002,11 @@ const MapData = ({navigation}: DrawerProp) => {
                         <NewTextRight>운전속도 : </NewTextRight>
                       </NewTextViewRow40>
                       <NewTextViewRow30>
-                        <NewTextRight>{ typeof coordinate2.speed === "number" && coordinate2.speed >= 0 ? (coordinate2.speed*3.6).toFixed(1) : "0"}</NewTextRight>
+                      {pushNum == 0 ? (
+                        <NewTextRight>{typeof coordinate2.speed === "number" && coordinate2.speed >= 0 ? (coordinate2.speed*3.6).toFixed(1) : "0"}</NewTextRight>
+                      ) : (
+                        <NewTextRight><NewTextColor style={{color:"#FF0000"}}>{pushNum}</NewTextColor></NewTextRight>
+                      )}
                       </NewTextViewRow30>
                       <NewTextViewRow30>
                         <NewTextLeft> km/h</NewTextLeft>
@@ -1169,42 +1200,50 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="car-electric"
           color="#000000"
           onPress={() => {
-            sound1 = new Sound(audioList[0].url, (error) => {
-              if(error){
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
+
+            setPushNum(20);
+            setInterPlus(true);
+            setTimeout(()=>{
+              console.log("급가속 체크");
+              setInterPlus(false);
+              setTimeout(()=>{
+                setPushNum(0);
+              }, 4500);
+
+              sound1 = new Sound(audioList[0].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+              let {latitude, longitude, timestamp} = coordinate2;
+              let _markerLocation = {
+                latitude,
+                longitude,
+                bool_report: false,
+                bool_sudden_acceleration: true,
+                bool_sudden_stop: false,
+                bool_sleep: false,
+                timestamp, // 이건 앱에서만 활용함
               }
-            });
-            let {latitude, longitude, timestamp} = coordinate2;
-            let _markerLocation = {
-              latitude,
-              longitude,
-              bool_report: false,
-              bool_sudden_acceleration: true,
-              bool_sudden_stop: false,
-              bool_sleep: false,
-              timestamp, // 이건 앱에서만 활용함
-            }
-            console.log(_markerLocation);
-            console.log(markerLocations.length);
-            // 마커를 기록함
-            setMarkerLocations([...markerLocations, _markerLocation]);
-            if(onSave && userInfo2 && userInfo2.key){
-              if(userInfo2.key != -1 && userInfo2.key != undefined){
-                // 유저가 있으므로 마커를 웹으로 전송함
-                console.log(_markerLocation);
-                drivingMarkerSave(_markerLocation);
+              console.log(_markerLocation);
+              console.log(markerLocations.length);
+              // 마커를 기록함
+              setMarkerLocations([...markerLocations, _markerLocation]);
+              if(onSave && userInfo2 && userInfo2.key){
+                if(userInfo2.key != -1 && userInfo2.key != undefined){
+                  // 유저가 있으므로 마커를 웹으로 전송함
+                  console.log(_markerLocation);
+                  drivingMarkerSave(_markerLocation);
+                }
               }
-            }
+            }, 1500);
+
           }}
         />
-        {/* airplane */}
-        {/* gauge-empty */}
-        {/* trending-up */}
-
         {/* 급감속 */}
         <IconButton
           style={{
@@ -1217,41 +1256,50 @@ const MapData = ({navigation}: DrawerProp) => {
           icon="car-off"
           color="#000000"
           onPress={() => {
-            sound1 = new Sound(audioList[2].url, (error) => {
-              if(error){
-                return;
-              } else {
-                sound1.play((success)=>{
-                  sound1.release();
-                })
+
+            setPushNum(80);
+            setInterMinus(true);
+            setTimeout(()=>{
+              console.log("급감속 체크");
+              setInterMinus(false);
+              setTimeout(()=>{
+                setPushNum(0);
+              }, 4500);
+
+              sound1 = new Sound(audioList[2].url, (error) => {
+                if(error){
+                  return;
+                } else {
+                  sound1.play((success)=>{
+                    sound1.release();
+                  })
+                }
+              });
+              let {latitude, longitude, timestamp} = coordinate2;
+              let _markerLocation = {
+                latitude,
+                longitude,
+                bool_report: false,
+                bool_sudden_acceleration: false,
+                bool_sudden_stop: true,
+                bool_sleep: false,
+                timestamp, // 이건 앱에서만 활용함
               }
-            });
-            let {latitude, longitude, timestamp} = coordinate2;
-            let _markerLocation = {
-              latitude,
-              longitude,
-              bool_report: false,
-              bool_sudden_acceleration: false,
-              bool_sudden_stop: true,
-              bool_sleep: false,
-              timestamp, // 이건 앱에서만 활용함
-            }
-            console.log(_markerLocation);
-            console.log(markerLocations.length);
-            // 마커를 기록함
-            setMarkerLocations([...markerLocations, _markerLocation]);
-            if(onSave && userInfo2 && userInfo2.key){
-              if(userInfo2.key != -1 && userInfo2.key != undefined){
-                // 유저가 있으므로 마커를 웹으로 전송함
-                console.log(_markerLocation);
-                drivingMarkerSave(_markerLocation);
+              console.log(_markerLocation);
+              console.log(markerLocations.length);
+              // 마커를 기록함
+              setMarkerLocations([...markerLocations, _markerLocation]);
+              if(onSave && userInfo2 && userInfo2.key){
+                if(userInfo2.key != -1 && userInfo2.key != undefined){
+                  // 유저가 있으므로 마커를 웹으로 전송함
+                  console.log(_markerLocation);
+                  drivingMarkerSave(_markerLocation);
+                }
               }
-            }
+            }, 1500);
+
           }}
         />
-        {/* gauge-full */}
-        {/* tortoise */}
-        {/* trending-down */}
       </CenterTestRightView>
     ) : null }
 
