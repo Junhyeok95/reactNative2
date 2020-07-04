@@ -12,6 +12,8 @@
   "dependencies": {
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-device-info": "^5.6.1",
+    "react-native-speech": "^0.1.2",
     "react-native-tts": "^3.2.0",
     "styled-components": "^5.1.1"
   },

@@ -11,9 +11,12 @@ const View = Styled.View`
   width: 80%;
   height: 80%;
   background-color: #00AA0099;
+  justify-content: center;
+  align-items: center;
 `;
 const Text = Styled.Text`
-  font-size: 20px;
+  font-size: 42px;
+  color: #000000;
 `;
 
 interface Props {

@@ -8,5 +8,8 @@ npm i -D @types/styled-components
 # install babel-plugin-root-import // babel.config.js 수정 tsconfig.json 수정
 npm i -D babel-plugin-root-import
 
-# install react-native-tts
-npm i -S react-native-tts
+# install react-native-tts // error ...
+npm i -S react-native-tts react-native-speech
+
+# install react-native-device-info
+npm i -S react-native-device-info
