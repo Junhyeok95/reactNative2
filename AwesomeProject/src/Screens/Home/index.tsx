@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import DeviceInfo from 'react-native-device-info';
 
+// import Tts from 'react-native-tts';
+// var Speech = require('react-native-speech');
+
 const Container = Styled.View`
   flex: 1;
   justify-content: center;
@@ -50,7 +53,7 @@ const Home = ({}: Props) => {
     <Container>
       <View>
         <Text>
-          Home
+          Home / DeviceInfo
         </Text>
         <Text>
           uniqueID
