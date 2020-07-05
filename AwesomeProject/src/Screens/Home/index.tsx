@@ -23,6 +23,7 @@ const Text = Styled.Text`
   color: #000000;
   margin: 8px;
 `;
+const ButtonRecord = Styled.Button``;
 
 interface Props {
 }
@@ -64,6 +65,10 @@ const Home = ({}: Props) => {
         <Text>
         isTablet {Tablet}
         </Text>
+        <ButtonRecord onPress={() => {
+          console.log("button push");
+        }} 
+        title={"buttonLabel"}/>
       </View>
     </Container>
   );

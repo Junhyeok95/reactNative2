@@ -37,3 +37,6 @@ npm i -S react-native-device-info
 # install react-native-voice
 npm i -S @react-native-community/voice
 npx pod-install
+
+# install react-native-mail
+npm i -S react-native-mail
