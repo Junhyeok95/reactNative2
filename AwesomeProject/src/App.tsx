@@ -4,6 +4,7 @@ import Home from '~/Screens/Home';
 import Profile from '~/Screens/Profile';
 import SpeechTest from '~/Screens/SpeechTest';
 import Mail from '~/Screens/Mail';
+import Multi from '~/Screens/Multi';
 
 interface Props {}
 
@@ -14,7 +15,8 @@ const App = ({}: Props) => {
       {/* <Home />
       <Profile /> */}
       {/* <SpeechTest /> */}
-      <Mail />
+      {/* <Mail /> */}
+      <Multi />
     </>
   );
 };

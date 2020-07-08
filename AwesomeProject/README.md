@@ -40,3 +40,9 @@ npx pod-install
 
 # install react-native-mail
 npm i -S react-native-mail
+
+# Multi-Language 
+yarn add react-native-localize
+yarn add i18n-js
+npm i -S @types/i18n-js
+npm i -S react-native-languages
