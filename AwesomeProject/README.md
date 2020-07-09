@@ -44,5 +44,6 @@ npm i -S react-native-mail
 # Multi-Language 
 yarn add react-native-localize
 yarn add i18n-js
+yarn add lodash.memoize // 무슨 .. 캐시? 에 사용한다는데 ...
 npm i -S @types/i18n-js
 npm i -S react-native-languages

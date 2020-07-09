@@ -45,8 +45,9 @@ const Multi = ({}: Props) => {
     <Container>
       <View>
         <Text>
-          {I18n.t("hello")}
+          반갑다
         </Text>
+        {/* <I18n /> */}
       </View>
     </Container>
   );
