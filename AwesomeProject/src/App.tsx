@@ -6,6 +6,8 @@ import SpeechTest from '~/Screens/SpeechTest';
 import Mail from '~/Screens/Mail';
 import Multi from '~/Screens/Multi';
 import Multi2 from '~/Screens/Multi2';
+import Multi3 from '~/Screens/Multi3';
+import './i18n';
 
 interface Props {}
 
@@ -18,7 +20,7 @@ const App = ({}: Props) => {
       {/* <SpeechTest /> */}
       {/* <Mail /> */}
       {/* <Multi /> */}
-      <Multi2 />
+      <Multi3 />
     </>
   );
 };
