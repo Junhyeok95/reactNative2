@@ -1,4 +1,5 @@
 ## library
+
 ```
 npm i -D typescript @types/react @types/react-native
 npm i -D @types/styled-components
@@ -26,6 +27,7 @@ npm i -S react-native-tts
 ```
 
 ## clean
+
 ```
 cd ios
 xcodebuild clean
@@ -45,6 +47,7 @@ cd ios && pod install && cd ..
 ```
 
 ### tip
+
 ```
 android -> app -> build.gradle
 apply from: "../../node_modules/react-native/react.gradle" // 중복주의
@@ -54,4 +57,16 @@ react-native set-icon --path ./src/Assets/images/app_icon.png --background "#FFF
 react-native set-splash --path ./src/Assets/images/splash.png --resize cover --background "#FFFFFF"
 #import "RNSplashScreen.h"  // here
 [RNSplashScreen show];  // here  + 스토리보드 생성 SplashScreen
+
+cmd + shift + p -> format document // 정리
+```
+
+### tip2
+
+```
+watchman watch-del-all
+rm -rf node_modules
+npm i
+npx pod-install
+rm -rf /tmp/metro-*
 ```

@@ -1,9 +1,12 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerNavigationProp,
+} from '@react-navigation/drawer';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {UserContext} from '~/Contexts/User';
+import {UserContext} from '~/Contexts/User/index';
 import CustomDrawer from '~/Screens/Drawer';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import IconButton from '~/Components/IconButton';
@@ -35,8 +38,7 @@ const LoginStackNavi = () => {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
-      }}
-    >
+      }}>
       <Stack.Screen
         name="SignIn"
         component={SignIn}
@@ -63,20 +65,19 @@ const MainFirstStackNavi = ({navigation}: DrawerProp) => {
         },
         headerRight: () => (
           <IconButton
-            style={{marginRight:8}}
+            style={{marginRight: 8}}
             icon="menu"
             color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Driving"
         component={Driving}
         options={{
-          headerTitle:"クルマモリ9",
-          headerBackTitleVisible: false
+          headerTitle: 'クルマモリ9',
+          headerBackTitleVisible: false,
         }}
       />
     </Stack.Navigator>
@@ -97,20 +98,19 @@ const MainSecondStackNavi = ({navigation}: DrawerProp) => {
         },
         headerRight: () => (
           <IconButton
-            style={{marginRight:8}}
+            style={{marginRight: 8}}
             icon="menu"
             color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Profile"
         component={Profile}
         options={{
-          headerTitle:"クルマモリ9",
-          headerBackTitleVisible: false
+          headerTitle: 'クルマモリ9',
+          headerBackTitleVisible: false,
         }}
       />
     </Stack.Navigator>
@@ -130,20 +130,19 @@ const MainThirdStackNavi = ({navigation}: DrawerProp) => {
         },
         headerRight: () => (
           <IconButton
-            style={{marginRight:8}}
+            style={{marginRight: 8}}
             icon="menu"
             color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Bluetooth"
         component={Bluetooth}
         options={{
-          headerTitle:"クルマモリ9",
-          headerBackTitleVisible: false
+          headerTitle: 'クルマモリ9',
+          headerBackTitleVisible: false,
         }}
       />
     </Stack.Navigator>
@@ -164,20 +163,19 @@ const MainFourthStackNavi = ({navigation}: DrawerProp) => {
         },
         headerRight: () => (
           <IconButton
-            style={{marginRight:8}}
+            style={{marginRight: 8}}
             icon="menu"
             color="#FFFFFF"
             onPress={() => navigation.openDrawer()}
           />
         ),
-      }}
-    >
+      }}>
       <Stack.Screen
         name="Setting"
         component={Setting}
         options={{
-          headerTitle:"クルマモリ9",
-          headerBackTitleVisible: false
+          headerTitle: 'クルマモリ9',
+          headerBackTitleVisible: false,
         }}
       />
     </Stack.Navigator>
@@ -191,8 +189,7 @@ const MainTabNavi = () => {
       shifting={true}
       activeColor={'#000000'}
       inactiveColor={'#AAAAAA'}
-      barStyle={{backgroundColor: '#FFFFFF'}}
-    >
+      barStyle={{backgroundColor: '#FFFFFF'}}>
       <Tab.Screen
         name="MainFirstStackNavi"
         component={MainFirstStackNavi}
@@ -222,7 +219,7 @@ const MainTabNavi = () => {
         component={MainFourthStackNavi}
         options={{
           tabBarLabel: '설정',
-          tabBarIcon: 'settings-outline',
+          tabBarIcon: 'cog-outline',
         }}
       />
     </Tab.Navigator>
@@ -232,14 +229,13 @@ const MainTabNavi = () => {
 const MapTabNavi = () => {
   return (
     <Tab.Navigator
-      initialRouteName={"MapData"}
+      initialRouteName={'MapData'}
       shifting={true}
       activeColor={'#000000'}
       inactiveColor={'#AAAAAA'}
-      barStyle={{backgroundColor: '#FFFFFF'}}
-    >
+      barStyle={{backgroundColor: '#FFFFFF'}}>
       <Tab.Screen
-        name={"MapData"}
+        name={'MapData'}
         component={MapData}
         options={{
           tabBarLabel: '지도',
@@ -247,7 +243,7 @@ const MapTabNavi = () => {
         }}
       />
       <Tab.Screen
-        name={"MapMarker"}
+        name={'MapMarker'}
         component={MapMarker}
         options={{
           tabBarLabel: '통계',
@@ -261,36 +257,29 @@ const MapTabNavi = () => {
 const DrawNavi = () => {
   return (
     <Drawer.Navigator
-      initialRouteName={"MainTabNavi"}
-      drawerPosition={"right"}
+      initialRouteName={'MainTabNavi'}
+      drawerPosition={'right'}
       drawerType={'slide'}
-      drawerContent={props => <CustomDrawer props={props} />}
+      drawerContent={(props) => <CustomDrawer props={props} />}
       drawerContentOptions={{
-        activeTintColor: '#0000FF'
-      }}
-    >
+        activeTintColor: '#0000FF',
+      }}>
       <Drawer.Screen
-        name={"MainTabNavi"}
+        name={'MainTabNavi'}
         component={MainTabNavi}
         options={{
           title: '메인',
-          drawerIcon: ({ }) => (
-            <Icon
-              name="home"
-              color={'#888'}
-              size={24}
-            />
-          ),
+          drawerIcon: ({}) => <Icon name="home" color={'#888'} size={24} />,
         }}
       />
       <Drawer.Screen
-        name={"MapTabNavi"}
+        name={'MapTabNavi'}
         component={MapTabNavi}
         options={{
           title: '지도',
-          drawerIcon: ({ }) => (
+          drawerIcon: ({}) => (
             <Icon
-              style={{margin:0, padding:0}}
+              style={{margin: 0, padding: 0}}
               name="map"
               color={'#888'}
               size={24}
@@ -305,7 +294,7 @@ const DrawNavi = () => {
 const RootNavi = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen     
+      <Stack.Screen
         name="DrawNavi"
         component={DrawNavi}
         options={{

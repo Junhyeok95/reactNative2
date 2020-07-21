@@ -20,7 +20,7 @@ interface Props {
   onPress: () => void;
 }
 
-const Background = ({ onPress }: Props) => {
+const Background = ({onPress}: Props) => {
   return (
     <Container onPress={onPress}>
       <BlackBackground />

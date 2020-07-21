@@ -23,12 +23,12 @@ const IconButton = ({icon, icon2, style, color, onPress, size}: Props) => {
       <Container style={style} onPress={onPress}>
         <Icon
           name={icon}
-          color={color ? color : 'white'} 
+          color={color ? color : 'white'}
           size={size ? parseInt(size) : 24}
         />
         <Icon
           name={icon2}
-          color={color ? color : 'white'} 
+          color={color ? color : 'white'}
           size={size ? parseInt(size) : 24}
         />
       </Container>

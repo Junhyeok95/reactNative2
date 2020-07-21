@@ -1,9 +1,9 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {Platform, Linking, Alert} from 'react-native';
 import Styled from 'styled-components/native';
-import {UserContext} from '~/Contexts/User';
+import {UserContext} from '~/Contexts/User/index';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Keyboard} from "react-native";
+import {Keyboard} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from '~/Components/Button';
 import Input from '~/Components/Input';
@@ -112,10 +112,11 @@ const SignIn = ({navigation}: Props) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
+      <Container behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <View>
           <TextRowView>
-            <KrumamoText> クルマモ</KrumamoText><Ri9Text>リ9 </Ri9Text>
+            <KrumamoText> クルマモ</KrumamoText>
+            <Ri9Text>リ9 </Ri9Text>
           </TextRowView>
           <Icon
             style={{margin: 36}}
@@ -125,39 +126,39 @@ const SignIn = ({navigation}: Props) => {
           />
           <FormContainer>
             <Input
-              style={{flex:1, backgorunColr:"#F00", marginBottom: 8}}
+              style={{flex: 1, backgorunColr: '#F00', marginBottom: 8}}
               placeholder={'이메일'}
               keyboardType={'email-address'}
-              onChangeText={e=>setInputEamil(e)}
+              onChangeText={(e) => setInputEamil(e)}
             />
             <Input
-              style={{ marginBottom: 8 }}
+              style={{marginBottom: 8}}
               secureTextEntry={true}
               placeholder={'비밀번호'}
-              onChangeText={e=>setInputPassword(e)}
+              onChangeText={(e) => setInputPassword(e)}
             />
             <Button
               // label="Sign In"
-              style={{ backgroundColor:"#DDDDDD", marginBottom: 8 }}
+              style={{backgroundColor: '#DDDDDD', marginBottom: 8}}
               label="로그인"
-              onPress={()=>{
-                if(inputEmail.trim() && inputPassword.trim()){
+              onPress={() => {
+                if (inputEmail.trim() && inputPassword.trim()) {
                   let inputE = inputEmail.trim();
                   let inputP = inputPassword.trim();
                   login2(inputE, inputP);
-                }else{
-                  Alert.alert("내용을 잘못입력했습니다");
+                } else {
+                  Alert.alert('내용을 잘못입력했습니다');
                 }
               }}
               // 이 동작이 setUserInfo 실행 -> NavigationContainer 의 함수로 인해서 MainNavi 스택으로 이동
             />
             <ButtonContainer>
               <Button
-                style={{ backgroundColor:"#DDDDDD" }}
+                style={{backgroundColor: '#DDDDDD'}}
                 label="회원가입"
                 // onPress={() => navigation.navigate('SignUp')}
                 // onPress={() => Linking.openURL(URL+"/auth/signup")}
-                onPress={() => Linking.openURL(URL+"/auth/register")}
+                onPress={() => Linking.openURL(URL + '/auth/register')}
               />
               {/* <ButtonMargin />
               <Button
@@ -169,37 +170,34 @@ const SignIn = ({navigation}: Props) => {
             </ButtonContainer>
           </FormContainer>
         </View>
-        {showMaster &&
-        <TopLeftView style={{marginTop: getStatusBarHeight()}}>
-          <TouchableOpacityView>
-            <TouchableOpacity onPress={() => setShowInput(true)}>
-              <Label>
-                URL : {URL}
-              </Label>
-            </TouchableOpacity>
-            <TouchableOpacityViewRow>
-              <TouchableOpacity2 onPress={()=>login('WDJ@YJU', 'password')}>
-                <Label>
-                  MASTER
-                </Label>
-              </TouchableOpacity2>
-              <TouchableOpacity2 onPress={()=>updateURL("http://kurumamori.iptime.org:80")}>
-                <Label>
-                  reset URL{'\n'}kuru:80
-                </Label>
-              </TouchableOpacity2>
-              <TouchableOpacity2 onPress={()=>updateURL("http://kurumamori.iptime.org:8080")}>
-                <Label>
-                  reset URL{'\n'}kuru:8080
-                </Label>
-              </TouchableOpacity2>
-            </TouchableOpacityViewRow>
-          </TouchableOpacityView>
-        </TopLeftView>}
+        {showMaster && (
+          <TopLeftView style={{marginTop: getStatusBarHeight()}}>
+            <TouchableOpacityView>
+              <TouchableOpacity onPress={() => setShowInput(true)}>
+                <Label>URL : {URL}</Label>
+              </TouchableOpacity>
+              <TouchableOpacityViewRow>
+                <TouchableOpacity2 onPress={() => login('WDJ@YJU', 'password')}>
+                  <Label>MASTER</Label>
+                </TouchableOpacity2>
+                <TouchableOpacity2
+                  onPress={() => updateURL('http://kurumamori.iptime.org:80')}>
+                  <Label>reset URL{'\n'}kuru:80</Label>
+                </TouchableOpacity2>
+                <TouchableOpacity2
+                  onPress={() =>
+                    updateURL('http://kurumamori.iptime.org:8080')
+                  }>
+                  <Label>reset URL{'\n'}kuru:8080</Label>
+                </TouchableOpacity2>
+              </TouchableOpacityViewRow>
+            </TouchableOpacityView>
+          </TopLeftView>
+        )}
         <TopRighView style={{marginTop: getStatusBarHeight()}}>
-          <TouchableOpacity3 onPress={()=>setShowMaster(!showMaster)}/>
+          <TouchableOpacity3 onPress={() => setShowMaster(!showMaster)} />
         </TopRighView>
-      {showInput && <URLInput hideURLInput={() => setShowInput(false)} />}
+        {showInput && <URLInput hideURLInput={() => setShowInput(false)} />}
       </Container>
     </TouchableWithoutFeedback>
   );

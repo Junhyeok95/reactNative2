@@ -10,10 +10,10 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-    "baseUrl": "./src",   // root-import 추가
-    "paths": {            //
-      "~/*": ["*"]        //
-    }                     //
+    "baseUrl": "./src", // root-import 추가
+    "paths": {
+      "~/*": ["*"] // root-import 추가
+    }
   },
   "exclude": [
     "node_modules",

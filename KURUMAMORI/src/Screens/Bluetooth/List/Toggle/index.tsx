@@ -15,11 +15,6 @@ const Text = Styled.Text`
 const Switch = Styled.Switch`
   margin-left: 8px;
 `;
-const BackContainer = Styled.View`
-  border-width: 1px;
-  border-color: #AAAA;
-  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
-`;
 const TouchableOpacity = Styled.TouchableOpacity``;
 
 interface Props {
@@ -32,22 +27,25 @@ const Toggle = ({onValueChange, value}: Props) => {
   // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   // const state = ['OFF', 'ON'];
 
-  const {defaultInfo, setDefaultInfo} = useContext<IDrivingData>(DrivingDataContext);
+  const {defaultInfo, setDefaultInfo} = useContext<IDrivingData>(
+    DrivingDataContext,
+  );
 
   return (
     <Container>
-      <TouchableOpacity onPress={()=>{
-        let _defaultInfo = [...defaultInfo];
-        console.log(_defaultInfo[3]);
-        if(defaultInfo[3] == 1){
-          _defaultInfo[3] = 0;
-        }
-        else{
-          _defaultInfo[3] = 1;
-        }
-        setDefaultInfo(_defaultInfo);
-      }}>
-        <Text>Bluetooth
+      <TouchableOpacity
+        onPress={() => {
+          let _defaultInfo = [...defaultInfo];
+          console.log(_defaultInfo[3]);
+          if (defaultInfo[3] == 1) {
+            _defaultInfo[3] = 0;
+          } else {
+            _defaultInfo[3] = 1;
+          }
+          setDefaultInfo(_defaultInfo);
+        }}>
+        <Text>
+          Bluetooth
           {/* {isEnabled ? state[1] : state[0]} */}
         </Text>
       </TouchableOpacity>

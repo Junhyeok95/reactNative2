@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {UserContext} from '~/Contexts/User';
+import {UserContext} from '~/Contexts/User/index';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 const Container = Styled.View`
@@ -44,56 +44,62 @@ interface Props {
 }
 
 const Profile = ({navigation}: Props) => {
-  const {userInfo2, profileSearchRes, profileSearch} = useContext<IUserContext>(UserContext);
+  const {userInfo2, profileSearchRes, profileSearch} = useContext<IUserContext>(
+    UserContext,
+  );
 
   useEffect(() => {
-    console.log("--- --- Profile");
-    if(userInfo2){
-      if(userInfo2.key != -1 && userInfo2.key != undefined){
+    console.log('--- --- Profile');
+    if (userInfo2) {
+      if (userInfo2.key != -1 && userInfo2.key != undefined) {
         profileSearch();
       }
     }
     return () => {
-      console.log("--- --- MapTest return");
+      console.log('--- --- MapTest return');
     };
-  },[]);
+  }, []);
   return (
     <Container>
       <BackContainer>
         <LabelContainer>
           <Label>회원 정보</Label>
         </LabelContainer>
-        {profileSearchRes ? 
+        {profileSearchRes ? (
           <>
             <Text>
-              이름 : {profileSearchRes[0].name ? profileSearchRes[0].name.toString() : ""}
+              이름 :{' '}
+              {profileSearchRes[0].name
+                ? profileSearchRes[0].name.toString()
+                : ''}
             </Text>
             <Text>
-              성별 : {profileSearchRes[0].gender ? profileSearchRes[0].gender.toString() : ""}
+              성별 :{' '}
+              {profileSearchRes[0].gender
+                ? profileSearchRes[0].gender.toString()
+                : ''}
             </Text>
             <Text>
-              생일 : {profileSearchRes[0].birth ? profileSearchRes[0].birth.toString() : ""}
+              생일 :{' '}
+              {profileSearchRes[0].birth
+                ? profileSearchRes[0].birth.toString()
+                : ''}
             </Text>
             <Text>
-              연락처 : {profileSearchRes[0].phone ? profileSearchRes[0].phone.toString() : ""}
+              연락처 :{' '}
+              {profileSearchRes[0].phone
+                ? profileSearchRes[0].phone.toString()
+                : ''}
             </Text>
           </>
-          :
+        ) : (
           <>
-            <Text>
-              이름 : 
-            </Text>
-            <Text>
-              성별 : 
-            </Text>
-            <Text>
-              생일 : 
-            </Text>
-            <Text>
-              연락처 : 
-            </Text>
+            <Text>이름 :</Text>
+            <Text>성별 :</Text>
+            <Text>생일 :</Text>
+            <Text>연락처 :</Text>
           </>
-        }
+        )}
       </BackContainer>
 
       <BackContainer>
@@ -101,7 +107,8 @@ const Profile = ({navigation}: Props) => {
           <Label>비상연락망</Label>
         </LabelContainer>
         <Text>
-          연락처 : {profileSearchRes && profileSearchRes[1] ? profileSearchRes[1] : "" }
+          연락처 :{' '}
+          {profileSearchRes && profileSearchRes[1] ? profileSearchRes[1] : ''}
         </Text>
       </BackContainer>
 
@@ -109,73 +116,41 @@ const Profile = ({navigation}: Props) => {
         <LabelContainer>
           <Label>의료 정보</Label>
         </LabelContainer>
-        {profileSearchRes && profileSearchRes[2] ? 
+        {profileSearchRes && profileSearchRes[2] ? (
           <>
-            <Text>
-              다니는 병원 : {profileSearchRes[2].hospital}
-            </Text>
-            <Text>
-              병력 : {profileSearchRes[2].sickness_name}
-            </Text>
-            <Text>
-              복용 약 : {profileSearchRes[2].medicine}
-            </Text>
-            <Text>
-              증상 : {profileSearchRes[2].symptom}
-            </Text>
+            <Text>다니는 병원 : {profileSearchRes[2].hospital}</Text>
+            <Text>병력 : {profileSearchRes[2].sickness_name}</Text>
+            <Text>복용 약 : {profileSearchRes[2].medicine}</Text>
+            <Text>증상 : {profileSearchRes[2].symptom}</Text>
           </>
-          :
+        ) : (
           <>
-            <Text>
-              다니는 병원 : 
-            </Text>
-            <Text>
-              병력 : 
-            </Text>
-            <Text>
-              복용 약 : 
-            </Text>
-            <Text>
-              증상 : 
-            </Text>
+            <Text>다니는 병원 :</Text>
+            <Text>병력 :</Text>
+            <Text>복용 약 :</Text>
+            <Text>증상 :</Text>
           </>
-        }
+        )}
       </BackContainer>
       <BackContainer>
         <LabelContainer>
           <Label>손해보험사</Label>
         </LabelContainer>
-        {profileSearchRes && profileSearchRes[3] && profileSearchRes[4] ?
+        {profileSearchRes && profileSearchRes[3] && profileSearchRes[4] ? (
           <>
-            <Text>
-              보험사 : {profileSearchRes[3].insurance_name}
-            </Text>
-            <Text>
-              연락처 : {profileSearchRes[3].insurance_phone}
-            </Text>
-            <Text>
-              가입일 : {profileSearchRes[4].subscription_date}
-            </Text>
-            <Text>
-              만기일 : {profileSearchRes[4].expiration_date}
-            </Text>
+            <Text>보험사 : {profileSearchRes[3].insurance_name}</Text>
+            <Text>연락처 : {profileSearchRes[3].insurance_phone}</Text>
+            <Text>가입일 : {profileSearchRes[4].subscription_date}</Text>
+            <Text>만기일 : {profileSearchRes[4].expiration_date}</Text>
           </>
-          :
+        ) : (
           <>
-            <Text>
-              보험사 : 
-            </Text>
-            <Text>
-              연락처 : 
-            </Text>
-            <Text>
-              가입일 : 
-            </Text>
-            <Text>
-              만기일 : 
-            </Text>
+            <Text>보험사 :</Text>
+            <Text>연락처 :</Text>
+            <Text>가입일 :</Text>
+            <Text>만기일 :</Text>
           </>
-        }
+        )}
       </BackContainer>
     </Container>
   );

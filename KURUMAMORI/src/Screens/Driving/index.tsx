@@ -75,44 +75,38 @@ interface Props {
 }
 
 const Driving = ({navigation}: Props) => {
-
   const {defaultInfo} = useContext<IDrivingData>(DrivingDataContext);
-  useEffect(() => {
-  },[]);
+  useEffect(() => {}, []);
 
   return (
     <Container>
-        {defaultInfo[3] == 1? (
-          <TextNew>
-            안전하게 달려볼까요 ~!
-          </TextNew>
-        ):(
-          <TextOld>
-            블루투스를 연결해 주세요
-          </TextOld>
-        )}
+      {defaultInfo[3] == 1 ? (
+        <TextNew>안전하게 달려볼까요 ~!</TextNew>
+      ) : (
+        <TextOld>블루투스를 연결해 주세요</TextOld>
+      )}
       <View>
         <LottieView
-          style={{flex:1, backgroundColor:'#EFEFEF'}}
+          style={{flex: 1, backgroundColor: '#EFEFEF'}}
           resizeMode={'contain'}
           source={require('~/Assets/Lottie2/main_car.json')}
           autoPlay={true}
           imageAssetsFolder={'images'}
         />
       </View>
-      <DeviceButtonContainer style={{borderColor: defaultInfo[3] == 1?'#000000':'#111111'}}>
+      <DeviceButtonContainer
+        style={{borderColor: defaultInfo[3] == 1 ? '#000000' : '#111111'}}>
         <Bt
           onPress={() => {
-            if(defaultInfo[3] != 1){
+            if (defaultInfo[3] != 1) {
               navigation.navigate('MainThirdStackNavi');
             } else {
             }
-          }}
-        >
-          {defaultInfo[3] == 1? (
+          }}>
+          {defaultInfo[3] == 1 ? (
             <IconButton
               style={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: '#FFFFFF',
               }}
               size="72"
               icon="bluetooth-connect"
@@ -124,7 +118,7 @@ const Driving = ({navigation}: Props) => {
           ) : (
             <IconButton
               style={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: '#FFFFFF',
               }}
               size="72"
               icon="bluetooth-off"
@@ -134,24 +128,23 @@ const Driving = ({navigation}: Props) => {
               }}
             />
           )}
-          <BtLabel>{defaultInfo[3] == 1?'페어링':'신호없음'}</BtLabel>
+          <BtLabel>{defaultInfo[3] == 1 ? '페어링' : '신호없음'}</BtLabel>
         </Bt>
       </DeviceButtonContainer>
-      <DrivingButtonContainer style={{borderColor: defaultInfo[4] == 1?'#000000':'#000000'}}>
+      <DrivingButtonContainer
+        style={{borderColor: defaultInfo[4] == 1 ? '#000000' : '#000000'}}>
         <Bt
           onPress={() => {
-            if(defaultInfo[3] == 1){
+            if (defaultInfo[3] == 1) {
               navigation.navigate('MapTabNavi');
-            }
-            else{
+            } else {
               navigation.navigate('MainThirdStackNavi');
             }
-          }}
-        >
-          {defaultInfo[3] == 1? (
+          }}>
+          {defaultInfo[3] == 1 ? (
             <IconButton
               style={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: '#FFFFFF',
               }}
               size="72"
               icon="car"
@@ -163,22 +156,21 @@ const Driving = ({navigation}: Props) => {
           ) : (
             <IconButton
               style={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: '#FFFFFF',
               }}
               size="72"
               icon="car"
               color="#000000"
               onPress={() => {
-                if(defaultInfo[3] == 1){
+                if (defaultInfo[3] == 1) {
                   navigation.navigate('MapTabNavi');
-                }
-                else{
+                } else {
                   navigation.navigate('MainThirdStackNavi');
                 }
               }}
             />
           )}
-          <BtLabel>{defaultInfo[4] == 1?'운전중':'운전하기'}</BtLabel>
+          <BtLabel>{defaultInfo[4] == 1 ? '운전중' : '운전하기'}</BtLabel>
         </Bt>
       </DrivingButtonContainer>
     </Container>

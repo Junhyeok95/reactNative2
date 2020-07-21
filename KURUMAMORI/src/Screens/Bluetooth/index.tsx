@@ -15,9 +15,8 @@ interface Props {
 }
 
 const Bluetooth = ({navigation}: Props) => {
-
   useEffect(() => {
-    console.log("--- --- Bluetooth");
+    console.log('--- --- Bluetooth');
   }, []);
 
   return (

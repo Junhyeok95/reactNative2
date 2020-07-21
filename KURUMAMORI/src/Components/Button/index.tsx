@@ -25,7 +25,7 @@ interface Props {
 const Button = ({label, style, color, onPress}: Props) => {
   return (
     <Container style={style} onPress={onPress}>
-      <Label style={{ color: color ? color:'#000000' }}>{label}</Label>
+      <Label style={{color: color ? color : '#000000'}}>{label}</Label>
     </Container>
   );
 };

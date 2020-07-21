@@ -23,12 +23,15 @@ interface Props {
   onPress?: () => void;
 }
 
-const Subtitle = ({ title, btnLabel, onPress }: Props) => {
-
+const Subtitle = ({title, btnLabel, onPress}: Props) => {
   return (
     <Container>
       <Text>{title}</Text>
-      <Button style={{flex:1, margin:4, padding:4}} label={btnLabel} onPress={onPress} />
+      <Button
+        style={{flex: 1, margin: 4, padding: 4}}
+        label={btnLabel}
+        onPress={onPress}
+      />
     </Container>
   );
 };

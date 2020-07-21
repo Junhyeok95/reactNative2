@@ -2,9 +2,14 @@ import React, {useContext, useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {
-  FlatList, Platform, Alert,
-  PermissionsAndroid, AppState,
-  NativeModules, NativeEventEmitter,} from 'react-native';
+  FlatList,
+  Platform,
+  Alert,
+  PermissionsAndroid,
+  AppState,
+  NativeModules,
+  NativeEventEmitter,
+} from 'react-native';
 import Toggle from '~/Screens/Bluetooth/List/Toggle';
 import Subtitle from '~/Screens/Bluetooth/List/Subtitle';
 import BleManager from 'react-native-ble-manager';
@@ -57,17 +62,16 @@ interface Props {
 }
 
 const List = ({navigation}: Props) => {
-
   // 안드로이드 블루투스 요청
   const androidPermissionBluetooth = () => {
     if (Platform.OS === 'android') {
       BleManager.enableBluetooth() // Android only
-      .then(() => {
-        console.log('android Bluetooth check OK');
-      })
-      .catch((error) => {
-        Alert.alert('You need to enable bluetooth to use this app.');
-      });
+        .then(() => {
+          console.log('android Bluetooth check OK');
+        })
+        .catch((error) => {
+          Alert.alert('You need to enable bluetooth to use this app.');
+        });
     } else if (Platform.OS === 'ios') {
       // Alert.alert('PermissionBluetooth, Android only');
     }
@@ -76,15 +80,21 @@ const List = ({navigation}: Props) => {
   // 안드로이드 위치권한 요청
   const androidPermissionLocation = () => {
     if (Platform.OS === 'android' && Platform.Version >= 23) {
-      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => { // check
+      PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+      ).then((result) => {
+        // check
         if (result) {
-          console.log("android LOCATION check OK");
+          console.log('android LOCATION check OK');
         } else {
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => { // request
+          PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+          ).then((result) => {
+            // request
             if (result) {
-              console.log("android LOCATION request Ok");
+              console.log('android LOCATION request Ok');
             } else {
-              console.log("android LOCATION reject");
+              console.log('android LOCATION reject');
             }
           });
         }
@@ -98,11 +108,13 @@ const List = ({navigation}: Props) => {
 
   const [isEnabled, setIsEnabled] = useState<boolean>(false); // blueToothEnable
   const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-    setPeripherals( new Map() );
+    setIsEnabled((previousState) => !previousState);
+    setPeripherals(new Map());
   };
 
-  const {defaultInfo, setDefaultInfo, linkInfo, setLinkInfo} = useContext<IDrivingData>(DrivingDataContext);
+  const {defaultInfo, setDefaultInfo, linkInfo, setLinkInfo} = useContext<
+    IDrivingData
+  >(DrivingDataContext);
   // const {}  = useContext<IDrivingData>(DrivingDataContext);
 
   const [scanning, setScanning] = useState<boolean>(false);
@@ -116,14 +128,14 @@ const List = ({navigation}: Props) => {
   const [yaw, setYaw] = useState<number>(0); // 도리도리
 
   const RASP_SERVICE_UUID = '13333333-3333-3333-3333-000000000000';
-  const RASP_NOTIFY_CHARACTERISTIC_UUID = '13333333-3333-3333-3333-000000000001';
+  const RASP_NOTIFY_CHARACTERISTIC_UUID =
+    '13333333-3333-3333-3333-000000000001';
   const RASP_READ_CHARACTERISTIC_UUID = '13333333-3333-3333-3333-000000000002';
   const RASP_WRITE_CHARACTERISTIC_UUID = '13333333-3333-3333-3333-000000000003';
 
-  const [restring, setRestring] = useState<string>("x");
+  const [restring, setRestring] = useState<string>('x');
 
-  useEffect(()=>{
-
+  useEffect(() => {
     // // TEST -----
     //       let myInterval = setInterval(() => {
     //         let now = new Date();
@@ -132,7 +144,7 @@ const List = ({navigation}: Props) => {
     //           nowarr[2] = now.getSeconds();
     //           setLinkInfo(nowarr); // 저장
     //       }, 1000);
-          
+
     //       console.log('> List useEffect');
     //       // let _defaultInfo = [...defaultInfo];
     //       // let _defaultInfo = defaultInfo;
@@ -149,19 +161,31 @@ const List = ({navigation}: Props) => {
       androidPermissionBluetooth();
       androidPermissionLocation();
     }
-    AppState.addEventListener("change", HandleAppStateChange);
+    AppState.addEventListener('change', HandleAppStateChange);
     BleManager.start({showAlert: false}); // StartOptions 가능, showAlert->ios
-    const HandlerDiscoverPeripheral = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', HandleDiscoverPeripheral );
-    const HandlerStop = bleManagerEmitter.addListener('BleManagerStopScan', HandleStopScan );
-    const HandlerDisconnectedPeripheral = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', HandleDisconnectedPeripheral );
-    const HandlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', HandleUpdateValueForCharacteristic );
+    const HandlerDiscoverPeripheral = bleManagerEmitter.addListener(
+      'BleManagerDiscoverPeripheral',
+      HandleDiscoverPeripheral,
+    );
+    const HandlerStop = bleManagerEmitter.addListener(
+      'BleManagerStopScan',
+      HandleStopScan,
+    );
+    const HandlerDisconnectedPeripheral = bleManagerEmitter.addListener(
+      'BleManagerDisconnectPeripheral',
+      HandleDisconnectedPeripheral,
+    );
+    const HandlerUpdate = bleManagerEmitter.addListener(
+      'BleManagerDidUpdateValueForCharacteristic',
+      HandleUpdateValueForCharacteristic,
+    );
 
-    return() => {
+    return () => {
       HandlerDiscoverPeripheral.remove();
       HandlerStop.remove();
       HandlerDisconnectedPeripheral.remove();
       HandlerUpdate.remove();
-      AppState.removeEventListener("change", HandleAppStateChange);
+      AppState.removeEventListener('change', HandleAppStateChange);
 
       // // TEST -----
       //         console.log("--- --- MapData return");
@@ -173,25 +197,28 @@ const List = ({navigation}: Props) => {
   ////////// ////////// ////////// ////////// //////////
 
   // 0. 화면 전환
-  const HandleAppStateChange = (nextAppState:any) => {
+  const HandleAppStateChange = (nextAppState: any) => {
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
       console.log('> App has come to the foreground!');
       // point
       BleManager.getConnectedPeripherals([]).then((peripheralsArray) => {
-        console.log('!!! !!! Connected peripherals: ' + peripheralsArray.length);
+        console.log(
+          '!!! !!! Connected peripherals: ' + peripheralsArray.length,
+        );
       });
     }
     setAppState(nextAppState);
   };
   // 1. Emitter addListener 장치 검색
-  const HandleDiscoverPeripheral = (peripheral:any) => {
+  const HandleDiscoverPeripheral = (peripheral: any) => {
     console.log('> 장치 검색 성공 : ', peripheral.id);
     let _peripherals = peripherals;
-    if (!peripheral.name) { // 이름이 없을 경우
+    if (!peripheral.name) {
+      // 이름이 없을 경우
       peripheral.name = 'NO NAME';
     }
     _peripherals.set(peripheral.id, peripheral);
-    setPeripherals( new Map(_peripherals) );
+    setPeripherals(new Map(_peripherals));
   };
   // 2. Emitter addListener 장치 검색 취소 BleManagerStopScan 중지되면 실행
   const HandleStopScan = () => {
@@ -199,7 +226,7 @@ const List = ({navigation}: Props) => {
     setScanning(false);
   };
   // 3. Emitter addListener 연결 취소 됬을 경우
-  const HandleDisconnectedPeripheral = (data:any) => {
+  const HandleDisconnectedPeripheral = (data: any) => {
     setRaspId('');
     console.log('> disconnect 2');
     console.log('> 연결 취소 : ' + data.peripheral);
@@ -212,15 +239,14 @@ const List = ({navigation}: Props) => {
     }
   };
   // 4. Emitter addListener 변경
-  const HandleUpdateValueForCharacteristic = (data:any) => {
+  const HandleUpdateValueForCharacteristic = (data: any) => {
     try {
-      if (data){
-
+      if (data) {
         let str = JSON.stringify(data.value);
         setRestring(str);
         let arr = [...linkInfo];
-        for(let i = 0 ; i < arr.length ; i++){
-          arr[i] = data.value[i]
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = data.value[i];
         }
         setLinkInfo(arr); // 저장
         // console.log(arr);
@@ -237,13 +263,11 @@ const List = ({navigation}: Props) => {
           9 -> 카운트
         */
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   const _Scan = () => {
-    if (isEnabled){
+    if (isEnabled) {
       if (!scanning) {
         // 기본 장치 값 초기화
         // setPeripherals( new Map() );
@@ -253,18 +277,25 @@ const List = ({navigation}: Props) => {
         });
       }
     } else {
-      Alert.alert("블루투스를 켜주세요");
+      Alert.alert('블루투스를 켜주세요');
     }
-  }
+  };
 
-  const _connectBtn = (peripheral:any) => {
-    if (peripheral){
-      if (peripheral.connected){
-        BleManager.stopNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
-          console.log('> stopNotification ' + peripheral.id);
-        }).catch((error) => { // stopNotification
-          console.log('> stopNotification error', error);
-        });
+  const _connectBtn = (peripheral: any) => {
+    if (peripheral) {
+      if (peripheral.connected) {
+        BleManager.stopNotification(
+          peripheral.id,
+          RASP_SERVICE_UUID,
+          RASP_NOTIFY_CHARACTERISTIC_UUID,
+        )
+          .then(() => {
+            console.log('> stopNotification ' + peripheral.id);
+          })
+          .catch((error) => {
+            // stopNotification
+            console.log('> stopNotification error', error);
+          });
         setRaspId('');
         setRestring('');
         setTimeout(() => {
@@ -286,49 +317,56 @@ const List = ({navigation}: Props) => {
         // }
 
         setTimeout(() => {
+          BleManager.connect(peripheral.id)
+            .then(() => {
+              let _peripherals = peripherals;
+              let p = peripherals.get(peripheral.id);
+              if (p) {
+                p.connected = true;
+                _peripherals.set(peripheral.id, p);
+                setPeripherals(new Map(_peripherals));
+              }
+              setRaspId(peripheral.id);
+              console.log('###### Connected to ' + peripheral.id);
 
-          BleManager.connect(peripheral.id).then(() => {
-            let _peripherals = peripherals;
-            let p = peripherals.get(peripheral.id);
-            if (p) {
-              p.connected = true;
-              _peripherals.set(peripheral.id, p);
-              setPeripherals(new Map(_peripherals));
-            }
-            setRaspId(peripheral.id);
-            console.log('###### Connected to ' + peripheral.id);
+              setTimeout(() => {
+                BleManager.retrieveServices(peripheral.id).then(
+                  (peripheralInfo) => {
+                    console.log('### retrieveServices');
+                    console.log(peripheralInfo);
+                    setTimeout(() => {
+                      // 2 setTimeout
+                      BleManager.startNotification(
+                        peripheral.id,
+                        RASP_SERVICE_UUID,
+                        RASP_NOTIFY_CHARACTERISTIC_UUID,
+                      )
+                        .then(() => {
+                          console.log(
+                            '### Started notification on ' + peripheral.id,
+                          );
 
-            setTimeout(() => {
-              BleManager.retrieveServices(peripheral.id).then((peripheralInfo) => {
-                console.log("### retrieveServices");
-                console.log(peripheralInfo);
-                setTimeout(() => { // 2 setTimeout
-                  BleManager.startNotification(peripheral.id, RASP_SERVICE_UUID, RASP_NOTIFY_CHARACTERISTIC_UUID).then(() => {
-                    console.log('### Started notification on ' + peripheral.id);
+                          let _defaultInfo = [...defaultInfo];
+                          _defaultInfo[3] = 1;
+                          setDefaultInfo(_defaultInfo);
 
-                      let _defaultInfo = [...defaultInfo];
-                      _defaultInfo[3] = 1;
-                      setDefaultInfo(_defaultInfo);
-
-                      setTimeout(() => {
-                        navigation.navigate('MainFirstStackNavi');
-                      }, 2000);
-
-                  }).catch((error) => { // startNotification
-                    console.log('Notification error', error);
-                  });
-                }, 1000); // 2 setTimeout
-                
-              });
-            }, 500);
-
-          }).catch((error) => {
-            console.log('> Connection error', error);
-          });
-
+                          setTimeout(() => {
+                            navigation.navigate('MainFirstStackNavi');
+                          }, 2000);
+                        })
+                        .catch((error) => {
+                          // startNotification
+                          console.log('Notification error', error);
+                        });
+                    }, 1000); // 2 setTimeout
+                  },
+                );
+              }, 500);
+            })
+            .catch((error) => {
+              console.log('> Connection error', error);
+            });
         }, 1000);
-
-
       }
     }
   };
@@ -336,51 +374,89 @@ const List = ({navigation}: Props) => {
   const renderEmpty = () => {
     return (
       <LottieView
-        style={{flex:1, backgroundColor:'#EFEFEF'}}
+        style={{flex: 1, backgroundColor: '#EFEFEF'}}
         resizeMode={'cover'}
         source={require('~/Assets/Lottie/blue2.json')}
         autoPlay
         imageAssetsFolder={'images'}
       />
     );
-  }
-  const renderItem = ({ item, index }:any) => {
+  };
+  const renderItem = ({item, index}: any) => {
     const color = item.connected ? '#0BF7' : '#F5FFFA';
     return (
-      <TouchableHighlight onPress={() => { _connectBtn(item) }}>
-        <RowView style={{paddingLeft:4, paddingRight:4, margin: 8, backgroundColor: color}}>
+      <TouchableHighlight
+        onPress={() => {
+          _connectBtn(item);
+        }}>
+        <RowView
+          style={{
+            paddingLeft: 4,
+            paddingRight: 4,
+            margin: 8,
+            backgroundColor: color,
+          }}>
           <Icon
-            style={{paddingLeft:32, paddingRight:16}}
+            style={{paddingLeft: 32, paddingRight: 16}}
             name="devices"
             color={'#888'}
             size={72}
           />
-          <View style={item.name=="KURUMAMORI" || item.name=="raspberrypi" ?{borderWidth:1, borderColor:"#00F"}:{}}>
-            <Text style={{fontSize: 16, textAlign: 'center', color: '#333333', padding: 4}}>{item.name=="KURUMAMORI" || item.name=="raspberrypi" ? "KURUMAMORI" : item.name}</Text>
-            <Text style={{fontSize: 12, textAlign: 'center', color: '#333333', padding: 2}}>{item.id}</Text>
+          <View
+            style={
+              item.name == 'KURUMAMORI' || item.name == 'raspberrypi'
+                ? {borderWidth: 1, borderColor: '#00F'}
+                : {}
+            }>
+            <Text
+              style={{
+                fontSize: 16,
+                textAlign: 'center',
+                color: '#333333',
+                padding: 4,
+              }}>
+              {item.name == 'KURUMAMORI' || item.name == 'raspberrypi'
+                ? 'KURUMAMORI'
+                : item.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                textAlign: 'center',
+                color: '#333333',
+                padding: 2,
+              }}>
+              {item.id}
+            </Text>
           </View>
         </RowView>
       </TouchableHighlight>
     );
-  }
+  };
 
   const list = Array.from(peripherals.values());
-  const btnScanTitle = '장치 검색 ('+(scanning?'ON':'OFF')+')';
+  const btnScanTitle = '장치 검색 (' + (scanning ? 'ON' : 'OFF') + ')';
 
   return (
     <Container>
       <Toggle onValueChange={toggleSwitch} value={isEnabled} />
-      <Subtitle title = {'Device List'} btnLabel={btnScanTitle} onPress={_Scan} />
-      {isEnabled && <FlatListContainer
-        keyExtractor={( item, index ):any => {
-          return `key-${index}`;
-        }}
-        data={list}
-        ListEmptyComponent={renderEmpty} // data 배열이 없을 경우 표시되는 컴포넌트
-        renderItem={renderItem}
-        contentContainerStyle={list.length === 0 && { flex: 1 }}
-      />}
-      <TestText>{restring ? restring.slice(restring.length-2, restring.length-1):""}</TestText>
+      <Subtitle title={'Device List'} btnLabel={btnScanTitle} onPress={_Scan} />
+      {isEnabled && (
+        <FlatListContainer
+          keyExtractor={(item, index): any => {
+            return `key-${index}`;
+          }}
+          data={list}
+          ListEmptyComponent={renderEmpty} // data 배열이 없을 경우 표시되는 컴포넌트
+          renderItem={renderItem}
+          contentContainerStyle={list.length === 0 && {flex: 1}}
+        />
+      )}
+      <TestText>
+        {restring
+          ? restring.slice(restring.length - 2, restring.length - 1)
+          : ''}
+      </TestText>
     </Container>
   );
 };

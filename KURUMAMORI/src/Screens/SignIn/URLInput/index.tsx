@@ -16,7 +16,7 @@ interface Props {
   hideURLInput: () => void;
 }
 
-const URLInput = ({ hideURLInput }: Props) => {
+const URLInput = ({hideURLInput}: Props) => {
   return (
     <Container behavior="padding">
       <Background onPress={hideURLInput} />
