@@ -19,9 +19,7 @@ interface IUserContext {
   login: (email: string, password: string) => void;
   login2: (email: string, password: string) => void;
   getUserInfo: () => void;
-  getUserInfo2: () => void;
   profileSearch: () => void;
   settingSearch: () => void;
   logout: () => void;
-  logout2: () => void;
 }

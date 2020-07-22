@@ -102,11 +102,8 @@ interface Props {
 
 const SignIn = ({navigation}: Props) => {
   const {URL, updateURL, login, login2} = useContext<IUserContext>(UserContext);
-  let loginNum = 0;
-
   const [inputEmail, setInputEamil] = useState('');
   const [inputPassword, setInputPassword] = useState('');
-
   const [showMaster, setShowMaster] = useState<boolean>(false);
   const [showInput, setShowInput] = useState<boolean>(false);
 

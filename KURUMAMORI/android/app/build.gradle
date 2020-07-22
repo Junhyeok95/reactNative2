@@ -135,6 +135,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true // KURUMAMORI plus
     }
     splits {
         abi {
@@ -189,6 +190,8 @@ android {
 }
 
 dependencies {
+  implementation 'com.android.support:multidex:1.0.3'// KURUMAMORI plus
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

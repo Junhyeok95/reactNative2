@@ -14,7 +14,7 @@ import SignIn from './SignIn';
 import Driving from './Driving';
 import Profile from './Profile';
 import Bluetooth from './Bluetooth';
-import Setting from './Setting';
+import Configure from './Configure';
 import MapData from './MapData';
 import MapMarker from './MapMarker';
 
@@ -171,8 +171,8 @@ const MainFourthStackNavi = ({navigation}: DrawerProp) => {
         ),
       }}>
       <Stack.Screen
-        name="Setting"
-        component={Setting}
+        name="Configure"
+        component={Configure}
         options={{
           headerTitle: 'クルマモリ9',
           headerBackTitleVisible: false,

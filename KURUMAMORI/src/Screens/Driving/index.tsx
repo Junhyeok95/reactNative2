@@ -89,7 +89,7 @@ const Driving = ({navigation}: Props) => {
         <LottieView
           style={{flex: 1, backgroundColor: '#EFEFEF'}}
           resizeMode={'contain'}
-          source={require('~/Assets/Lottie2/main_car.json')}
+          source={require('~/Assets/Lottie/main_car.json')}
           autoPlay={true}
           imageAssetsFolder={'images'}
         />

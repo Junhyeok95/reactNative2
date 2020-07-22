@@ -31,7 +31,7 @@ interface Props {
 }
 
 const Drawer = ({props}: Props) => {
-  const {userInfo2, logout, logout2} = useContext<IUserContext>(UserContext);
+  const {userInfo2, logout} = useContext<IUserContext>(UserContext);
   const [visible, setVisible] = useState(true);
 
   return (
@@ -74,7 +74,6 @@ const Drawer = ({props}: Props) => {
             onPress={() => {
               console.log('> Drawer logout');
               logout();
-              logout2();
             }}
           />
         </Footer>

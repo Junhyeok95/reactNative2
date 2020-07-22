@@ -376,7 +376,7 @@ const List = ({navigation}: Props) => {
       <LottieView
         style={{flex: 1, backgroundColor: '#EFEFEF'}}
         resizeMode={'cover'}
-        source={require('~/Assets/Lottie/blue2.json')}
+        source={require('~/Assets/Lottie/blue_lottie.json')}
         autoPlay
         imageAssetsFolder={'images'}
       />

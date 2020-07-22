@@ -12,11 +12,9 @@ const defaultContext: IUserContext = {
   login: (email: string, password: string) => {},
   login2: (email: string, password: string) => {},
   getUserInfo: () => {},
-  getUserInfo2: () => {},
   profileSearch: () => {},
   settingSearch: () => {},
   logout: () => {},
-  logout2: () => {},
 };
 
 const UserContext = createContext(defaultContext);
@@ -155,21 +153,6 @@ const UserContextProvider = ({children}: Props) => {
 
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
   const getUserInfo = (): void => {
-    // AsyncStorage.getItem('token')
-    //   .then(value => {
-    //     if (value) {
-    //       setUserInfo({
-    //         name: 'WDJ',
-    //         email: 'WDJ@YJU.AC.KR',
-    //         key: '-1'
-    //       });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     setUserInfo(undefined);
-    //   });
-  };
-  const getUserInfo2 = (): void => {
     AsyncStorage.getItem('login2')
       .then((value) => {
         if (value && typeof value === 'string') {
@@ -180,29 +163,26 @@ const UserContextProvider = ({children}: Props) => {
             key: userInfoAsyncStorage.id,
           });
         } else {
-          console.log('> getUserInfo2 else 발생');
+          console.log('> getUserInfo else 발생');
         }
       })
       .catch(() => {
-        console.log('> catch getUserInfo2 에러');
+        console.log('> catch getUserInfo 에러');
         setUserInfo2(undefined);
       });
   };
+
   // 사용 방법 -> const {} = useContext<IUserContext>(UserContext);
   const logout = (): void => {
-    // AsyncStorage.removeItem('token');
-    // setUserInfo2(undefined);
-    // setUserInfo(undefined);
-  };
-  const logout2 = (): void => {
     AsyncStorage.removeItem('login2');
     setUserInfo(undefined);
     setUserInfo2(undefined);
     setProfileSearchRes(undefined);
+    setSettingSearchRes(undefined);
   };
 
   useEffect(() => {
-    getUserInfo2();
+    getUserInfo();
     initURL();
   }, []);
 
@@ -218,11 +198,9 @@ const UserContextProvider = ({children}: Props) => {
         login,
         login2,
         getUserInfo,
-        getUserInfo2,
         profileSearch,
         settingSearch,
         logout,
-        logout2,
       }}>
       {children}
     </UserContext.Provider>

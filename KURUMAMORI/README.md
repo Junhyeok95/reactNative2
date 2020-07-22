@@ -24,6 +24,7 @@ npm i -S react-native-status-bar-height
 npm i -S react-interval
 npm i -S react-i18next i18next
 npm i -S react-native-tts
+npm i -S react-native-sound
 ```
 
 ## clean
@@ -61,12 +62,15 @@ react-native set-splash --path ./src/Assets/images/splash.png --resize cover --b
 cmd + shift + p -> format document // 정리
 ```
 
-### tip2
+### tip2 // Multidex (android/app/build.gradle)
 
 ```
-watchman watch-del-all
-rm -rf node_modules
-npm i
-npx pod-install
-rm -rf /tmp/metro-*
+android{
+  defaultConfig{
+    multiDexEnabled true // plus
+  }
+}
+dependencies{
+  implementation 'com.android.support:multidex:1.0.3'// plus
+}
 ```

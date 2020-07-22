@@ -1617,7 +1617,7 @@ const MapData = ({navigation}: DrawerProp) => {
               <LottieView
                 style={{backgroundColor: '#FFFFFF'}}
                 resizeMode={'contain'}
-                source={require('~/Assets/Lottie2/i119_count.json')}
+                source={require('~/Assets/Lottie/i119_count.json')}
                 autoPlay
                 imageAssetsFolder={'images'}
               />
@@ -1695,7 +1695,7 @@ const MapData = ({navigation}: DrawerProp) => {
               <LottieView
                 style={{backgroundColor: '#FFFFFF'}}
                 resizeMode={'contain'}
-                source={require('~/Assets/Lottie2/car_start.json')}
+                source={require('~/Assets/Lottie/car_start.json')}
                 autoPlay
                 imageAssetsFolder={'images'}
               />
@@ -1713,7 +1713,7 @@ const MapData = ({navigation}: DrawerProp) => {
               <LottieView
                 style={{backgroundColor: '#FFFFFF'}}
                 resizeMode={'contain'}
-                source={require('~/Assets/Lottie2/car_save.json')}
+                source={require('~/Assets/Lottie/car_save.json')}
                 autoPlay
                 imageAssetsFolder={'images'}
               />

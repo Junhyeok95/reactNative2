@@ -51,20 +51,20 @@ const TouchableOpacity = Styled.TouchableOpacity``;
 
 const BR: string = '\n';
 
-type NavigationProp = StackNavigationProp<MainFourthStackNavi, 'Setting'>;
+type NavigationProp = StackNavigationProp<MainFourthStackNavi, 'Configure'>;
 
 interface Props {
   navigation: NavigationProp;
 }
 
-const Setting = ({navigation}: Props) => {
+const Configure = ({navigation}: Props) => {
   const {userInfo2, settingSearchRes, settingSearch} = useContext<IUserContext>(
     UserContext,
   );
   const {drivingDelete} = useContext(DrivingDataContext);
 
   useEffect(() => {
-    console.log('--- --- Setting');
+    console.log('--- --- Configure');
     if (userInfo2) {
       if (userInfo2.key != -1 && userInfo2.key != undefined) {
         settingSearch();
@@ -118,7 +118,7 @@ const Setting = ({navigation}: Props) => {
         <LottieView
           style={{flex: 1, backgroundColor: '#EFEFEF'}}
           resizeMode={'contain'}
-          source={require('~/Assets/Lottie/dev1.json')}
+          source={require('~/Assets/Lottie/dev_lottie.json')}
           autoPlay
           imageAssetsFolder={'images'}
         />
@@ -127,4 +127,4 @@ const Setting = ({navigation}: Props) => {
   );
 };
 
-export default Setting;
+export default Configure;

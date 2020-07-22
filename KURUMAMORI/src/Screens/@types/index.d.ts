@@ -24,7 +24,7 @@ type MainThirdStackNavi = {
 };
 
 type MainFourthStackNavi = {
-  Setting: undefined;
+  Configure: undefined;
   MapStackNavi: undefined;
 };
 
