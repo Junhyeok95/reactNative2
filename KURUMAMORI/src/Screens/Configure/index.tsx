@@ -14,13 +14,14 @@ const Container = Styled.View`
 `;
 const BackContainer = Styled.View`
   width: 80%;
-  background-color: #FCFCFC;
+  background-color: #FFFFFF;
   margin-top: 8px;
   padding: 12px;
   border-width: 1px;
   margin-bottom: 16px;
   border-color: #AAAA;
   box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+  elevation: 50;
 `;
 const LabelContainer = Styled.View`
   flex-direction: row;
@@ -42,9 +43,6 @@ const View = Styled.View`
   flex: 1;
   width: 80%;
   margin-top: 16px;
-`;
-const ViewCenter = Styled.View`
-
 `;
 
 const TouchableOpacity = Styled.TouchableOpacity``;
