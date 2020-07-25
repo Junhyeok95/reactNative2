@@ -5,13 +5,25 @@ import {initReactI18next} from 'react-i18next';
 // (tip move them in a JSON file and import them)
 const resources = {
   en: {
-    translation: {},
+    translation: {
+      test: 'test',
+      hello: 'hello',
+      home: 'home',
+    },
   },
   kr: {
-    translation: {},
+    translation: {
+      test: '테스트',
+      hello: '안녕',
+      home: '집',
+    },
   },
   jp: {
-    translation: {},
+    translation: {
+      test: 'テスト',
+      hello: 'こんにちは',
+      home: '家',
+    },
   },
 };
 

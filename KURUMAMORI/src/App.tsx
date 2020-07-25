@@ -5,6 +5,7 @@ import {UserContextProvider} from '~/Contexts/User/index';
 import {DrivingDataProvider} from '~/Contexts/DrivingData';
 import Navigator from '~/Screens/Navigator';
 import SplashScreen from 'react-native-splash-screen';
+import '~/i18n';
 
 interface Props {}
 

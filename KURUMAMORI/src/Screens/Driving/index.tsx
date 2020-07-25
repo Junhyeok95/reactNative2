@@ -4,6 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 import {DrivingDataContext} from '~/Contexts/DrivingData';
 import IconButton from '~/Components/IconButton';
+import {useTranslation} from 'react-i18next';
 
 const Container = Styled.View`
   flex: 1;
@@ -76,6 +77,9 @@ interface Props {
 
 const Driving = ({navigation}: Props) => {
   const {defaultInfo} = useContext<IDrivingData>(DrivingDataContext);
+
+  const {t} = useTranslation();
+
   useEffect(() => {}, []);
 
   return (
@@ -85,6 +89,7 @@ const Driving = ({navigation}: Props) => {
       ) : (
         <TextOld>블루투스를 연결해 주세요</TextOld>
       )}
+      <TextNew>{t('hello')}</TextNew>
       <View>
         <LottieView
           style={{flex: 1, backgroundColor: '#EFEFEF'}}
