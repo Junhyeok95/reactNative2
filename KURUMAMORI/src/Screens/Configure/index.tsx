@@ -12,17 +12,37 @@ const Container = Styled.View`
   padding-top: 24px;
   padding-bottom: 24px;
 `;
+const Container2 = Styled.View`
+  width: 90%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  margin-bottom: 6px;
+`;
+
 const BackContainer = Styled.View`
-  width: 80%;
+  width: 90%;
   background-color: #FFFFFF;
-  margin-top: 8px;
   padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
   border-width: 1px;
-  margin-bottom: 16px;
   border-color: #AAAA;
   box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
   elevation: 50;
 `;
+const BackContainer2 = Styled.View`
+  width: 49%;
+  height: 100%;
+  background-color: #FFFFFF;
+  padding: 12px;
+  border-width: 1px;
+  border-color: #AAAA;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+  elevation: 50;
+`;
+
 const LabelContainer = Styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -31,21 +51,33 @@ const LabelContainer = Styled.View`
 `;
 const Label = Styled.Text`
   color: #000000;
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: bold;
 `;
 const Text = Styled.Text`
-  color: #555;
   font-size: 16px;
   padding-left: 8px;
   padding-right: 8px;
+`;
+const TextContainer = Styled.View`
 `;
 const View = Styled.View`
   flex: 1;
   width: 80%;
   margin-top: 16px;
 `;
-
+const TouchText = Styled.Text`
+  border-width: 1px;
+  margin-top: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+`;
 const TouchableOpacity = Styled.TouchableOpacity``;
+const TextTouchableOpacity = Styled.TouchableOpacity`
+  align-items: center;
+`;
 
 const BR: string = '\n';
 
@@ -92,26 +124,34 @@ const Configure = ({navigation}: Props) => {
         )}
       </BackContainer>
       <BackContainer>
+        <LabelContainer>
+          <Label>이용약관</Label>
+        </LabelContainer>
         <TouchableOpacity onPress={() => drivingDelete()}>
-          <LabelContainer>
-            <Label>이용약관</Label>
-          </LabelContainer>
-          <Text>본 약관은 쿠루마모리가 제공하는</Text>
-          <Text>모든 서비스의 이용조건 및 절차,</Text>
-          <Text>이용자와 당 사이트의 권리, 의무,</Text>
-          <Text>책임사항과 기타 필요한 사항을</Text>
-          <Text>규정함을 목적으로 합니다.</Text>
+          <TextContainer>
+            <Text>본 약관은 쿠루마모리가 제공하는 모든 서비스의 </Text>
+            <Text>이용조건 및 절차, 이용자와 당 사이트의 권리,</Text>
+            <Text>의무, 책임사항과 기타 필요한 사항을 규정함을 </Text>
+            <Text>목적으로 합니다.</Text>
+          </TextContainer>
         </TouchableOpacity>
       </BackContainer>
-      <BackContainer>
-        <LabelContainer>
+      <Container2>
+        <BackContainer2>
           <Label>버전 정보</Label>
-        </LabelContainer>
-        <Text>
-          현재버전 : 1. 0. 2{BR}
-          최신버전 : 1. 0. 2
-        </Text>
-      </BackContainer>
+          <Text>
+            현재버전 : 1. 0. 2{BR}
+            최신버전 : 1. 0. 2
+          </Text>
+        </BackContainer2>
+        <BackContainer2>
+          <Label>언어 설정</Label>
+          <Text>현재언어 : {}</Text>
+          <TextTouchableOpacity>
+            <TouchText>변경하기</TouchText>
+          </TextTouchableOpacity>
+        </BackContainer2>
+      </Container2>
       <View>
         <LottieView
           style={{flex: 1, backgroundColor: '#EFEFEF'}}

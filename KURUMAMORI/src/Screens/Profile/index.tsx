@@ -11,12 +11,12 @@ const Container = Styled.View`
   padding-bottom: 24px;
 `;
 const BackContainer = Styled.View`
-  width: 80%;
+  width: 90%;
   background-color: #FFFFFF;
-  margin-top: 8px;
+  margin-top: 6px;
   padding: 12px;
   border-width: 1px;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   border-color: #AAAA;
   box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
   elevation: 30;
@@ -28,14 +28,14 @@ const LabelContainer = Styled.View`
   margin-bottom: 8px;
 `;
 const Label = Styled.Text`
-  color: #000;
-  font-size: 24px;
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
 `;
 const Text = Styled.Text`
-  color: #555;
   font-size: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 type NavigationProp = StackNavigationProp<MainSecondStackNavi, 'Profile'>;

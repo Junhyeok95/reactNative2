@@ -30,7 +30,7 @@ const Bluetooth = ({navigation}: Props) => {
 
   return (
     <Container>
-      <Text>{t('hello')}</Text>
+      {/* <Text>{t('hello')}</Text> */}
       <List navigation={navigation} />
     </Container>
   );
