@@ -67,7 +67,8 @@ const View = Styled.View`
   margin-top: 16px;
 `;
 const TouchText = Styled.Text`
-  border-width: 1px;
+  border-width: 3px;
+  border-color: blue;
   margin-top: 4px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -88,9 +89,13 @@ interface Props {
 }
 
 const Configure = ({navigation}: Props) => {
-  const {userInfo2, settingSearchRes, settingSearch} = useContext<IUserContext>(
-    UserContext,
-  );
+  const {
+    userLanguage,
+    updateUserLanguage,
+    userInfo2,
+    settingSearchRes,
+    settingSearch,
+  } = useContext<IUserContext>(UserContext);
   const {drivingDelete} = useContext(DrivingDataContext);
 
   useEffect(() => {
@@ -146,8 +151,20 @@ const Configure = ({navigation}: Props) => {
         </BackContainer2>
         <BackContainer2>
           <Label>언어 설정</Label>
-          <Text>현재언어 : {}</Text>
-          <TextTouchableOpacity>
+          <Text>현재언어 : {userLanguage}</Text>
+          <TextTouchableOpacity
+            onPress={() => {
+              console.log('언어변경');
+              if (userLanguage == 'en') {
+                updateUserLanguage('kr');
+              }
+              if (userLanguage == 'kr') {
+                updateUserLanguage('jp');
+              }
+              if (userLanguage == 'jp') {
+                updateUserLanguage('en');
+              }
+            }}>
             <TouchText>변경하기</TouchText>
           </TextTouchableOpacity>
         </BackContainer2>

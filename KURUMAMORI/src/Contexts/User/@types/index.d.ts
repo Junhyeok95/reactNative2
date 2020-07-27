@@ -22,4 +22,6 @@ interface IUserContext {
   profileSearch: () => void;
   settingSearch: () => void;
   logout: () => void;
+  userLanguage: string | undefined;
+  updateUserLanguage: (language: string) => void;
 }

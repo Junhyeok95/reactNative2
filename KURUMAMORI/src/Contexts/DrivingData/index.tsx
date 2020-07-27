@@ -120,7 +120,7 @@ const DrivingDataProvider = ({cache, children}: Props) => {
       setDrivingSaveDataArr(cachedData);
       return;
     } else {
-      console.log('get Cache Data List x');
+      // console.log('get Cache Data List x');
       return;
     }
   };

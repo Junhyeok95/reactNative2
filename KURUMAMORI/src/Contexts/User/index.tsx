@@ -1,6 +1,7 @@
 import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Alert} from 'react-native';
+import {useTranslation, initReactI18next} from 'react-i18next';
 
 const defaultContext: IUserContext = {
   URL: undefined,
@@ -15,6 +16,8 @@ const defaultContext: IUserContext = {
   profileSearch: () => {},
   settingSearch: () => {},
   logout: () => {},
+  userLanguage: undefined,
+  updateUserLanguage: (language: string) => {},
 };
 
 const UserContext = createContext(defaultContext);
@@ -37,6 +40,35 @@ const UserContextProvider = ({children}: Props) => {
         setURL(myURL);
       } else if (myURL === null) {
         setURL('http://btrya23.iptime.org:8000');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const {t, i18n} = useTranslation();
+  const [userLanguage, setUserLanguage] = useState<string>();
+  const updateUserLanguage = (language: string): void => {
+    try {
+      i18n
+        .use(initReactI18next) // passes i18n down to react-i18next
+        .init({
+          lng: language, // 파라미터
+        });
+    } catch (error) {
+      console.log('>>>', error);
+    }
+    setUserLanguage(language);
+    AsyncStorage.setItem('saveUserLanguage', language);
+    console.log('> updateUserLanguage : ', language);
+  };
+  const initUserLanguage = async () => {
+    try {
+      const myUserLanguage = await AsyncStorage.getItem('saveUserLanguage');
+      if (myUserLanguage !== null) {
+        setUserLanguage(myUserLanguage);
+      } else if (myUserLanguage === null) {
+        setUserLanguage('kr');
       }
     } catch (e) {
       console.log(e);
@@ -179,11 +211,13 @@ const UserContextProvider = ({children}: Props) => {
     setUserInfo2(undefined);
     setProfileSearchRes(undefined);
     setSettingSearchRes(undefined);
+    updateUserLanguage('kr');
   };
 
   useEffect(() => {
     getUserInfo();
     initURL();
+    initUserLanguage();
   }, []);
 
   return (
@@ -191,6 +225,8 @@ const UserContextProvider = ({children}: Props) => {
       value={{
         URL,
         updateURL,
+        userLanguage,
+        updateUserLanguage,
         userInfo,
         userInfo2,
         profileSearchRes,
