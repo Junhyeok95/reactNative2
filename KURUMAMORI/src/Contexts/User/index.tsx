@@ -211,7 +211,7 @@ const UserContextProvider = ({children}: Props) => {
     setUserInfo2(undefined);
     setProfileSearchRes(undefined);
     setSettingSearchRes(undefined);
-    updateUserLanguage('kr');
+    // updateUserLanguage('kr');
   };
 
   useEffect(() => {

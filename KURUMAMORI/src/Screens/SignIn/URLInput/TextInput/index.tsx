@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import Styled from 'styled-components/native';
 import {UserContext} from '~/Contexts/User/index';
+import {useTranslation} from 'react-i18next';
 
 const Input = Styled.TextInput`
   background-color: #FFF;
@@ -17,12 +18,13 @@ interface Props {
 const TextInput = ({hideURLInput}: Props) => {
   const BR: string = '\n';
   const {updateURL} = useContext<IUserContext>(UserContext);
+  const {t} = useTranslation();
   return (
     <Input
       autoFocus={true}
       autoCapitalize="none"
       autoCorrect={false}
-      placeholder={'새로운 URL 입력  (예시) --> http://localhost:8000'}
+      placeholder={t('newURL')}
       returnKeyType="done"
       placeholderTextColor="#00F"
       onSubmitEditing={({nativeEvent}) => {
