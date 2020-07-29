@@ -60,6 +60,7 @@ const Bt = Styled.TouchableOpacity`
 const BtLabel = Styled.Text`
   font-size: 20px;
   font-weight: 900;
+  text-align: center;
 `;
 
 const TText = Styled.Text`
@@ -85,11 +86,10 @@ const Driving = ({navigation}: Props) => {
   return (
     <Container>
       {defaultInfo[3] == 1 ? (
-        <TextNew>안전하게 달려볼까요 ~!</TextNew>
+        <TextNew>{t('pairingOK')}</TextNew>
       ) : (
-        <TextOld>블루투스를 연결해 주세요</TextOld>
+        <TextOld>{t('pairingPlease')}</TextOld>
       )}
-      <TextNew>{t('hello')}</TextNew>
       <View>
         <LottieView
           style={{flex: 1, backgroundColor: '#EFEFEF'}}
@@ -133,7 +133,9 @@ const Driving = ({navigation}: Props) => {
               }}
             />
           )}
-          <BtLabel>{defaultInfo[3] == 1 ? '페어링' : '신호없음'}</BtLabel>
+          <BtLabel>
+            {defaultInfo[3] == 1 ? t('lefticon') : t('leftOKicon')}
+          </BtLabel>
         </Bt>
       </DeviceButtonContainer>
       <DrivingButtonContainer
@@ -175,7 +177,13 @@ const Driving = ({navigation}: Props) => {
               }}
             />
           )}
-          <BtLabel>{defaultInfo[4] == 1 ? '운전중' : '운전하기'}</BtLabel>
+          <BtLabel>
+            {defaultInfo[4] == 1
+              ? t('rightOKingicon')
+              : defaultInfo[3] == 1
+              ? t('rightOKicon')
+              : t('righticon')}
+          </BtLabel>
         </Bt>
       </DrivingButtonContainer>
     </Container>

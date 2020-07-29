@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/drawer';
 import {UserContext} from '~/Contexts/User/index';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {useTranslation} from 'react-i18next';
 
 const TouchableOpacity = Styled.TouchableOpacity``;
 const Header = Styled.View`
@@ -25,6 +26,8 @@ const Footer = Styled.View`
   border-top-width: 1px;
   border-color: #D3D3D3;
 `;
+const Middle = Styled.View`
+`;
 
 interface Props {
   props: DrawerContentComponentProps<DrawerContentOptions>;
@@ -33,6 +36,7 @@ interface Props {
 const Drawer = ({props}: Props) => {
   const {userInfo2, logout} = useContext<IUserContext>(UserContext);
   const [visible, setVisible] = useState(true);
+  const {t} = useTranslation();
 
   return (
     <>
@@ -45,7 +49,7 @@ const Drawer = ({props}: Props) => {
                 userInfo2.name != null &&
                 userInfo2.name != undefined
                   ? userInfo2.name + ''
-                  : '회원'}
+                  : ''}
               </Text>
             ) : (
               <Text>
@@ -70,7 +74,7 @@ const Drawer = ({props}: Props) => {
                 size={24}
               />
             )}
-            label="로그아웃"
+            label={t('singout')}
             onPress={() => {
               console.log('> Drawer logout');
               logout();

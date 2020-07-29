@@ -17,6 +17,7 @@ import Bluetooth from './Bluetooth';
 import Configure from './Configure';
 import MapData from './MapData';
 import MapMarker from './MapMarker';
+import {useTranslation} from 'react-i18next';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -183,6 +184,7 @@ const MainFourthStackNavi = ({navigation}: DrawerProp) => {
 };
 
 const MainTabNavi = () => {
+  const {t} = useTranslation();
   return (
     <Tab.Navigator
       initialRouteName="MainFirstStackNavi"
@@ -194,7 +196,7 @@ const MainTabNavi = () => {
         name="MainFirstStackNavi"
         component={MainFirstStackNavi}
         options={{
-          tabBarLabel: '운전',
+          tabBarLabel: t('driving'),
           tabBarIcon: 'car',
         }}
       />
@@ -202,7 +204,7 @@ const MainTabNavi = () => {
         name="MainThirdStackNavi"
         component={MainThirdStackNavi}
         options={{
-          tabBarLabel: '연결',
+          tabBarLabel: t('pairing'),
           tabBarIcon: 'bluetooth',
         }}
       />
@@ -210,7 +212,7 @@ const MainTabNavi = () => {
         name="MainSecondStackNavi"
         component={MainSecondStackNavi}
         options={{
-          tabBarLabel: '정보',
+          tabBarLabel: t('information'),
           tabBarIcon: 'account-outline',
         }}
       />
@@ -218,7 +220,7 @@ const MainTabNavi = () => {
         name="MainFourthStackNavi"
         component={MainFourthStackNavi}
         options={{
-          tabBarLabel: '설정',
+          tabBarLabel: t('configure'),
           tabBarIcon: 'cog-outline',
         }}
       />
@@ -227,6 +229,7 @@ const MainTabNavi = () => {
 };
 
 const MapTabNavi = () => {
+  const {t} = useTranslation();
   return (
     <Tab.Navigator
       initialRouteName={'MapData'}
@@ -238,7 +241,7 @@ const MapTabNavi = () => {
         name={'MapData'}
         component={MapData}
         options={{
-          tabBarLabel: '지도',
+          tabBarLabel: t('map'),
           tabBarIcon: 'map-outline',
         }}
       />
@@ -246,7 +249,7 @@ const MapTabNavi = () => {
         name={'MapMarker'}
         component={MapMarker}
         options={{
-          tabBarLabel: '통계',
+          tabBarLabel: t('statistics'),
           tabBarIcon: 'chart-bar',
         }}
       />
@@ -255,6 +258,7 @@ const MapTabNavi = () => {
 };
 
 const DrawNavi = () => {
+  const {t} = useTranslation();
   return (
     <Drawer.Navigator
       initialRouteName={'MainTabNavi'}
@@ -268,7 +272,7 @@ const DrawNavi = () => {
         name={'MainTabNavi'}
         component={MainTabNavi}
         options={{
-          title: '메인',
+          title: t('main'),
           drawerIcon: ({}) => <Icon name="home" color={'#888'} size={24} />,
         }}
       />
@@ -276,7 +280,7 @@ const DrawNavi = () => {
         name={'MapTabNavi'}
         component={MapTabNavi}
         options={{
-          title: '지도',
+          title: t('map'),
           drawerIcon: ({}) => (
             <Icon
               style={{margin: 0, padding: 0}}

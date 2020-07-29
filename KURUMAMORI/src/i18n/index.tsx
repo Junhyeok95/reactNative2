@@ -15,10 +15,29 @@ const resources = {
       ri9: 'リ9 ',
       email: 'email',
       password: 'password',
-      singin: 'Sign in',
-      singup: 'Sign up',
+      singin: 'Sign In',
+      singup: 'Sign Up',
       incorrectlyentered: 'incorrectly entered',
       // SignIn
+      // Navigator + Drawer
+      main: 'Main',
+      map: 'Map',
+      statistics: 'statistics',
+      driving: 'driving',
+      pairing: 'pairing',
+      information: 'Information',
+      configure: 'setting',
+      singout: 'Sing Out',
+      // Navigator + Drawer
+      // Driving
+      pairingPlease: 'Please connect the pairing',
+      pairingOK: 'Drive safely ~!',
+      lefticon: 'Pairing',
+      leftOKicon: 'No signal',
+      righticon: 'No signal',
+      rightOKicon: 'To go' + '\n' + 'driving',
+      rightOKingicon: 'Driving',
+      // Driving
       test: 'test',
       hello: 'hello',
       home: 'home',
@@ -36,6 +55,25 @@ const resources = {
       singup: '회원가입',
       incorrectlyentered: '잘못입력했습니다',
       // SignIn
+      // Navigator + Drawer
+      main: '메인',
+      map: '지도',
+      statistics: '통계',
+      driving: '운전',
+      pairing: '페어링',
+      information: '정보',
+      configure: '설정',
+      singout: '로그아웃',
+      // Navigator + Drawer
+      // Driving
+      pairingPlease: '페어링을 연결하십시오',
+      pairingOK: '안전운전 하세요 ~!',
+      lefticon: '페어링',
+      leftOKicon: '신호없음',
+      righticon: '신호없음',
+      rightOKicon: '운전하기',
+      rightOKingicon: '운전중',
+      // Driving
       test: '테스트',
       hello: '안녕',
       home: '집',
@@ -52,7 +90,27 @@ const resources = {
       singin: 'ログイン',
       singup: '新規登録',
       incorrectlyentered: '入力ミスです',
-      // SignIntest: 'テスト',
+      // SignIn
+      // Navigator + Drawer
+      main: 'メーン',
+      map: '地図',
+      statistics: '統計',
+      driving: '運転',
+      pairing: 'ペアリング',
+      information: '情報',
+      configure: '設定',
+      singout: 'ログアウト',
+      // Navigator + Drawer
+      // Driving
+      pairingPlease: 'ペアリングをつなげてください',
+      pairingOK: '安全運転してください ~!',
+      lefticon: 'ペアリング',
+      leftOKicon: '信号なし',
+      righticon: '信号なし',
+      rightOKicon: '運転する',
+      rightOKingicon: '運転中',
+      // Driving
+      test: 'テスト',
       hello: 'こんにちは',
       home: '家',
     },
