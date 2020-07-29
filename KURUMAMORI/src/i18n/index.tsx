@@ -38,6 +38,14 @@ const resources = {
       rightOKicon: 'To go' + '\n' + 'driving',
       rightOKingicon: 'Driving',
       // Driving
+      // Bluetooth
+      bluetoothONalert: 'Please turn on Bluetooth',
+      bluetooth: 'Bluetooth',
+      list: 'Peripheral Device List',
+      scan: 'Scan',
+      // Bluetooth
+      // Profile
+      // Profile
       test: 'test',
       hello: 'hello',
       home: 'home',
@@ -74,6 +82,12 @@ const resources = {
       rightOKicon: '운전하기',
       rightOKingicon: '운전중',
       // Driving
+      // Bluetooth
+      bluetoothONalert: '블루투스를 켜 주세요',
+      bluetooth: '블루투스',
+      list: '주변 장치 목록',
+      scan: '검색',
+      // Bluetooth
       test: '테스트',
       hello: '안녕',
       home: '집',
@@ -110,6 +124,12 @@ const resources = {
       rightOKicon: '運転する',
       rightOKingicon: '運転中',
       // Driving
+      // Bluetooth
+      bluetoothONalert: 'ブルートゥースをつけてください',
+      bluetooth: 'ブルートゥース',
+      list: '周辺装置リスト',
+      scan: '検索',
+      // Bluetooth
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',

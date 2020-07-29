@@ -16,6 +16,7 @@ import BleManager from 'react-native-ble-manager';
 import {DrivingDataContext} from '~/Contexts/DrivingData';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LottieView from 'lottie-react-native';
+import {useTranslation} from 'react-i18next';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -62,6 +63,8 @@ interface Props {
 }
 
 const List = ({navigation}: Props) => {
+  const {t} = useTranslation();
+
   // 안드로이드 블루투스 요청
   const androidPermissionBluetooth = () => {
     if (Platform.OS === 'android') {
@@ -277,7 +280,7 @@ const List = ({navigation}: Props) => {
         });
       }
     } else {
-      Alert.alert('블루투스를 켜주세요');
+      Alert.alert(t('bluetoothONalert'));
     }
   };
 
@@ -435,12 +438,12 @@ const List = ({navigation}: Props) => {
   };
 
   const list = Array.from(peripherals.values());
-  const btnScanTitle = '장치 검색 (' + (scanning ? 'ON' : 'OFF') + ')';
+  const btnScanTitle = t('scan') + ' (' + (scanning ? 'ON' : 'OFF') + ')';
 
   return (
     <Container>
       <Toggle onValueChange={toggleSwitch} value={isEnabled} />
-      <Subtitle title={'Device List'} btnLabel={btnScanTitle} onPress={_Scan} />
+      <Subtitle title={t('list')} btnLabel={btnScanTitle} onPress={_Scan} />
       {isEnabled && (
         <FlatListContainer
           keyExtractor={(item, index): any => {

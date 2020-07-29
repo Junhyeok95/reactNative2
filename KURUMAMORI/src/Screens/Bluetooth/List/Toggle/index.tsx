@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import Styled from 'styled-components/native';
 import {DrivingDataContext} from '~/Contexts/DrivingData';
+import {useTranslation} from 'react-i18next';
 
 const Container = Styled.View`
   flex-direction: row;
@@ -23,9 +24,7 @@ interface Props {
 }
 
 const Toggle = ({onValueChange, value}: Props) => {
-  // const [isEnabled, setIsEnabled] = useState(true);
-  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  // const state = ['OFF', 'ON'];
+  const {t} = useTranslation();
 
   const {defaultInfo, setDefaultInfo} = useContext<IDrivingData>(
     DrivingDataContext,
@@ -44,10 +43,7 @@ const Toggle = ({onValueChange, value}: Props) => {
           }
           setDefaultInfo(_defaultInfo);
         }}>
-        <Text>
-          Bluetooth
-          {/* {isEnabled ? state[1] : state[0]} */}
-        </Text>
+        <Text>{t('bluetooth')}</Text>
       </TouchableOpacity>
       <Switch onValueChange={onValueChange} value={value} />
     </Container>
