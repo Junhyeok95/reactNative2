@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {UserContext} from '~/Contexts/User/index';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 
 const Container = Styled.View`
   flex: 1;
@@ -45,6 +46,7 @@ interface Props {
 }
 
 const Profile = ({navigation}: Props) => {
+  const {t} = useTranslation();
   const {userInfo2, profileSearchRes, profileSearch} = useContext<IUserContext>(
     UserContext,
   );
@@ -64,30 +66,30 @@ const Profile = ({navigation}: Props) => {
     <Container>
       <BackContainer>
         <LabelContainer>
-          <Label>회원 정보</Label>
+          <Label>{t('memberinformation')}</Label>
         </LabelContainer>
         {profileSearchRes ? (
           <>
             <Text>
-              이름 :{' '}
+              {t('membername')} :{' '}
               {profileSearchRes[0].name
                 ? profileSearchRes[0].name.toString()
                 : ''}
             </Text>
             <Text>
-              성별 :{' '}
+              {t('membergender')} :{' '}
               {profileSearchRes[0].gender
                 ? profileSearchRes[0].gender.toString()
                 : ''}
             </Text>
             <Text>
-              생일 :{' '}
+              {t('memberbirthday')} :{' '}
               {profileSearchRes[0].birth
                 ? profileSearchRes[0].birth.toString()
                 : ''}
             </Text>
             <Text>
-              연락처 :{' '}
+              {t('memberphone')} :{' '}
               {profileSearchRes[0].phone
                 ? profileSearchRes[0].phone.toString()
                 : ''}
@@ -95,61 +97,78 @@ const Profile = ({navigation}: Props) => {
           </>
         ) : (
           <>
-            <Text>이름 :</Text>
-            <Text>성별 :</Text>
-            <Text>생일 :</Text>
-            <Text>연락처 :</Text>
+            <Text>{t('membername')} :</Text>
+            <Text>{t('membergender')} :</Text>
+            <Text>{t('memberbirthday')} :</Text>
+            <Text>{t('memberphone')} :</Text>
           </>
         )}
       </BackContainer>
 
       <BackContainer>
         <LabelContainer>
-          <Label>비상연락망</Label>
+          <Label>{t('emergencycontactinformation')}</Label>
         </LabelContainer>
         <Text>
-          연락처 :{' '}
+          {t('emergencycontactphone')} :{' '}
           {profileSearchRes && profileSearchRes[1] ? profileSearchRes[1] : ''}
         </Text>
       </BackContainer>
 
       <BackContainer>
         <LabelContainer>
-          <Label>의료 정보</Label>
+          <Label>{t('medicalinformation')}</Label>
         </LabelContainer>
         {profileSearchRes && profileSearchRes[2] ? (
           <>
-            <Text>다니는 병원 : {profileSearchRes[2].hospital}</Text>
-            <Text>병력 : {profileSearchRes[2].sickness_name}</Text>
-            <Text>복용 약 : {profileSearchRes[2].medicine}</Text>
-            <Text>증상 : {profileSearchRes[2].symptom}</Text>
+            <Text>
+              {t('medicalhospital')} : {profileSearchRes[2].hospital}
+            </Text>
+            <Text>
+              {t('medicalhistory')} : {profileSearchRes[2].sickness_name}
+            </Text>
+            <Text>
+              {t('medication')} : {profileSearchRes[2].medicine}
+            </Text>
+            <Text>
+              {t('medicalsymptom')} : {profileSearchRes[2].symptom}
+            </Text>
           </>
         ) : (
           <>
-            <Text>다니는 병원 :</Text>
-            <Text>병력 :</Text>
-            <Text>복용 약 :</Text>
-            <Text>증상 :</Text>
+            <Text>{t('medicalhospital')} :</Text>
+            <Text>{t('medicalhistory')} :</Text>
+            <Text>{t('medication')} :</Text>
+            <Text>{t('medicalsymptom')} :</Text>
           </>
         )}
       </BackContainer>
       <BackContainer>
         <LabelContainer>
-          <Label>손해보험사</Label>
+          <Label>{t('propertyinsurancecompany')}</Label>
         </LabelContainer>
         {profileSearchRes && profileSearchRes[3] && profileSearchRes[4] ? (
           <>
-            <Text>보험사 : {profileSearchRes[3].insurance_name}</Text>
-            <Text>연락처 : {profileSearchRes[3].insurance_phone}</Text>
-            <Text>가입일 : {profileSearchRes[4].subscription_date}</Text>
-            <Text>만기일 : {profileSearchRes[4].expiration_date}</Text>
+            <Text>
+              {t('insurancecompany')} : {profileSearchRes[3].insurance_name}
+            </Text>
+            <Text>
+              {t('insurancecompanyphone')} :{' '}
+              {profileSearchRes[3].insurance_phone}
+            </Text>
+            <Text>
+              {t('subscriptiondate')} : {profileSearchRes[4].subscription_date}
+            </Text>
+            <Text>
+              {t('maturitydate')} : {profileSearchRes[4].expiration_date}
+            </Text>
           </>
         ) : (
           <>
-            <Text>보험사 :</Text>
-            <Text>연락처 :</Text>
-            <Text>가입일 :</Text>
-            <Text>만기일 :</Text>
+            <Text>{t('insurancecompany')} :</Text>
+            <Text>{t('insurancecompanyphone')} :</Text>
+            <Text>{t('subscriptiondate')} :</Text>
+            <Text>{t('maturitydate')} :</Text>
           </>
         )}
       </BackContainer>
