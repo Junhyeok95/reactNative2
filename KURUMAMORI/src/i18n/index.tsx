@@ -63,6 +63,20 @@ const resources = {
       subscriptiondate: 'Subscription Date',
       maturitydate: 'Maturity Date',
       // Profile
+      // Configure
+      deviceinformation: 'Device Information',
+      devicecode: 'Device Code',
+      purchasedate: 'Purchase Date',
+      termsofuse: 'Terms of Use',
+      termsofuselorem:
+        'The purpose of this Agreement is to prescribe the conditions and procedures for the use of all services provided by the head office, the rights, obligations, responsibilities, and other necessary matters of the users and the site.',
+      versioninformation: 'Version',
+      currentversion: 'Current',
+      latestversion: 'Latest',
+      languageinformation: 'Language',
+      currentlanguage: 'Current',
+      change: 'Change',
+      // Configure
       test: 'test',
       hello: 'hello',
       home: 'home',
@@ -124,6 +138,20 @@ const resources = {
       subscriptiondate: '가입일',
       maturitydate: '만기일',
       // Profile
+      // Configure
+      deviceinformation: '장치 정보',
+      devicecode: '장치 코드',
+      purchasedate: '구입 날짜',
+      termsofuse: '이용 약관',
+      termsofuselorem:
+        '본 약관은 쿠루마모리가 제공하는 모든 서비스의 이용조건 및 절차,이용자와 당 사이트의 권리,의무,책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.',
+      versioninformation: '버전 정보',
+      currentversion: '현재 버전',
+      latestversion: '최신 버전',
+      languageinformation: '언어 정보',
+      currentlanguage: '현재 언어',
+      change: '변경하기',
+      // Configure
       test: '테스트',
       hello: '안녕',
       home: '집',
@@ -185,6 +213,20 @@ const resources = {
       subscriptiondate: '加入日',
       maturitydate: '満期日',
       // Profile
+      // Configure
+      deviceinformation: '装置情報',
+      devicecode: '装置コード',
+      purchasedate: '購入日付',
+      termsofuse: '利用約款',
+      termsofuselorem:
+        '本約款は本社が提供するすべてのサービスの利用条件および手続き、利用者と当サイトの権利、義務、責任事項とその他必要事項を規定することを目的とします。',
+      versioninformation: 'バージョン情報',
+      currentversion: '現在',
+      latestversion: '最新',
+      languageinformation: '言語情報',
+      currentlanguage: '現在',
+      change: '変更する',
+      // Configure
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',

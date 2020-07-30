@@ -4,6 +4,7 @@ import {DrivingDataContext} from '~/Contexts/DrivingData';
 import {UserContext} from '~/Contexts/User/index';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
+import {useTranslation} from 'react-i18next';
 
 const Container = Styled.View`
   flex: 1;
@@ -66,20 +67,19 @@ const View = Styled.View`
   width: 80%;
   margin-top: 16px;
 `;
-const TouchText = Styled.Text`
-  border-width: 3px;
-  border-color: blue;
-  margin-top: 4px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-`;
 const TouchableOpacity = Styled.TouchableOpacity``;
-const TextTouchableOpacity = Styled.TouchableOpacity`
-  align-items: center;
-`;
 
+const TouchText = Styled.Text`
+  border-width: 2px;
+  border-color: blue;
+  padding: 2px 6px;
+`;
+const TextTouchableOpacity = Styled.TouchableOpacity`
+  position: absolute;
+  align-items: center;
+  right: 3px;
+  bottom: 3px;
+`;
 const BR: string = '\n';
 
 type NavigationProp = StackNavigationProp<MainFourthStackNavi, 'Configure'>;
@@ -89,6 +89,7 @@ interface Props {
 }
 
 const Configure = ({navigation}: Props) => {
+  const {t} = useTranslation();
   const {
     userLanguage,
     updateUserLanguage,
@@ -114,44 +115,47 @@ const Configure = ({navigation}: Props) => {
     <Container>
       <BackContainer>
         <LabelContainer>
-          <Label>기기 정보</Label>
+          <Label>{t('deviceinformation')}</Label>
         </LabelContainer>
         {settingSearchRes ? (
           <>
-            <Text>기기 코드 : {settingSearchRes.product_key}</Text>
-            <Text>구입 날짜 : {settingSearchRes.created_at.slice(0, 10)}</Text>
+            <Text>
+              {t('devicecode')} : {settingSearchRes.product_key}
+            </Text>
+            <Text>
+              {t('purchasedate')} : {settingSearchRes.created_at.slice(0, 10)}
+            </Text>
           </>
         ) : (
           <>
-            <Text>기기 코드 :</Text>
-            <Text>구입 날짜 :</Text>
+            <Text>{t('devicecode')} :</Text>
+            <Text>{t('purchasedate')} :</Text>
           </>
         )}
       </BackContainer>
       <BackContainer>
         <LabelContainer>
-          <Label>이용약관</Label>
+          <Label>{t('termsofuse')}</Label>
         </LabelContainer>
         <TouchableOpacity onPress={() => drivingDelete()}>
           <TextContainer>
-            <Text>본 약관은 쿠루마모리가 제공하는 모든 서비스의 </Text>
-            <Text>이용조건 및 절차, 이용자와 당 사이트의 권리,</Text>
-            <Text>의무, 책임사항과 기타 필요한 사항을 규정함을 </Text>
-            <Text>목적으로 합니다.</Text>
+            <Text>{t('termsofuselorem')}</Text>
           </TextContainer>
         </TouchableOpacity>
       </BackContainer>
       <Container2>
         <BackContainer2>
-          <Label>버전 정보</Label>
+          <Label>{t('versioninformation')}</Label>
           <Text>
-            현재버전 : 1. 0. 2{BR}
-            최신버전 : 1. 0. 2
+            {t('currentversion')} : 1. 3. 5{BR}
+            {t('latestversion')} : 1. 3. 5
           </Text>
         </BackContainer2>
         <BackContainer2>
-          <Label>언어 설정</Label>
-          <Text>현재언어 : {userLanguage}</Text>
+          <Label>{t('languageinformation')}</Label>
+          <Text>
+            {t('currentlanguage')} : {userLanguage}
+          </Text>
           <TextTouchableOpacity
             onPress={() => {
               console.log('언어변경');
@@ -165,7 +169,7 @@ const Configure = ({navigation}: Props) => {
                 updateUserLanguage('en');
               }
             }}>
-            <TouchText>변경하기</TouchText>
+            <TouchText>{t('change')}</TouchText>
           </TextTouchableOpacity>
         </BackContainer2>
       </Container2>
