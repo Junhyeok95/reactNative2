@@ -68,7 +68,17 @@ const UserContextProvider = ({children}: Props) => {
       if (myUserLanguage !== null) {
         setUserLanguage(myUserLanguage);
       } else if (myUserLanguage === null) {
-        setUserLanguage('kr');
+        setUserLanguage('en');
+      }
+      try {
+        i18n
+          .use(initReactI18next) // passes i18n down to react-i18next
+          .init({
+            lng: myUserLanguage !== null ? myUserLanguage : 'en', // 파라미터
+          });
+        console.log('>>> 캐쉬값 가저오기 성공');
+      } catch (error) {
+        console.log('>>>', error);
       }
     } catch (e) {
       console.log(e);
