@@ -27,14 +27,14 @@ const TextRowView = Styled.View`
 `;
 
 const KrumamoText = Styled.Text`
-  font-size: 60px;
+  font-size: 66px;
   color: #000000;
-  font-weight: 900;
+  font-weight: bold;
 `;
 const Ri9Text = Styled.Text`
-  font-weight: 700;
-  font-size: 60px;
+  font-size: 66px;
   color: #FF0000;
+  font-weight: bold;
 `;
 const FormContainer = Styled.View`
   width: 80%;

@@ -76,8 +76,6 @@ const resources = {
       languageinformation: 'Language',
       currentlanguage: 'Current',
       change: 'Change',
-      detect: 'Detect',
-
       // Configure
       // MapData
       startdriving: 'Start',
@@ -85,7 +83,23 @@ const resources = {
       stopdriving: 'Stop',
       stopdrivingmodal: 'Stop driving',
       speed: 'Speed',
+      drivingtime: 'Time',
+      looking: 'Looking',
+      front: 'Front',
+      left: 'Left',
+      right: 'Right',
+      state: 'State',
+      normal: 'Normal',
+      drowsiness: 'Drowsiness',
+      drowsinessalert: 'Drowsiness',
+      latitude: 'Latitude',
+      longitude: 'Longitude',
       time: 'Time',
+      singotext:
+        'An accident has been detected. If you do not press the cancel button, it will automatically report.',
+      cancel: 'Cancel',
+      reportOKtext2: 'Location and medical information has been sent.',
+      reportOKtext3: 'Report is complete.',
       // MapData
       test: 'test',
       hello: 'hello',
@@ -162,6 +176,30 @@ const resources = {
       currentlanguage: '현재 언어',
       change: '변경하기',
       // Configure
+      // MapData
+      startdriving: '운전 시작',
+      startdrivingmodal: '운전을 시작합니다',
+      stopdriving: '운전 중지',
+      stopdrivingmodal: '운전을 중지합니다',
+      speed: '속도',
+      drivingtime: '주행 시간',
+      looking: '시선 감지',
+      front: '정면',
+      left: '좌',
+      right: '우',
+      state: '운전 상태',
+      normal: '정상',
+      drowsiness: '졸음',
+      drowsinessalert: '졸음 감지',
+      latitude: '위도',
+      longitude: '경도',
+      time: '현재 시간',
+      singotext:
+        '사고가 감지되었습니다. \n취소 버튼을 누르지 않으면 \n자동으로 신고됩니다.',
+      cancel: '신고 취소',
+      reportOKtext2: '위치정보, 의료정보 전송',
+      reportOKtext3: '신고가 완료되었습니다',
+      // MapData
       test: '테스트',
       hello: '안녕',
       home: '집',
@@ -237,6 +275,30 @@ const resources = {
       currentlanguage: '現在',
       change: '変更する',
       // Configure
+      // MapData
+      startdriving: '運転開始',
+      startdrivingmodal: '運転を始めます',
+      stopdriving: '運転中止',
+      stopdrivingmodal: '運転を中止します',
+      speed: '速度',
+      drivingtime: '走行時間',
+      looking: '視線検知',
+      front: '正面',
+      left: '左',
+      right: '右',
+      state: '運転状態',
+      normal: '正常',
+      drowsiness: '眠気',
+      drowsinessalert: '眠気検知',
+      latitude: '緯度',
+      longitude: '経度',
+      time: '現在時刻',
+      singotext:
+        '事故が検知されました。\nキャンセルボタンを\n押さない場合は、\n自動的に申告されます。',
+      cancel: 'キャンセル',
+      reportOKtext2: '位置情報、医療情報　送信',
+      reportOKtext3: '申告が完了しました',
+      // MapData
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',
@@ -248,7 +310,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'en',
+    lng: 'jp',
     fallbackLng: 'en', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome

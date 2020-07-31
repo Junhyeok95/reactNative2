@@ -11,6 +11,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import ReactInterval from 'react-interval';
 import LottieView from 'lottie-react-native';
+import {useTranslation} from 'react-i18next';
 
 // const audioList = [
 //   {
@@ -73,42 +74,7 @@ import LottieView from 'lottie-react-native';
 //   }
 // ]
 
-const NewTextViewData = Styled.View``;
-const NewTextViewRow = Styled.View`
-  flex-direction: row;
-`;
-
-const NewTextViewRow30 = Styled.View`
-  width: 30%;
-`;
-const NewTextViewRow40 = Styled.View`
-  width: 40%;
-`;
-const NewTextViewRow60 = Styled.View`
-  width: 60%;
-`;
-
-const NewTextRight = Styled.Text`
-  font-size: 20px;
-  text-align: right;
-`;
-const NewTextCenter = Styled.Text`
-  font-size: 20px;
-  text-align: center;
-`;
-const NewTextLeft = Styled.Text`
-  font-size: 20px;
-  text-align: left;
-`;
-const NewTextColor = Styled.Text`
-  font-size: 20px;
-`;
-
-const Text = Styled.Text`
-  font-size: 20px;
-`;
-const MapInfoTouchableOpacity = Styled.TouchableOpacity`
-`;
+// update -----------------------------------------
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFFDD;
@@ -117,15 +83,35 @@ const TopLeftView = Styled.View`
   border-radius: 16px;
   top: 1%;
   left: 2%;
-  width: 60%;
-  padding: 4% 0;
+  padding: 2%;
 `;
-const TopLeftPadding = Styled.View`
-  padding: 0 10%;
-`;
-const TopLeftViewTouch = Styled.View`
+const TopLeftViewTouch = Styled.TouchableOpacity`
   flex: 1;
 `;
+const TopLeftViewBasic = Styled.View`
+  flex-direction: row;
+`;
+const TopLeftViewLeft = Styled.View`
+`;
+const TopLeftViewRight = Styled.View`
+`;
+const TopLeftViewLeftText = Styled.Text`
+  font-weight: bold;
+  text-align: right;
+  font-size: 20px;
+  padding-left: 2%;
+`;
+const TopLeftViewRightText = Styled.Text`
+  text-align: center;
+  font-size: 20px;
+  padding-left: 2%;
+  padding-right: 2%;
+`;
+const TextColor = Styled.Text`
+  color: #00000088;
+`;
+
+// update -----------------------------------------
 const TopRightView = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -208,7 +194,7 @@ const BtLabel = Styled.Text`
 `;
 
 const SingoTextView = Styled.View`
-  width: 100%;
+  width: 90%;
   padding-top: 16px;
   justify-content: center;
   align-items: center;
@@ -231,18 +217,14 @@ const LottieViewMyView = Styled.View`
 const ModalView = Styled.View`
   background-color: #FFFFFF;
   width: 96%;
-  height: 66%;
   margin-top: 30%;
   margin-left: 2%;
   margin-right: 2%;
-
   border-width: 8px;
   border-radius: 8px;
   border-color: #FF0000;
-
   justify-content: center;
   align-items: center;
-
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
   align-items: center;
@@ -251,11 +233,9 @@ const TouchableOpacityView = Styled.View`
   background-color: #FFFFFF;
   justify-content: center;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-
   border-width: 3px;
   border-color: #FF0000;
   border-radius: 10px;
-
 `;
 const ReportCancelBtn = Styled.Text`
   font-size: 40px;
@@ -306,10 +286,8 @@ const DrivingStartSaveModalView = Styled.View`
   margin-top: 45%;
   margin-left: 14%;
   margin-right: 14%;
-  
   border-width: 4px;
   border-radius: 32px;
-  
   justify-content: center;
   align-items: center;
   `;
@@ -335,7 +313,6 @@ const DrivingStartSaveText = Styled.Text`
 const ReportOkModalView = Styled.View`
   background-color: #FFFFFF;
   width: 96%;
-  height: 66%;
   margin-top: 30%;
   margin-left: 2%;
   margin-right: 2%;
@@ -352,18 +329,22 @@ const ReportOKImage = Styled.Image`
   height: 100%;
 `;
 const ReportOKText = Styled.Text`
+  font-size: 48px;
+  font-weight: 800;
+`;
+const ReportOKText2 = Styled.Text`
   margin-top: 8px;
   font-size: 28px;
   font-weight: 600;
 `;
-const ReportOKText2 = Styled.Text`
-  margin-top: 16px;
+const ReportOKText3 = Styled.Text`
+  margin-top: 24px;
   font-size: 36px;
   font-weight: 800;
 `;
 const ReportTouchableOpacity = Styled.TouchableOpacity`
-  width: 80%;
-  height: 60%;
+  width: 100%;
+  height: 55%;
 `;
 
 // ------------- report_ok modal ------------
@@ -402,6 +383,8 @@ interface DrawerProp {
 }
 
 const MapData = ({navigation}: DrawerProp) => {
+  const {t} = useTranslation();
+
   // 안드로이드 위치권한 요청
   const androidPermissionLocation = () => {
     if (Platform.OS === 'android' && Platform.Version >= 23) {
@@ -431,9 +414,9 @@ const MapData = ({navigation}: DrawerProp) => {
 
   const face = (num: number): string => {
     if (num == 0) return ' ';
-    if (num == 10) return '정면';
-    if (num == 20) return ' 좌 ';
-    if (num == 30) return ' 우 ';
+    if (num == 10) return t('front');
+    if (num == 20) return t('left');
+    if (num == 30) return t('right');
     return '';
   };
   const eyePoint = (num: number): string => {
@@ -988,175 +971,131 @@ const MapData = ({navigation}: DrawerProp) => {
 
       {driving && (
         <TopLeftView style={{marginTop: getStatusBarHeight()}}>
-          <MapInfoTouchableOpacity
+          <TopLeftViewTouch
             onPress={() => {
               setInfoTouch(!infoTouch);
             }}>
-            <TopLeftViewTouch>
-              {infoTouch == true ? (
-                <>
-                  <NewTextViewData>
-                    <NewTextViewRow>
-                      <NewTextViewRow40>
-                        <NewTextRight>운전속도 : </NewTextRight>
-                      </NewTextViewRow40>
-                      <NewTextViewRow30>
-                        {pushNum == 0 ? (
-                          <NewTextRight>
-                            {typeof coordinate2.speed === 'number' &&
-                            coordinate2.speed >= 0
-                              ? (coordinate2.speed * 3.6).toFixed(1)
-                              : '0'}
-                          </NewTextRight>
-                        ) : (
-                          <NewTextRight>
-                            <NewTextColor style={{color: '#FF0000'}}>
-                              {pushNum}
-                            </NewTextColor>
-                          </NewTextRight>
-                        )}
-                      </NewTextViewRow30>
-                      <NewTextViewRow30>
-                        <NewTextLeft> km/h</NewTextLeft>
-                      </NewTextViewRow30>
-                    </NewTextViewRow>
-                    <NewTextViewRow>
-                      <NewTextViewRow40>
-                        <NewTextRight>주행시간 : </NewTextRight>
-                      </NewTextViewRow40>
-                      <NewTextViewRow60>
-                        <NewTextCenter>
-                          {new Date(
-                            new Date().getTime() - _startTime,
-                          ).getHours() -
-                            9 +
-                            ' : ' +
-                            new Date(
-                              new Date().getTime() - _startTime,
-                            ).getMinutes() +
-                            ' : ' +
-                            new Date(
-                              new Date().getTime() - _startTime,
-                            ).getSeconds()}
-                        </NewTextCenter>
-                      </NewTextViewRow60>
-                    </NewTextViewRow>
-                    <NewTextViewRow style={{marginTop: 8}}>
-                      <NewTextViewRow40>
-                        <NewTextRight>시선감지 : </NewTextRight>
-                      </NewTextViewRow40>
-                      <NewTextViewRow60>
-                        <NewTextCenter>
-                          {linkInfo[4] == 10 ? (
-                            <NewTextColor style={{fontWeight: 'bold'}}>
-                              정면
-                            </NewTextColor>
-                          ) : (
-                            <NewTextColor style={{color: '#00000077'}}>
-                              정면
-                            </NewTextColor>
-                          )}{' '}
-                          /
-                          {linkInfo[4] == 20 ? (
-                            <NewTextColor style={{fontWeight: 'bold'}}>
-                              {' '}
-                              좌
-                            </NewTextColor>
-                          ) : (
-                            <NewTextColor style={{color: '#00000077'}}>
-                              {' '}
-                              좌
-                            </NewTextColor>
-                          )}{' '}
-                          /
-                          {linkInfo[4] == 30 ? (
-                            <NewTextColor style={{fontWeight: 'bold'}}>
-                              {' '}
-                              우
-                            </NewTextColor>
-                          ) : (
-                            <NewTextColor style={{color: '#00000077'}}>
-                              {' '}
-                              우
-                            </NewTextColor>
-                          )}
-                        </NewTextCenter>
-                      </NewTextViewRow60>
-                    </NewTextViewRow>
-                    <NewTextViewRow>
-                      <NewTextViewRow40>
-                        <NewTextRight>주시태만 : </NewTextRight>
-                      </NewTextViewRow40>
-                      <NewTextViewRow60>
-                        <NewTextCenter>
-                          {linkInfo[5] == 1 ? (
-                            <NewTextColor style={{fontWeight: 'bold'}}>
-                              정상
-                            </NewTextColor>
-                          ) : (
-                            <NewTextColor style={{color: '#00000077'}}>
-                              정상
-                            </NewTextColor>
-                          )}{' '}
-                          /
-                          {linkInfo[5] == 2 ? (
-                            <NewTextColor style={{fontWeight: 'bold'}}>
-                              {' '}
-                              졸음
-                            </NewTextColor>
-                          ) : (
-                            <NewTextColor style={{color: '#00000077'}}>
-                              {' '}
-                              졸음
-                            </NewTextColor>
-                          )}
-                        </NewTextCenter>
-                      </NewTextViewRow60>
-                    </NewTextViewRow>
-                  </NewTextViewData>
-                </>
-              ) : (
-                <TopLeftPadding>
-                  <Text>
-                    SLR : {linkInfo[4] == -1 ? 'X' : face(linkInfo[4])} /{' '}
-                    {linkInfo[5] == -1 ? 'X' : eyePoint(linkInfo[5])} /{' '}
-                    {linkInfo[6] == -1 ? 'X' : eyePoint(linkInfo[6])}
-                  </Text>
-                  <Text>
-                    YPR : {linkInfo[1] == -1 ? 'X' : linkInfo[1]} /{' '}
-                    {linkInfo[2] == -1 ? 'X' : linkInfo[2]} /{' '}
-                    {linkInfo[3] == -1 ? 'X' : linkInfo[3]}
-                  </Text>
-                  <Text style={{marginTop: 8}}>
-                    위도 : {coordinate2.latitude.toFixed(5)}
-                  </Text>
-                  <Text>경도 : {coordinate2.longitude.toFixed(5)}</Text>
-                  <Text>
-                    속도 :{' '}
+            <TopLeftViewBasic>
+              <TopLeftViewLeft>
+                <TopLeftViewLeftText>{t('speed')} :</TopLeftViewLeftText>
+                <TopLeftViewLeftText>{t('drivingtime')} :</TopLeftViewLeftText>
+                <TopLeftViewLeftText style={{marginTop: 8}}>
+                  {t('looking')} :
+                </TopLeftViewLeftText>
+                <TopLeftViewLeftText>{t('state')} :</TopLeftViewLeftText>
+
+                {/* TopLeftViewDetail TopLeftViewDetail TopLeftViewDetail */}
+
+                {infoTouch == true ? (
+                  <>
+                    <TopLeftViewLeftText style={{marginTop: 8}}>
+                      S L R :
+                    </TopLeftViewLeftText>
+                    <TopLeftViewLeftText>Y P R :</TopLeftViewLeftText>
+                    <TopLeftViewLeftText>{t('latitude')} :</TopLeftViewLeftText>
+                    <TopLeftViewLeftText>
+                      {t('longitude')} :
+                    </TopLeftViewLeftText>
+                    <TopLeftViewLeftText>{t('time')} :</TopLeftViewLeftText>
+                  </>
+                ) : null}
+              </TopLeftViewLeft>
+              <TopLeftViewRight>
+                {pushNum == 0 ? (
+                  <TopLeftViewRightText>
                     {typeof coordinate2.speed === 'number' &&
                     coordinate2.speed >= 0
                       ? (coordinate2.speed * 3.6).toFixed(1) + ' km/h'
-                      : '0 km/h'}
-                  </Text>
-                  {/* <Text>시간 : {parseInt((coordinate2.timestamp/1000).toString())}</Text> */}
-                  <Text>
-                    시간 :{' '}
-                    {new Date(coordinate2.timestamp).getHours() +
-                      ':' +
-                      new Date(coordinate2.timestamp).getMinutes() +
-                      ':' +
-                      new Date(coordinate2.timestamp).getSeconds()}
-                  </Text>
-                </TopLeftPadding>
-              )}
+                      : '0'}
+                  </TopLeftViewRightText>
+                ) : (
+                  <TopLeftViewRightText style={{color: '#FF0000'}}>
+                    {pushNum} km/h
+                  </TopLeftViewRightText>
+                )}
+                <TopLeftViewRightText>
+                  {new Date(new Date().getTime() - _startTime).getHours() -
+                    9 +
+                    ' : ' +
+                    new Date(new Date().getTime() - _startTime).getMinutes() +
+                    ' : ' +
+                    new Date(new Date().getTime() - _startTime).getSeconds()}
+                </TopLeftViewRightText>
+                <TopLeftViewRightText style={{marginTop: 8}}>
+                  {linkInfo[4] == 10 ? (
+                    <TextColor style={{fontWeight: 'bold', color: '#000000'}}>
+                      {t('front')}
+                    </TextColor>
+                  ) : (
+                    <TextColor>{t('front')}</TextColor>
+                  )}
+                  {' / '}
+                  {linkInfo[4] == 20 ? (
+                    <TextColor style={{fontWeight: 'bold', color: '#FF7F00'}}>
+                      {t('left')}
+                    </TextColor>
+                  ) : (
+                    <TextColor> {t('left')}</TextColor>
+                  )}
+                  {' / '}
+                  {linkInfo[4] == 30 ? (
+                    <TextColor style={{fontWeight: 'bold', color: '#FF7F00'}}>
+                      {t('right')}
+                    </TextColor>
+                  ) : (
+                    <TextColor> {t('right')}</TextColor>
+                  )}
+                </TopLeftViewRightText>
+                <TopLeftViewRightText>
+                  {linkInfo[5] == 1 ? (
+                    <TextColor style={{fontWeight: 'bold', color: '#000000'}}>
+                      {t('normal')}
+                    </TextColor>
+                  ) : (
+                    <TextColor>{t('normal')}</TextColor>
+                  )}
+                  {' / '}
+                  {linkInfo[5] == 2 ? (
+                    <TextColor style={{fontWeight: 'bold', color: '#FF7F00'}}>
+                      {t('drowsiness')}
+                    </TextColor>
+                  ) : (
+                    <TextColor> {t('drowsiness')}</TextColor>
+                  )}
+                </TopLeftViewRightText>
 
-              {/* <Text>위도 : {coordinate.latitude.toFixed(5)}</Text>
-              <Text>경도 : {coordinate.longitude.toFixed(5)}</Text>
-              <Text>속도 : {typeof coordinate.speed === "number" ? (coordinate.speed*3.6).toFixed(1)+" km/h" : ""}</Text>
-              <Text>시간 : {parseInt((coordinate.timestamp/1000).toString())}</Text>
-              <Text></Text> */}
-            </TopLeftViewTouch>
-          </MapInfoTouchableOpacity>
+                {/* TopLeftViewDetail TopLeftViewDetail TopLeftViewDetail */}
+
+                {infoTouch == true ? (
+                  <>
+                    <TopLeftViewRightText style={{marginTop: 8}}>
+                      {linkInfo[4] == -1 ? 'X' : face(linkInfo[4])} /{' '}
+                      {linkInfo[5] == -1 ? 'X' : eyePoint(linkInfo[5])} /{' '}
+                      {linkInfo[6] == -1 ? 'X' : eyePoint(linkInfo[6])}
+                    </TopLeftViewRightText>
+                    <TopLeftViewRightText>
+                      {linkInfo[1] == -1 ? 'X' : linkInfo[1]} /{' '}
+                      {linkInfo[2] == -1 ? 'X' : linkInfo[2]} /{' '}
+                      {linkInfo[3] == -1 ? 'X' : linkInfo[3]}
+                    </TopLeftViewRightText>
+                    <TopLeftViewRightText>
+                      {coordinate2.latitude.toFixed(5)}
+                    </TopLeftViewRightText>
+                    <TopLeftViewRightText>
+                      {coordinate2.longitude.toFixed(5)}
+                    </TopLeftViewRightText>
+                    <TopLeftViewRightText>
+                      {new Date(coordinate2.timestamp).getHours() +
+                        ' : ' +
+                        new Date(coordinate2.timestamp).getMinutes() +
+                        ' : ' +
+                        new Date(coordinate2.timestamp).getSeconds()}
+                    </TopLeftViewRightText>
+                  </>
+                ) : null}
+              </TopLeftViewRight>
+            </TopLeftViewBasic>
+          </TopLeftViewTouch>
         </TopLeftView>
       )}
 
@@ -1251,6 +1190,10 @@ const MapData = ({navigation}: DrawerProp) => {
               //     })
               //   }
               // });
+              setModalVisibleSleep(true);
+              setTimeout(() => {
+                setModalVisibleSleep(false);
+              }, 2000);
               let {latitude, longitude, timestamp} = coordinate2;
               let _markerLocation = {
                 latitude,
@@ -1277,7 +1220,7 @@ const MapData = ({navigation}: DrawerProp) => {
         </CenterTestTestRightView>
       ) : null}
 
-      {driving == true ? (
+      {driving == true && infoTouch == true ? (
         <CenterTestRightView>
           {/* 급가속 */}
           <IconButton
@@ -1602,16 +1545,14 @@ const MapData = ({navigation}: DrawerProp) => {
             }
           }}>
           <BtLabel style={driving ? {color: '#FFFFFF'} : {}}>
-            {driving ? '운전 종료' : '운전 시작'}
+            {driving ? t('stopdriving') : t('startdriving')}
           </BtLabel>
         </Btn>
       </BottomRightView>
 
       {checkInfo[3] == 1 ? (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisibleReportCount}>
+        <Modal animationType="slide" transparent={true} visible={true}>
+          {/* visible={modalVisibleReportCount}> */}
           <ModalView>
             <LottieViewMyView>
               <LottieView
@@ -1623,9 +1564,7 @@ const MapData = ({navigation}: DrawerProp) => {
               />
             </LottieViewMyView>
             <SingoTextView>
-              <SingoText>사고가 감지되었습니다</SingoText>
-              <SingoText>취소 버튼을 누르지 않으면</SingoText>
-              <SingoText>자동 신고를 하겠습니다</SingoText>
+              <SingoText>{t('singotext')}</SingoText>
               <SingoTextCount>
                 {checkInfo[4] >= 0 && checkInfo[4] < 10
                   ? 10 - checkInfo[4]
@@ -1664,7 +1603,7 @@ const MapData = ({navigation}: DrawerProp) => {
                   //   }
                   // });
                 }}>
-                <ReportCancelBtn>신고 취소</ReportCancelBtn>
+                <ReportCancelBtn>{t('cancel')}</ReportCancelBtn>
               </TouchableOpacity>
             </TouchableOpacityView>
           </ModalView>
@@ -1680,7 +1619,7 @@ const MapData = ({navigation}: DrawerProp) => {
               <SleepAlertImage
                 source={require('~/Assets/Images/sleepAlertIcon.png')}
               />
-              <SleepAlertText>졸음 감지 !</SleepAlertText>
+              <SleepAlertText>{t('drowsinessalert')} !!</SleepAlertText>
             </SleepModalImageTextView>
           </SleepModalView>
         </Modal>
@@ -1701,7 +1640,9 @@ const MapData = ({navigation}: DrawerProp) => {
               />
             </LottieStartSaveView>
             <DrivingStartSaveTextView>
-              <DrivingStartSaveText>운전을 시작합니다</DrivingStartSaveText>
+              <DrivingStartSaveText>
+                {t('startdrivingmodal')}
+              </DrivingStartSaveText>
             </DrivingStartSaveTextView>
           </DrivingStartSaveModalView>
         </ModalViewBack>
@@ -1719,7 +1660,9 @@ const MapData = ({navigation}: DrawerProp) => {
               />
             </LottieStartSaveView>
             <DrivingStartSaveTextView>
-              <DrivingStartSaveText>운전을 종료합니다</DrivingStartSaveText>
+              <DrivingStartSaveText>
+                {t('stopdrivingmodal')}
+              </DrivingStartSaveText>
             </DrivingStartSaveTextView>
           </DrivingStartSaveModalView>
         </ModalViewBack>
@@ -1729,7 +1672,10 @@ const MapData = ({navigation}: DrawerProp) => {
         transparent={true}
         visible={modalVisibleReportOk}>
         <ReportOkModalView>
-          <ReportOKText2>Kurumamori 119</ReportOKText2>
+          <ReportOKText>
+            {t('kurumamo')}
+            {t('ri9')}
+          </ReportOKText>
           <ReportTouchableOpacity
             onPress={() => {
               //# if(soundReal){
@@ -1744,8 +1690,8 @@ const MapData = ({navigation}: DrawerProp) => {
               source={require('~/Assets/Images/reportOK.png')}
             />
           </ReportTouchableOpacity>
-          <ReportOKText>위치정보, 의료정보 전송</ReportOKText>
-          <ReportOKText2>신고가 완료됬습니다</ReportOKText2>
+          <ReportOKText2>{t('reportOKtext2')}</ReportOKText2>
+          <ReportOKText3>{t('reportOKtext3')}</ReportOKText3>
         </ReportOkModalView>
       </Modal>
     </>
