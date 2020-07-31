@@ -76,7 +76,17 @@ const resources = {
       languageinformation: 'Language',
       currentlanguage: 'Current',
       change: 'Change',
+      detect: 'Detect',
+
       // Configure
+      // MapData
+      startdriving: 'Start',
+      startdrivingmodal: 'Start driving',
+      stopdriving: 'Stop',
+      stopdrivingmodal: 'Stop driving',
+      speed: 'Speed',
+      time: 'Time',
+      // MapData
       test: 'test',
       hello: 'hello',
       home: 'home',
