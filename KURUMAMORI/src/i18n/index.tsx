@@ -22,11 +22,11 @@ const resources = {
       // Navigator + Drawer
       main: 'Main',
       map: 'Map',
-      statistics: 'statistics',
-      driving: 'driving',
-      pairing: 'pairing',
+      statistics: 'Statistics',
+      driving: 'Driving',
+      pairing: 'Pairing',
       information: 'Information',
-      configure: 'setting',
+      configure: 'Setting',
       singout: 'Sing Out',
       // Navigator + Drawer
       // Driving
@@ -101,6 +101,15 @@ const resources = {
       reportOKtext2: 'Location and medical information has been sent.',
       reportOKtext3: 'Report is complete.',
       // MapData
+      // MapMarker
+      date: 'Date',
+      starttime: 'Start time',
+      endtime: 'End time',
+      // drivingtime: '',
+      suddenacceleration: 'Sudden Acceleration',
+      suddenstop: 'Sudden Stop',
+      // drowsiness: '',
+      // MapMarker
       test: 'test',
       hello: 'hello',
       home: 'home',
@@ -299,6 +308,7 @@ const resources = {
       reportOKtext2: '位置情報、医療情報　送信',
       reportOKtext3: '申告が完了しました',
       // MapData
+      // MapData
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',
@@ -310,7 +320,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'jp',
+    lng: 'en',
     fallbackLng: 'en', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome

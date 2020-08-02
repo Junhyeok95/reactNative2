@@ -93,6 +93,11 @@ const SaveName = Styled.Text`
 interface ILocation {
   latitude: number;
   longitude: number;
+  bool_report: boolean;
+  bool_sudden_acceleration: boolean;
+  bool_sudden_stop: boolean;
+  bool_sleep: boolean;
+  timestamp: number;
 }
 interface IGeolocation {
   latitude: number;
@@ -112,6 +117,7 @@ interface ICamera {
 }
 
 interface IDriving {
+  startTime: number;
   stopTime: number;
   drivingTime: number;
   sleepMarker: number;
@@ -148,6 +154,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
   }
 
   const [drivingInfo, setDrivingInfo] = useState<IDriving>({
+    startTime: 0,
     stopTime: 0,
     drivingTime: 0,
     sleepMarker: 0,
@@ -246,6 +253,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
             // let saveNameTime = (new Date(item.endTime).getMonth()+1) + "월 " + new Date(item.endTime).getDate() + "일";
             // console.log(saveNameTime);
             setDrivingInfo({
+              startTime: item.startTime,
               stopTime: item.endTime,
               drivingTime: item.endTime - item.startTime,
               sleepMarker: _sleepMarker,
@@ -304,6 +312,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
             strokeColor="#00f"
           />
         )}
+
         {poly >= 0 &&
           drivingSaveDataArr != undefined &&
           drivingSaveDataArr[poly].DrivingMarker &&
@@ -315,10 +324,28 @@ const MapMarker = ({navigation}: DrawerProp) => {
                   latitude: markerLocation.latitude,
                   longitude: markerLocation.longitude,
                 }}
+                // tracksViewChanges={false}
+                // icon={require('~/Assets/Images/.png')}
+                pinColor={
+                  markerLocation.bool_sudden_acceleration == true
+                    ? 'blue'
+                    : markerLocation.bool_sudden_stop == true
+                    ? 'lime'
+                    : 'red'
+                }
+                title={
+                  markerLocation.bool_sudden_acceleration == true
+                    ? '급가속'
+                    : markerLocation.bool_sudden_stop == true
+                    ? '급정거'
+                    : '졸음'
+                }
+                description={markerLocation.timestamp.toString()}
               />
             ),
           )}
       </MapView>
+
       <TopLeftView style={{marginTop: getStatusBarHeight()}}>
         {/* <Text>
             날짜 : {defaultInfo[0].toString().substr(0,4) + 
@@ -360,6 +387,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
           회
         </Text>
       </TopLeftView>
+
       <TopRightView style={{marginTop: getStatusBarHeight()}}>
         <IconButton
           style={{flex: 1}}
@@ -450,103 +478,106 @@ const MapMarker = ({navigation}: DrawerProp) => {
         />
       </BottomLeftView>
 
-      <CenterTestRightView>
-        <IconButton
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderColor: '#AAA',
-            borderRadius: 10,
-            borderWidth: 1,
-          }}
-          icon="database-plus"
-          color="#000000"
-          onPress={() => {
-            let num = Math.floor(Math.random() * 10);
-            let arr = saveLocations2[num].routes[0].geometry.coordinates.map(
-              (item: any[]) => {
-                return {latitude: item[1], longitude: item[0]};
-              },
-            );
-            let _drivingSaveData = Object.assign({}, drivingSaveData);
-            let _endT = new Date().getTime();
-            if (arr) {
-              if (userInfo2 && userInfo2.key) {
-                _drivingSaveData.webUserId = userInfo2.key;
-              }
-              if (userInfo2 && userInfo2.name) {
-                _drivingSaveData.Drivingline = arr;
-                // 탐지 객체도 넣어야함 DrivingMarker
-                _drivingSaveData.name = userInfo2.name;
-                _drivingSaveData.startTime =
-                  _endT - 60000 * Math.floor(Math.random() * 45 + 10);
-                _drivingSaveData.endTime = _endT;
-              }
-
-              // 랜덤 발생 위치 넣어야함
-              _drivingSaveData.DrivingMarker = [];
-
-              dummyAdd(_drivingSaveData);
-              console.log('dummyAdd');
-            }
-          }}
-        />
-        {/* cloud-download-outline */}
-        <IconButton
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderColor: '#AAA',
-            borderRadius: 10,
-            borderWidth: 1,
-          }}
-          icon="database-remove"
-          color="#000000"
-          onPress={() => {
-            if (drivingSaveDataArr != undefined && poly >= 0) {
-              if (poly + 1 == drivingSaveDataArr.length) {
-                setPoly((poly) => poly - 1);
-                if (poly == 0) {
-                  // 인포를 못함
-                  console.log('정지');
-                } else {
-                  // 인포를 해도됨
-                  setDrivingInfo({
-                    stopTime: drivingSaveDataArr[poly - 1].endTime,
-                    drivingTime:
-                      drivingSaveDataArr[poly - 1].endTime -
-                      drivingSaveDataArr[poly - 1].startTime,
-                    sleepMarker: 0,
-                    suddenStopMarker: 0,
-                    suddenAccelerationMarker: 0,
-                  });
-                  let {latitude, longitude} = drivingSaveDataArr[
-                    poly - 1
-                  ].Drivingline[0];
-                  setCamera((camera) => {
-                    return {
-                      center: {
-                        latitude: latitude,
-                        longitude: longitude,
-                      },
-                      heading: 0,
-                      pitch: 0,
-                      zoom: camera.zoom,
-                      altitude: 0,
-                    };
-                  });
+      {false && (
+        <CenterTestRightView>
+          <IconButton
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderColor: '#AAA',
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="database-plus"
+            color="#000000"
+            onPress={() => {
+              let num = Math.floor(Math.random() * 10);
+              let arr = saveLocations2[num].routes[0].geometry.coordinates.map(
+                (item: any[]) => {
+                  return {latitude: item[1], longitude: item[0]};
+                },
+              );
+              let _drivingSaveData = Object.assign({}, drivingSaveData);
+              let _endT = new Date().getTime();
+              if (arr) {
+                if (userInfo2 && userInfo2.key) {
+                  _drivingSaveData.webUserId = userInfo2.key;
                 }
-                console.log('같다 지운다');
-                dummyRemove();
-              } else {
+                if (userInfo2 && userInfo2.name) {
+                  _drivingSaveData.Drivingline = arr;
+                  // 탐지 객체도 넣어야함 DrivingMarker
+                  _drivingSaveData.name = userInfo2.name;
+                  _drivingSaveData.startTime =
+                    _endT - 60000 * Math.floor(Math.random() * 45 + 10);
+                  _drivingSaveData.endTime = _endT;
+                }
+
+                // 랜덤 발생 위치 넣어야함
+                _drivingSaveData.DrivingMarker = [];
+
+                dummyAdd(_drivingSaveData);
+                console.log('dummyAdd');
+              }
+            }}
+          />
+          {/* cloud-download-outline */}
+          <IconButton
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderColor: '#AAA',
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="database-remove"
+            color="#000000"
+            onPress={() => {
+              if (drivingSaveDataArr != undefined && poly >= 0) {
+                if (poly + 1 == drivingSaveDataArr.length) {
+                  setPoly((poly) => poly - 1);
+                  if (poly == 0) {
+                    // 인포를 못함
+                    console.log('정지');
+                  } else {
+                    // 인포를 해도됨
+                    setDrivingInfo({
+                      startTime: drivingSaveDataArr[poly - 1].startTime,
+                      stopTime: drivingSaveDataArr[poly - 1].endTime,
+                      drivingTime:
+                        drivingSaveDataArr[poly - 1].endTime -
+                        drivingSaveDataArr[poly - 1].startTime,
+                      sleepMarker: 0,
+                      suddenStopMarker: 0,
+                      suddenAccelerationMarker: 0,
+                    });
+                    let {latitude, longitude} = drivingSaveDataArr[
+                      poly - 1
+                    ].Drivingline[0];
+                    setCamera((camera) => {
+                      return {
+                        center: {
+                          latitude: latitude,
+                          longitude: longitude,
+                        },
+                        heading: 0,
+                        pitch: 0,
+                        zoom: camera.zoom,
+                        altitude: 0,
+                      };
+                    });
+                  }
+                  console.log('같다 지운다');
+                  dummyRemove();
+                } else {
+                  dummyRemove();
+                }
+              }
+              if (poly == -2) {
                 dummyRemove();
               }
-            }
-            if (poly == -2) {
-              dummyRemove();
-            }
-          }}
-        />
-        {/* cloud-upload-outline */}
-      </CenterTestRightView>
+            }}
+          />
+          {/* cloud-upload-outline */}
+        </CenterTestRightView>
+      )}
       <Footer>
         <FlatList
           // data={locationsArr}

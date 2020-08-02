@@ -68,7 +68,7 @@ const UserContextProvider = ({children}: Props) => {
       if (myUserLanguage !== null) {
         setUserLanguage(myUserLanguage);
       } else if (myUserLanguage === null) {
-        setUserLanguage('en');
+        setUserLanguage('jp');
       }
       try {
         i18n

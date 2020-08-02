@@ -375,6 +375,11 @@ interface ICamera {
 interface ILocation {
   latitude: number;
   longitude: number;
+  bool_report: boolean;
+  bool_sudden_acceleration: boolean;
+  bool_sudden_stop: boolean;
+  bool_sleep: boolean;
+  timestamp: number;
 }
 
 type TypeDrawerProp = DrawerNavigationProp<DrawNaviParamList, 'MainTabNavi'>;
@@ -924,6 +929,7 @@ const MapData = ({navigation}: DrawerProp) => {
             strokeColor="#00F"
           />
         )}
+
         {onSave &&
           onMarker &&
           markerLocations.map((markerLocation: ILocation, index: number) => (
@@ -933,9 +939,25 @@ const MapData = ({navigation}: DrawerProp) => {
                 latitude: markerLocation.latitude,
                 longitude: markerLocation.longitude,
               }}
+              pinColor={
+                markerLocation.bool_sudden_acceleration == true
+                  ? 'blue'
+                  : markerLocation.bool_sudden_stop == true
+                  ? 'lime'
+                  : 'red'
+              }
+              title={
+                markerLocation.bool_sudden_acceleration == true
+                  ? '급가속'
+                  : markerLocation.bool_sudden_stop == true
+                  ? '급정거'
+                  : '졸음'
+              }
+              description={markerLocation.timestamp.toString()}
             />
           ))}
       </MapView>
+
       <ReactInterval
         timeout={1000}
         enabled={driving}
@@ -947,12 +969,13 @@ const MapData = ({navigation}: DrawerProp) => {
           linkInfo_5();
         }}
       />
+
       {interPlus && (
         <ReactInterval
           timeout={30}
           enabled={interPlus}
           callback={() => {
-            console.log('가속', pushNum);
+            // console.log('급가속', pushNum);
             if (pushNum < 80) setPushNum(pushNum + 2);
           }}
         />
@@ -963,7 +986,7 @@ const MapData = ({navigation}: DrawerProp) => {
           timeout={30}
           enabled={interMinus}
           callback={() => {
-            console.log('감속', pushNum);
+            // console.log('급정거', pushNum);
             if (pushNum > 20) setPushNum(pushNum - 2);
           }}
         />
@@ -1373,6 +1396,7 @@ const MapData = ({navigation}: DrawerProp) => {
           }}
         />
       </BottomLeftViewGPS>
+
       {driving && (
         <BottomLeftViewEye>
           <IconButton
@@ -1551,8 +1575,10 @@ const MapData = ({navigation}: DrawerProp) => {
       </BottomRightView>
 
       {checkInfo[3] == 1 ? (
-        <Modal animationType="slide" transparent={true} visible={true}>
-          {/* visible={modalVisibleReportCount}> */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisibleReportCount}>
           <ModalView>
             <LottieViewMyView>
               <LottieView
@@ -1609,6 +1635,7 @@ const MapData = ({navigation}: DrawerProp) => {
           </ModalView>
         </Modal>
       ) : null}
+
       {driving ? (
         <Modal
           animationType="slide"
@@ -1624,6 +1651,7 @@ const MapData = ({navigation}: DrawerProp) => {
           </SleepModalView>
         </Modal>
       ) : null}
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -1647,6 +1675,7 @@ const MapData = ({navigation}: DrawerProp) => {
           </DrivingStartSaveModalView>
         </ModalViewBack>
       </Modal>
+
       <Modal animationType="fade" transparent={true} visible={modalVisibleSave}>
         <ModalViewBack>
           <DrivingStartSaveModalView style={{borderColor: '#0000FF'}}>
@@ -1667,6 +1696,7 @@ const MapData = ({navigation}: DrawerProp) => {
           </DrivingStartSaveModalView>
         </ModalViewBack>
       </Modal>
+
       <Modal
         animationType="fade"
         transparent={true}
