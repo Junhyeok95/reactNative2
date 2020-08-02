@@ -10,10 +10,12 @@ import Geolocation from 'react-native-geolocation-service';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {DrivingDataContext} from '~/Contexts/DrivingData';
 import {UserContext} from '~/Contexts/User/index';
+import {useTranslation} from 'react-i18next';
 
 const Text = Styled.Text`
   font-size: 18px;
 `;
+// update -----------------------------------------
 const TopLeftView = Styled.View`
   position: absolute;
   background-color: #FFFFFFDD;
@@ -22,9 +24,35 @@ const TopLeftView = Styled.View`
   border-radius: 16px;
   top: 1%;
   left: 2%;
-  width: 70%;
-  padding: 4% 6%;
+  padding: 2%;
 `;
+const TopLeftViewTouch = Styled.TouchableOpacity`
+  flex: 1;
+`;
+const TopLeftViewBasic = Styled.View`
+  flex-direction: row;
+`;
+const TopLeftViewLeft = Styled.View`
+`;
+const TopLeftViewRight = Styled.View`
+`;
+const TopLeftViewLeftText = Styled.Text`
+  font-weight: bold;
+  text-align: right;
+  font-size: 20px;
+  padding-left: 2%;
+`;
+const TopLeftViewRightText = Styled.Text`
+  text-align: center;
+  font-size: 20px;
+  padding-left: 2%;
+  padding-right: 2%;
+`;
+const TextColor = Styled.Text`
+  color: #00000088;
+`;
+
+// update -----------------------------------------
 const TopRightView = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -131,6 +159,8 @@ interface DrawerProp {
 }
 
 const MapMarker = ({navigation}: DrawerProp) => {
+  const {t} = useTranslation();
+
   const {
     dummyAdd,
     dummyRemove,
@@ -164,6 +194,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
 
   const [poly, setPoly] = useState<number>(-2);
   const [locationsArr, setLocationsArr] = useState<Array<any>>(saveData);
+  const [infoTouch, setInfoTouch] = useState<boolean>(false);
 
   const [p1, setP1] = useState<number>(0);
   const [p2, setP2] = useState<number>(0);
@@ -347,11 +378,67 @@ const MapMarker = ({navigation}: DrawerProp) => {
       </MapView>
 
       <TopLeftView style={{marginTop: getStatusBarHeight()}}>
-        {/* <Text>
+        <TopLeftViewTouch
+          onPress={() => {
+            setInfoTouch(!infoTouch);
+          }}>
+          <TopLeftViewBasic>
+            <TopLeftViewLeft>
+              <TopLeftViewLeftText>{t('starttime')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText>{t('endtime')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText>{t('drivingtime2')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText style={{marginTop: 8}}>
+                {t('suddenacceleration2')} :
+              </TopLeftViewLeftText>
+              <TopLeftViewLeftText>{t('suddenstop2')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText>{t('drowsiness')} :</TopLeftViewLeftText>
+            </TopLeftViewLeft>
+            <TopLeftViewRight>
+              <TopLeftViewRightText>
+                {drivingInfo.startTime != 0
+                  ? new Date(drivingInfo.startTime).getMonth() +
+                    1 +
+                    '-' +
+                    new Date(drivingInfo.startTime).getDate() +
+                    ' ' +
+                    new Date(drivingInfo.startTime).getHours() +
+                    ' : ' +
+                    new Date(drivingInfo.startTime).getMinutes()
+                  : ''}
+              </TopLeftViewRightText>
+              <TopLeftViewRightText>
+                {drivingInfo.stopTime != 0
+                  ? new Date(drivingInfo.stopTime).getMonth() +
+                    1 +
+                    '-' +
+                    new Date(drivingInfo.stopTime).getDate() +
+                    ' ' +
+                    new Date(drivingInfo.stopTime).getHours() +
+                    ' : ' +
+                    new Date(drivingInfo.stopTime).getMinutes()
+                  : ''}
+              </TopLeftViewRightText>
+              <TopLeftViewRightText>
+                {drivingInfo.drivingTime != 0
+                  ? new Date(drivingInfo.drivingTime).getHours() -
+                    9 +
+                    ' : ' +
+                    new Date(drivingInfo.drivingTime).getMinutes() +
+                    ' : ' +
+                    new Date(drivingInfo.drivingTime).getSeconds()
+                  : ''}
+              </TopLeftViewRightText>
+            </TopLeftViewRight>
+          </TopLeftViewBasic>
+        </TopLeftViewTouch>
+      </TopLeftView>
+
+      {/* <TopLeftView style={{marginTop: getStatusBarHeight()}}>
+         <Text>
             날짜 : {defaultInfo[0].toString().substr(0,4) + 
             " - " + defaultInfo[0].toString().substr(4,2) + 
             " - " + defaultInfo[0].toString().substr(6,2)}
-          </Text> */}
+          </Text> 
         <Text>
           운행종료 :{' '}
           {drivingInfo.stopTime != 0
@@ -386,7 +473,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
             : ''}{' '}
           회
         </Text>
-      </TopLeftView>
+      </TopLeftView> */}
 
       <TopRightView style={{marginTop: getStatusBarHeight()}}>
         <IconButton

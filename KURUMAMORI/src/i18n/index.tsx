@@ -79,7 +79,7 @@ const resources = {
       // Configure
       // MapData
       startdriving: 'Start',
-      startdrivingmodal: 'Start driving',
+      startdrivingmodal: 'Start Driving',
       stopdriving: 'Stop',
       stopdrivingmodal: 'Stop driving',
       speed: 'Speed',
@@ -102,12 +102,13 @@ const resources = {
       reportOKtext3: 'Report is complete.',
       // MapData
       // MapMarker
-      date: 'Date',
       starttime: 'Start time',
       endtime: 'End time',
       // drivingtime: '',
+      drivingtime2: 'Driving Time',
       suddenacceleration: 'Sudden Acceleration',
-      suddenstop: 'Sudden Stop',
+      suddenacceleration2: 'Acceleration',
+      suddenstop: 'Stop Short',
       // drowsiness: '',
       // MapMarker
       test: 'test',

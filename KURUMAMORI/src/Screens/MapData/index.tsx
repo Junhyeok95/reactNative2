@@ -948,10 +948,10 @@ const MapData = ({navigation}: DrawerProp) => {
               }
               title={
                 markerLocation.bool_sudden_acceleration == true
-                  ? '급가속'
+                  ? t('suddenacceleration')
                   : markerLocation.bool_sudden_stop == true
-                  ? '급정거'
-                  : '졸음'
+                  ? t('suddenstop')
+                  : t('drowsiness')
               }
               description={markerLocation.timestamp.toString()}
             />
