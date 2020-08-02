@@ -361,15 +361,15 @@ const MapMarker = ({navigation}: DrawerProp) => {
                   markerLocation.bool_sudden_acceleration == true
                     ? 'blue'
                     : markerLocation.bool_sudden_stop == true
-                    ? 'lime'
+                    ? 'green'
                     : 'red'
                 }
                 title={
                   markerLocation.bool_sudden_acceleration == true
-                    ? '급가속'
+                    ? t('suddenacceleration')
                     : markerLocation.bool_sudden_stop == true
-                    ? '급정거'
-                    : '졸음'
+                    ? t('suddenstop')
+                    : t('dozeoff')
                 }
                 description={markerLocation.timestamp.toString()}
               />
@@ -384,96 +384,64 @@ const MapMarker = ({navigation}: DrawerProp) => {
           }}>
           <TopLeftViewBasic>
             <TopLeftViewLeft>
-              <TopLeftViewLeftText>{t('starttime')} :</TopLeftViewLeftText>
-              <TopLeftViewLeftText>{t('endtime')} :</TopLeftViewLeftText>
-              <TopLeftViewLeftText>{t('drivingtime2')} :</TopLeftViewLeftText>
-              <TopLeftViewLeftText style={{marginTop: 8}}>
+              <TopLeftViewLeftText>{t('data')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText>{t('drivingtime')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText style={{marginTop: 8, color: 'blue'}}>
                 {t('suddenacceleration2')} :
               </TopLeftViewLeftText>
-              <TopLeftViewLeftText>{t('suddenstop2')} :</TopLeftViewLeftText>
-              <TopLeftViewLeftText>{t('drowsiness')} :</TopLeftViewLeftText>
+              <TopLeftViewLeftText style={{color: 'green'}}>
+                {t('suddenstop2')} :
+              </TopLeftViewLeftText>
+              <TopLeftViewLeftText style={{color: 'red'}}>
+                {t('dozeoff')} :
+              </TopLeftViewLeftText>
             </TopLeftViewLeft>
             <TopLeftViewRight>
               <TopLeftViewRightText>
-                {drivingInfo.startTime != 0
-                  ? new Date(drivingInfo.startTime).getMonth() +
-                    1 +
-                    '-' +
-                    new Date(drivingInfo.startTime).getDate() +
-                    ' ' +
-                    new Date(drivingInfo.startTime).getHours() +
+                {new Date().getFullYear() +
+                  '-' +
+                  ('0' + (new Date().getMonth() + 1)).slice(-2) +
+                  '-' +
+                  ('0' + new Date().getDate()).slice(-2) +
+                  '  ' +
+                  ('0' + new Date(drivingInfo.stopTime).getHours()).slice(-2) +
+                  ':' +
+                  ('0' + new Date(drivingInfo.stopTime).getMinutes()).slice(-2)}
+              </TopLeftViewRightText>
+              <TopLeftViewRightText>
+                {drivingInfo.drivingTime != 0
+                  ? (
+                      '0' + new Date(drivingInfo.drivingTime).getUTCHours()
+                    ).slice(-2) +
                     ' : ' +
-                    new Date(drivingInfo.startTime).getMinutes()
+                    (
+                      '0' + new Date(drivingInfo.drivingTime).getMinutes()
+                    ).slice(-2) +
+                    ' : ' +
+                    (
+                      '0' + new Date(drivingInfo.drivingTime).getSeconds()
+                    ).slice(-2)
+                  : ''}
+              </TopLeftViewRightText>
+              <TopLeftViewRightText style={{marginTop: 8}}>
+                {drivingInfo.stopTime != 0
+                  ? drivingInfo.suddenAccelerationMarker + t('count')
                   : ''}
               </TopLeftViewRightText>
               <TopLeftViewRightText>
                 {drivingInfo.stopTime != 0
-                  ? new Date(drivingInfo.stopTime).getMonth() +
-                    1 +
-                    '-' +
-                    new Date(drivingInfo.stopTime).getDate() +
-                    ' ' +
-                    new Date(drivingInfo.stopTime).getHours() +
-                    ' : ' +
-                    new Date(drivingInfo.stopTime).getMinutes()
+                  ? drivingInfo.suddenStopMarker + t('count')
                   : ''}
               </TopLeftViewRightText>
               <TopLeftViewRightText>
-                {drivingInfo.drivingTime != 0
-                  ? new Date(drivingInfo.drivingTime).getHours() -
-                    9 +
-                    ' : ' +
-                    new Date(drivingInfo.drivingTime).getMinutes() +
-                    ' : ' +
-                    new Date(drivingInfo.drivingTime).getSeconds()
+                {drivingInfo.stopTime != 0
+                  ? drivingInfo.sleepMarker + t('count')
                   : ''}
               </TopLeftViewRightText>
             </TopLeftViewRight>
           </TopLeftViewBasic>
         </TopLeftViewTouch>
       </TopLeftView>
-
-      {/* <TopLeftView style={{marginTop: getStatusBarHeight()}}>
-         <Text>
-            날짜 : {defaultInfo[0].toString().substr(0,4) + 
-            " - " + defaultInfo[0].toString().substr(4,2) + 
-            " - " + defaultInfo[0].toString().substr(6,2)}
-          </Text> 
-        <Text>
-          운행종료 :{' '}
-          {drivingInfo.stopTime != 0
-            ? new Date(drivingInfo.stopTime).getMonth() +
-              1 +
-              '월 ' +
-              (new Date(drivingInfo.stopTime).getDate() + '일  -  ') +
-              (new Date(drivingInfo.stopTime).getHours() + '시 ') +
-              new Date(drivingInfo.stopTime).getMinutes() +
-              '분'
-            : ''}
-        </Text>
-        <Text>
-          주행시간 :{' '}
-          {drivingInfo.drivingTime != 0
-            ? new Date(drivingInfo.drivingTime).getHours() -
-              9 +
-              '시간 ' +
-              (new Date(drivingInfo.drivingTime).getMinutes() + '분 ') +
-              (new Date(drivingInfo.drivingTime).getSeconds() + '초')
-            : ''}
-        </Text>
-        <Text style={{marginTop: 8}}>
-          급정거 :{' '}
-          {drivingInfo.stopTime != 0 ? drivingInfo.suddenStopMarker : ''} 회 -
-          졸음 : {drivingInfo.stopTime != 0 ? drivingInfo.sleepMarker : ''} 회
-        </Text>
-        <Text>
-          급가속 :{' '}
-          {drivingInfo.stopTime != 0
-            ? drivingInfo.suddenAccelerationMarker
-            : ''}{' '}
-          회
-        </Text>
-      </TopLeftView> */}
 
       <TopRightView style={{marginTop: getStatusBarHeight()}}>
         <IconButton
@@ -565,7 +533,7 @@ const MapMarker = ({navigation}: DrawerProp) => {
         />
       </BottomLeftView>
 
-      {false && (
+      {infoTouch == true && (
         <CenterTestRightView>
           <IconButton
             style={{

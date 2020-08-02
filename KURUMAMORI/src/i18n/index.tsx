@@ -90,8 +90,8 @@ const resources = {
       right: 'Right',
       state: 'State',
       normal: 'Normal',
-      drowsiness: 'Drowsiness',
-      drowsinessalert: 'Drowsiness',
+      dozeoff: 'Doze off',
+      dozeoffalert: 'Doze off',
       latitude: 'Latitude',
       longitude: 'Longitude',
       time: 'Time',
@@ -102,14 +102,14 @@ const resources = {
       reportOKtext3: 'Report is complete.',
       // MapData
       // MapMarker
-      starttime: 'Start time',
-      endtime: 'End time',
+      data: 'Date',
       // drivingtime: '',
-      drivingtime2: 'Driving Time',
       suddenacceleration: 'Sudden Acceleration',
-      suddenacceleration2: 'Acceleration',
-      suddenstop: 'Stop Short',
-      // drowsiness: '',
+      suddenacceleration2: 'Fast',
+      suddenstop: 'Sudden Stop',
+      suddenstop2: 'Slow',
+      // dozeoff: '',
+      count: ' ',
       // MapMarker
       test: 'test',
       hello: 'hello',
@@ -199,8 +199,8 @@ const resources = {
       right: '우',
       state: '운전 상태',
       normal: '정상',
-      drowsiness: '졸음',
-      drowsinessalert: '졸음 감지',
+      dozeoff: '졸음',
+      dozeoffalert: '졸음 감지',
       latitude: '위도',
       longitude: '경도',
       time: '현재 시간',
@@ -210,6 +210,16 @@ const resources = {
       reportOKtext2: '위치정보, 의료정보 전송',
       reportOKtext3: '신고가 완료되었습니다',
       // MapData
+      // MapMarker
+      data: '날짜',
+      // drivingtime: '',
+      suddenacceleration: '급가속',
+      suddenacceleration2: '급가속',
+      suddenstop: '급정거',
+      suddenstop2: '급정거',
+      // dozeoff: '',
+      count: ' 회',
+      // MapMarker
       test: '테스트',
       hello: '안녕',
       home: '집',
@@ -298,8 +308,8 @@ const resources = {
       right: '右',
       state: '運転状態',
       normal: '正常',
-      drowsiness: '眠気',
-      drowsinessalert: '眠気検知',
+      dozeoff: '居眠り',
+      dozeoffalert: '居眠り検知',
       latitude: '緯度',
       longitude: '経度',
       time: '現在時刻',
@@ -309,7 +319,16 @@ const resources = {
       reportOKtext2: '位置情報、医療情報　送信',
       reportOKtext3: '申告が完了しました',
       // MapData
-      // MapData
+      // MapMarker
+      data: '日付',
+      // drivingtime: '',
+      suddenacceleration: '急加速',
+      suddenacceleration2: '急加速',
+      suddenstop: '急停車',
+      suddenstop2: '急停車',
+      // dozeoff: '',
+      count: ' 回',
+      // MapMarker
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',
@@ -321,7 +340,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'en',
+    lng: 'kr',
     fallbackLng: 'en', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome

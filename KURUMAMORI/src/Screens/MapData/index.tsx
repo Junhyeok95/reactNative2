@@ -943,7 +943,7 @@ const MapData = ({navigation}: DrawerProp) => {
                 markerLocation.bool_sudden_acceleration == true
                   ? 'blue'
                   : markerLocation.bool_sudden_stop == true
-                  ? 'lime'
+                  ? 'green'
                   : 'red'
               }
               title={
@@ -951,7 +951,7 @@ const MapData = ({navigation}: DrawerProp) => {
                   ? t('suddenacceleration')
                   : markerLocation.bool_sudden_stop == true
                   ? t('suddenstop')
-                  : t('drowsiness')
+                  : t('dozeoff')
               }
               description={markerLocation.timestamp.toString()}
             />
@@ -1037,8 +1037,7 @@ const MapData = ({navigation}: DrawerProp) => {
                   </TopLeftViewRightText>
                 )}
                 <TopLeftViewRightText>
-                  {new Date(new Date().getTime() - _startTime).getHours() -
-                    9 +
+                  {new Date(new Date().getTime() - _startTime).getUTCHours() +
                     ' : ' +
                     new Date(new Date().getTime() - _startTime).getMinutes() +
                     ' : ' +
@@ -1080,10 +1079,10 @@ const MapData = ({navigation}: DrawerProp) => {
                   {' / '}
                   {linkInfo[5] == 2 ? (
                     <TextColor style={{fontWeight: 'bold', color: '#FF7F00'}}>
-                      {t('drowsiness')}
+                      {t('dozeoff')}
                     </TextColor>
                   ) : (
-                    <TextColor> {t('drowsiness')}</TextColor>
+                    <TextColor> {t('dozeoff')}</TextColor>
                   )}
                 </TopLeftViewRightText>
 
@@ -1646,7 +1645,7 @@ const MapData = ({navigation}: DrawerProp) => {
               <SleepAlertImage
                 source={require('~/Assets/Images/sleepAlertIcon.png')}
               />
-              <SleepAlertText>{t('drowsinessalert')} !!</SleepAlertText>
+              <SleepAlertText>{t('dozeoffalert')} !!</SleepAlertText>
             </SleepModalImageTextView>
           </SleepModalView>
         </Modal>
