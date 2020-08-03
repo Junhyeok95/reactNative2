@@ -377,71 +377,85 @@ const MapMarker = ({navigation}: DrawerProp) => {
           )}
       </MapView>
 
-      <TopLeftView style={{marginTop: getStatusBarHeight()}}>
-        <TopLeftViewTouch
-          onPress={() => {
-            setInfoTouch(!infoTouch);
-          }}>
-          <TopLeftViewBasic>
-            <TopLeftViewLeft>
-              <TopLeftViewLeftText>{t('data')} :</TopLeftViewLeftText>
-              <TopLeftViewLeftText>{t('drivingtime')} :</TopLeftViewLeftText>
-              <TopLeftViewLeftText style={{marginTop: 8, color: 'blue'}}>
-                {t('suddenacceleration2')} :
-              </TopLeftViewLeftText>
-              <TopLeftViewLeftText style={{color: 'green'}}>
-                {t('suddenstop2')} :
-              </TopLeftViewLeftText>
-              <TopLeftViewLeftText style={{color: 'red'}}>
-                {t('dozeoff')} :
-              </TopLeftViewLeftText>
-            </TopLeftViewLeft>
-            <TopLeftViewRight>
-              <TopLeftViewRightText>
-                {new Date().getFullYear() +
-                  '-' +
-                  ('0' + (new Date().getMonth() + 1)).slice(-2) +
-                  '-' +
-                  ('0' + new Date().getDate()).slice(-2) +
-                  '  ' +
-                  ('0' + new Date(drivingInfo.stopTime).getHours()).slice(-2) +
-                  ':' +
-                  ('0' + new Date(drivingInfo.stopTime).getMinutes()).slice(-2)}
-              </TopLeftViewRightText>
-              <TopLeftViewRightText>
-                {drivingInfo.drivingTime != 0
-                  ? (
-                      '0' + new Date(drivingInfo.drivingTime).getUTCHours()
-                    ).slice(-2) +
-                    ' : ' +
-                    (
-                      '0' + new Date(drivingInfo.drivingTime).getMinutes()
-                    ).slice(-2) +
-                    ' : ' +
-                    (
-                      '0' + new Date(drivingInfo.drivingTime).getSeconds()
-                    ).slice(-2)
-                  : ''}
-              </TopLeftViewRightText>
-              <TopLeftViewRightText style={{marginTop: 8}}>
-                {drivingInfo.stopTime != 0
-                  ? drivingInfo.suddenAccelerationMarker + t('count')
-                  : ''}
-              </TopLeftViewRightText>
-              <TopLeftViewRightText>
-                {drivingInfo.stopTime != 0
-                  ? drivingInfo.suddenStopMarker + t('count')
-                  : ''}
-              </TopLeftViewRightText>
-              <TopLeftViewRightText>
-                {drivingInfo.stopTime != 0
-                  ? drivingInfo.sleepMarker + t('count')
-                  : ''}
-              </TopLeftViewRightText>
-            </TopLeftViewRight>
-          </TopLeftViewBasic>
-        </TopLeftViewTouch>
-      </TopLeftView>
+      {drivingInfo.startTime != 0 ? (
+        <TopLeftView style={{marginTop: getStatusBarHeight()}}>
+          <TopLeftViewTouch
+            onPress={() => {
+              setInfoTouch(!infoTouch);
+            }}>
+            <TopLeftViewBasic>
+              <TopLeftViewLeft>
+                <TopLeftViewLeftText>{t('data')} :</TopLeftViewLeftText>
+                <TopLeftViewLeftText>{t('drivingtime')} :</TopLeftViewLeftText>
+                <TopLeftViewLeftText style={{marginTop: 8, color: 'blue'}}>
+                  {t('suddenacceleration2')} :
+                </TopLeftViewLeftText>
+                <TopLeftViewLeftText style={{color: 'green'}}>
+                  {t('suddenstop2')} :
+                </TopLeftViewLeftText>
+                <TopLeftViewLeftText style={{color: 'red'}}>
+                  {t('dozeoff')} :
+                </TopLeftViewLeftText>
+              </TopLeftViewLeft>
+
+              <TopLeftViewRight>
+                <TopLeftViewRightText>
+                  {drivingInfo.stopTime != 0
+                    ? new Date(drivingInfo.stopTime).getFullYear() +
+                      '-' +
+                      (
+                        '0' +
+                        (new Date(drivingInfo.stopTime).getMonth() + 1)
+                      ).slice(-2) +
+                      '-' +
+                      ('0' + new Date(drivingInfo.stopTime).getDate()).slice(
+                        -2,
+                      ) +
+                      '  ' +
+                      ('0' + new Date(drivingInfo.stopTime).getHours()).slice(
+                        -2,
+                      ) +
+                      ':' +
+                      ('0' + new Date(drivingInfo.stopTime).getMinutes()).slice(
+                        -2,
+                      )
+                    : ' '}
+                </TopLeftViewRightText>
+                <TopLeftViewRightText>
+                  {drivingInfo.drivingTime != 0
+                    ? (
+                        '0' + new Date(drivingInfo.drivingTime).getUTCHours()
+                      ).slice(-2) +
+                      ' : ' +
+                      (
+                        '0' + new Date(drivingInfo.drivingTime).getMinutes()
+                      ).slice(-2) +
+                      ' : ' +
+                      (
+                        '0' + new Date(drivingInfo.drivingTime).getSeconds()
+                      ).slice(-2)
+                    : ' '}
+                </TopLeftViewRightText>
+                <TopLeftViewRightText style={{marginTop: 8}}>
+                  {drivingInfo.stopTime != 0
+                    ? drivingInfo.suddenAccelerationMarker + t('count')
+                    : ' '}
+                </TopLeftViewRightText>
+                <TopLeftViewRightText>
+                  {drivingInfo.stopTime != 0
+                    ? drivingInfo.suddenStopMarker + t('count')
+                    : ' '}
+                </TopLeftViewRightText>
+                <TopLeftViewRightText>
+                  {drivingInfo.stopTime != 0
+                    ? drivingInfo.sleepMarker + t('count')
+                    : ' '}
+                </TopLeftViewRightText>
+              </TopLeftViewRight>
+            </TopLeftViewBasic>
+          </TopLeftViewTouch>
+        </TopLeftView>
+      ) : null}
 
       <TopRightView style={{marginTop: getStatusBarHeight()}}>
         <IconButton

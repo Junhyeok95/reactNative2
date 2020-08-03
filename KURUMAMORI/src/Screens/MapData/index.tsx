@@ -12,6 +12,7 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import ReactInterval from 'react-interval';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
+import Sound from 'react-native-sound';
 
 // const audioList = [
 //   {
@@ -73,6 +74,19 @@ import {useTranslation} from 'react-i18next';
 //     url: require('./real_singo.mp3')
 //   }
 // ]
+
+const soundList = [
+  {
+    title: 'alert119', // 0
+    isRequire: true,
+    url: require('~/Assets/Sound/alert119.mp3'),
+  },
+  {
+    title: 'singo119',
+    isRequire: true,
+    url: require('~/Assets/Sound/singo119.mp3'),
+  },
+];
 
 // update -----------------------------------------
 const TopLeftView = Styled.View`
@@ -508,6 +522,13 @@ const MapData = ({navigation}: DrawerProp) => {
   //   new Sound(audioListNew[0].url, (error) => {})
   // );
 
+  const [alert119, setAlert119] = useState(
+    new Sound(soundList[0].url, (error) => {}),
+  );
+  const [singo119, setSingo119] = useState(
+    new Sound(soundList[1].url, (error) => {}),
+  );
+
   const [interPlus, setInterPlus] = useState<boolean>(false);
   const [interMinus, setInterMinus] = useState<boolean>(false);
   const [pushNum, setPushNum] = useState<number>(0);
@@ -832,6 +853,11 @@ const MapData = ({navigation}: DrawerProp) => {
             // })
             // }
             // });
+
+            if (alert119) {
+              alert119.play();
+            }
+
             setModalVisibleSleep(true);
             setTimeout(() => {
               setModalVisibleSleep(false);
@@ -1212,6 +1238,11 @@ const MapData = ({navigation}: DrawerProp) => {
               //     })
               //   }
               // });
+
+              if (alert119) {
+                alert119.play();
+              }
+
               setModalVisibleSleep(true);
               setTimeout(() => {
                 setModalVisibleSleep(false);
