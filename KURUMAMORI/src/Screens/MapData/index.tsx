@@ -13,6 +13,7 @@ import ReactInterval from 'react-interval';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
 import Sound from 'react-native-sound';
+import Tts from './TTS';
 
 // const audioList = [
 //   {
@@ -389,7 +390,7 @@ interface DrawerProp {
 }
 
 const MapData = ({navigation}: DrawerProp) => {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
 
   // 안드로이드 위치권한 요청
   const androidPermissionLocation = () => {
@@ -516,8 +517,38 @@ const MapData = ({navigation}: DrawerProp) => {
   const [interMinus, setInterMinus] = useState<boolean>(false);
   const [pushNum, setPushNum] = useState<number>(0);
 
+  const myTts = (speak: string) => {
+    console.log('myTts');
+    let _lang = i18n.language;
+    if (Platform.OS === 'ios') {
+      let _iosVoiceId;
+      if (_lang == 'en') {
+        // lang == 'en-US'
+        _iosVoiceId = 'com.apple.ttsbundle.Samantha-compact';
+      }
+      if (_lang == 'kr') {
+        // lang == 'ko-KR'
+        _iosVoiceId = 'com.apple.ttsbundle.Yuna-compact';
+      }
+      if (_lang == 'jp') {
+        // lang == 'ja-JP'
+        _iosVoiceId = 'com.apple.ttsbundle.Kyoko-compact';
+      }
+      if (_iosVoiceId != undefined) {
+        Tts.stop(); // 클리어
+        Tts.speak(speak, {
+          iosVoiceId: _iosVoiceId,
+          rate: 0.5,
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     androidPermissionLocation();
+    Tts.addEventListener('tts-start', (event: any) => {});
+    Tts.addEventListener('tts-finish', (event: any) => {});
+    Tts.addEventListener('tts-cancel', (event: any) => {});
 
     // //## 지워야함
     // setCheckInfo([-1,-1,-1, 1 ,-1,-1,-1,-1,-1,-1,-1]);
@@ -1212,16 +1243,6 @@ const MapData = ({navigation}: DrawerProp) => {
             icon="sleep"
             color="#000000"
             onPress={() => {
-              //# sound1 = new Sound(audioList[1].url, (error) => {
-              //   if(error){
-              //     return;
-              //   } else {
-              //     sound1.play((success)=>{
-              //       sound1.release();
-              //     })
-              //   }
-              // });
-
               if (alert119) {
                 alert119.play();
               }
@@ -1278,6 +1299,9 @@ const MapData = ({navigation}: DrawerProp) => {
                 setTimeout(() => {
                   setPushNum(0);
                 }, 4500);
+
+                // ##
+                myTts(t('hello'));
 
                 //# sound1 = new Sound(audioList[0].url, (error) => {
                 //   if(error){
