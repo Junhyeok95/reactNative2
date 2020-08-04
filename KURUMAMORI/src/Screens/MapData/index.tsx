@@ -60,19 +60,6 @@ import Sound from 'react-native-sound';
 //     isRequire: true,
 //     url: require('./lookfront_eye.mp3')
 //   },
-//   {
-//     title: 'i119', // 9
-//     isRequire: true,
-//     url: require('./i119.mp3')
-//   },
-// ]
-
-// const audioListNew = [
-//   {
-//     title: 'real_singo', // 0
-//     isRequire: true,
-//     url: require('./real_singo.mp3')
-//   }
 // ]
 
 const soundList = [
@@ -518,10 +505,6 @@ const MapData = ({navigation}: DrawerProp) => {
 
   const [modalVisibleReportOk, setModalVisibleReportOk] = useState(false);
 
-  ////#region  const [soundReal, setSoundReal] = useState(
-  //   new Sound(audioListNew[0].url, (error) => {})
-  // );
-
   const [alert119, setAlert119] = useState(
     new Sound(soundList[0].url, (error) => {}),
   );
@@ -609,10 +592,10 @@ const MapData = ({navigation}: DrawerProp) => {
             setTimeout(() => {
               setModalVisibleReportOk(false);
             }, 14000);
-            //# if(soundReal){
-            // // 신고음성
-            // soundReal.play();
-            // }
+            // 신고음성
+            if (singo119) {
+              singo119.play();
+            }
           }, 2000);
         }, 1000);
         console.log('자동 신고로 인해 운전을 종료합니다');
@@ -1738,12 +1721,15 @@ const MapData = ({navigation}: DrawerProp) => {
           </ReportOKText>
           <ReportTouchableOpacity
             onPress={() => {
-              //# if(soundReal){
-              //   soundReal.pause();
-              //   soundReal.setCurrentTime(0);
-              //   soundReal.getCurrentTime((seconds) => console.log('at ' + seconds));
-              //   setModalVisibleReportOk(false);
-              // }
+              if (singo119) {
+                singo119.pause();
+                singo119.setCurrentTime(0);
+                // singo119.getCurrentTime((seconds) => {
+                //   console.log('at ' + seconds);
+                //   console.log('신고 취소 버튼');
+                // });
+                setModalVisibleReportOk(false);
+              }
             }}>
             <ReportOKImage
               resizeMode="contain"
