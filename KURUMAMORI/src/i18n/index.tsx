@@ -220,6 +220,18 @@ const resources = {
       // dozeoff: '',
       count: ' 회',
       // MapMarker
+      // TtsMapData
+      reportrequest:
+        '사고가 감지되었습니다. 취소 버튼을 누르지 않으면 자동신고를 하겠습니다.',
+      reportcancel: '신고가 취소되었습니다.',
+      reporting: '자동 신고 중입니다.',
+      reportOK:
+        '현재 위치정보와, 등록된 의료정보를, 포함한 자동신고가 완료되었습니다.',
+      reportstopdriving: '자동 신고로 인해 운전이 중지됬습니다.',
+      sensedsuddenstop: '급정거를 감지했습니다.',
+      sensedsuddenacceleration: '급가속을 감지했습니다.',
+      sensedfocus: '운전하는 데 집중하십시오.',
+      // TtsMapData
       test: '테스트',
       hello: '안녕',
       home: '집',
@@ -340,7 +352,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'jp',
+    lng: 'kr',
     fallbackLng: 'en', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome

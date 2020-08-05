@@ -496,8 +496,6 @@ const MapData = ({navigation}: DrawerProp) => {
     Array<IMarkerlocation>
   >([]);
 
-  //# let sound1: Sound;
-
   const [modalVisibleSleep, setModalVisibleSleep] = useState(false);
   const [modalVisibleReportCount, setModalVisibleReportCount] = useState(false);
 
@@ -572,20 +570,10 @@ const MapData = ({navigation}: DrawerProp) => {
         _checkInfo[4] += 1; // 신고접수 온
         console.log('신고 접수 카운트', checkInfo[4]);
         setCheckInfo(_checkInfo);
-
         if (checkInfo[3] == 1 && checkInfo[4] == 0) {
-          // 신고의사를 묻는 알람
-          //# sound1 = new Sound(audioList[5].url, (error) => {
-          //   if(error){
-          //     return;
-          //   } else {
-          //     sound1.play((success)=>{
-          //       sound1.release();
-          //     })
-          //   }
-          // });
+          // Tts reportrequest 사고감지.. 취소버튼을 눌러라
+          myTts(t('reportrequest'));
         }
-
         // 카운트 모달 열기
         setModalVisibleReportCount(true);
       }
@@ -609,27 +597,32 @@ const MapData = ({navigation}: DrawerProp) => {
         console.log('신고 접수 완료 !! 음성 송출');
         // 신고음성, 신고 전화중 모달 5~10초
         setTimeout(() => {
-          //# sound1 = new Sound(audioList[7].url, (error) => {
-          //   if(error){
-          //     return;
-          //   } else {
-          //     sound1.play((success)=>{
-          //       sound1.release();
-          //     })
-          //   }
-          // });
+          // Tts reporting 자동 신고 중 알림
+          myTts(t('reporting'));
           setTimeout(() => {
             setModalVisibleReportOk(true);
             setTimeout(() => {
               setModalVisibleReportOk(false);
+              // Tts reportOKtext3 신고 완료
+              setTimeout(() => {
+                setModalVisibleSave(true);
+                myTts(t('reportstopdriving'));
+                console.log('자동 신고로 인해 운전이 중지됬습니다.');
+                setTimeout(() => {
+                  setModalVisibleSave(false);
+                }, 5000);
+              }, 1000);
             }, 14000);
             // 신고음성
             if (singo119) {
+              // Tts reportOKtext3 신고 완료
+              setTimeout(() => {
+                myTts(t('reportOK'));
+              }, 2000);
               singo119.play();
             }
           }, 2000);
-        }, 1000);
-        console.log('자동 신고로 인해 운전을 종료합니다');
+        }, 2000);
 
         let _checkInfo2 = [...checkInfo];
         console.log(_checkInfo2);
@@ -646,7 +639,6 @@ const MapData = ({navigation}: DrawerProp) => {
         setCheckInfo(_checkInfo2);
         setLinkInfo([-1, -1, -1, -1, -1, -1, -1, 0, 0, -1]);
         console.log(_checkInfo2);
-        console.log('자동 신고로 인해 운전을 종료합니다');
 
         let reportCheckId = false;
         if (onSave && userInfo2 && userInfo2.key) {
@@ -752,16 +744,8 @@ const MapData = ({navigation}: DrawerProp) => {
         let _checkInfo = [...checkInfo];
 
         if (_checkInfo[3] != 0) {
-          // 신고취소를 알람
-          //# sound1 = new Sound(audioList[6].url, (error) => {
-          //   if(error){
-          //     return;
-          //   } else {
-          //     sound1.play((success)=>{
-          //       sound1.release();
-          //     })
-          //   }
-          // });
+          // Tts reportcancel 신고취소 알림
+          myTts(t('reportcancel'));
         }
 
         _checkInfo[2] = 0; // 사고상태 오프
@@ -810,16 +794,9 @@ const MapData = ({navigation}: DrawerProp) => {
           if (linkInfo_4Cnt > 6) {
             // 태만 클리어
             setLinkInfo_4Cnt(0);
-            // 태만 감지 사운드
-            //# sound1 = new Sound(audioList[8].url, (error) => {
-            //   if(error){
-            //     return;
-            //   } else {
-            //     sound1.play((success)=>{
-            //       sound1.release();
-            //     })
-            //   }
-            // });
+
+            // Tts sensedfocus 운전하는 데 집중하십시오 / 태만 감지 사운드
+            myTts(t('sensedfocus'));
           }
         } else if (linkInfo[4] == 10) {
           // 정면주시 보상
@@ -857,17 +834,7 @@ const MapData = ({navigation}: DrawerProp) => {
             // 졸음 클리어
             setLinkInfo_5Cnt(0);
 
-            // 졸음감지
-            //# sound1 = new Sound(audioList[9].url, (error) => {
-            // if(error){
-            // return;
-            // } else {
-            // sound1.play((success)=>{
-            // sound1.release();
-            // })
-            // }
-            // });
-
+            // 졸음감지 경고음
             if (alert119) {
               alert119.play();
             }
@@ -875,7 +842,7 @@ const MapData = ({navigation}: DrawerProp) => {
             setModalVisibleSleep(true);
             setTimeout(() => {
               setModalVisibleSleep(false);
-            }, 2000);
+            }, 3000);
 
             let {latitude, longitude, timestamp} = coordinate2;
             let _markerLocation = {
@@ -1293,25 +1260,16 @@ const MapData = ({navigation}: DrawerProp) => {
             onPress={() => {
               setPushNum(20);
               setInterPlus(true);
+              console.log('급가속 체크');
               setTimeout(() => {
-                console.log('급가속 체크');
+                // Tts sensedsuddenacceleration 급가속을 감지
+                myTts(t('sensedsuddenacceleration'));
+
                 setInterPlus(false);
                 setTimeout(() => {
                   setPushNum(0);
-                }, 4500);
+                }, 3000);
 
-                // ##
-                myTts(t('hello'));
-
-                //# sound1 = new Sound(audioList[0].url, (error) => {
-                //   if(error){
-                //     return;
-                //   } else {
-                //     sound1.play((success)=>{
-                //       sound1.release();
-                //     })
-                //   }
-                // });
                 let {latitude, longitude, timestamp} = coordinate2;
                 let _markerLocation = {
                   latitude,
@@ -1350,22 +1308,16 @@ const MapData = ({navigation}: DrawerProp) => {
             onPress={() => {
               setPushNum(80);
               setInterMinus(true);
+              console.log('급정거 체크');
               setTimeout(() => {
-                console.log('급감속 체크');
+                // Tts sensedsuddenstop 급정거 감지
+                myTts(t('sensedsuddenstop'));
+
                 setInterMinus(false);
                 setTimeout(() => {
                   setPushNum(0);
-                }, 4500);
+                }, 3000);
 
-                //# sound1 = new Sound(audioList[2].url, (error) => {
-                //   if(error){
-                //     return;
-                //   } else {
-                //     sound1.play((success)=>{
-                //       sound1.release();
-                //     })
-                //   }
-                // });
                 let {latitude, longitude, timestamp} = coordinate2;
                 let _markerLocation = {
                   latitude,
@@ -1522,12 +1474,16 @@ const MapData = ({navigation}: DrawerProp) => {
               setOnSave(false); // 기록
 
               setModalVisibleSave(true);
+              // Tts stopdrivingmodal 운전을 중지합니다
+              myTts(t('stopdrivingmodal'));
               setTimeout(() => {
                 setModalVisibleSave(false);
               }, 2000);
               console.log('운전을 종료합니다');
             } else {
               setModalVisibleStart(true);
+              // Tts startdrivingmodal 운전을 시작합니다
+              myTts(t('startdrivingmodal'));
               setTimeout(() => {
                 setModalVisibleStart(false);
               }, 1500);
@@ -1656,15 +1612,8 @@ const MapData = ({navigation}: DrawerProp) => {
                     setCheckInfo(__checkInfo);
                   }, 10000);
 
-                  //# sound1 = new Sound(audioList[6].url, (error) => {
-                  //   if(error){
-                  //     return;
-                  //   } else {
-                  //     sound1.play((success)=>{
-                  //       sound1.release();
-                  //     })
-                  //   }
-                  // });
+                  // Tts reportcancel 신고취소 알림
+                  myTts(t('reportcancel'));
                 }}>
                 <ReportCancelBtn>{t('cancel')}</ReportCancelBtn>
               </TouchableOpacity>
