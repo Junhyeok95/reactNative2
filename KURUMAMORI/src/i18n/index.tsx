@@ -111,6 +111,19 @@ const resources = {
       // dozeoff: '',
       count: ' ',
       // MapMarker
+      // TtsMapData
+      reportrequest:
+        "An accident has been detected. If you don't press the cancel button, I'll report it automatically.",
+      reportcancel: 'The report has been canceled.',
+      reporting: 'An automatic report is in progress.',
+      reportOK:
+        'Automatic report including current location information, registered medical information, and automatic report has been completed.',
+      reportstopdriving:
+        'The automatic report has been completed and the operation has been suspended.',
+      sensedsuddenstop: 'Rapid sudden stop detected.',
+      sensedsuddenacceleration: 'Rapid acceleration detected',
+      sensedfocus: 'Please focus on driving.',
+      // TtsMapData
       test: 'test',
       hello: 'hello',
       home: 'home',
@@ -227,7 +240,7 @@ const resources = {
       reporting: '자동 신고 중입니다.',
       reportOK:
         '현재 위치정보와, 등록된 의료정보를, 포함한 자동신고가 완료되었습니다.',
-      reportstopdriving: '자동 신고로 인해 운전이 중지됬습니다.',
+      reportstopdriving: '자동신고로 인해 운전이 중지됬습니다.',
       sensedsuddenstop: '급정거를 감지했습니다.',
       sensedsuddenacceleration: '급가속을 감지했습니다.',
       sensedfocus: '운전하는 데 집중하십시오.',
@@ -341,6 +354,18 @@ const resources = {
       // dozeoff: '',
       count: ' 回',
       // MapMarker
+      // TtsMapData
+      reportrequest:
+        '事故が感知されました。 キャンセルボタンを押さなければ自動届出をします。',
+      reportcancel: '自動届出が取り消されました。',
+      reporting: '自動届出中です。',
+      reportOK:
+        '現在位置情報と、登録された医療情報を含む自動届出が完了しました。',
+      reportstopdriving: '自動届出により運転が中止されました。',
+      sensedsuddenstop: '急停車を感知しました。',
+      sensedsuddenacceleration: '急加速を感知しました。',
+      sensedfocus: '運転に集中してください。',
+      // TtsMapData
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',
