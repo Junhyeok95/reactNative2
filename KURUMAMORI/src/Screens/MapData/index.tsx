@@ -15,54 +15,6 @@ import {useTranslation} from 'react-i18next';
 import Sound from 'react-native-sound';
 import Tts from './TTS';
 
-// const audioList = [
-//   {
-//     title: 'fast', // 0
-//     isRequire: true,
-//     url: require('./fast_detect.mp3')
-//   },
-//   {
-//     title: 'sleep', // 1
-//     isRequire: true,
-//     url: require('./sleep_detect.mp3')
-//   },
-//   {
-//     title: 'slow', // 2
-//     isRequire: true,
-//     url: require('./slow_detect.mp3')
-//   },
-//   {
-//     title: 'sago', // 3
-//     isRequire: true,
-//     url: require('./sago.mp3')
-//   },
-//   {
-//     title: 'auto_singo', // 4
-//     isRequire: true,
-//     url: require('./auto_singo.mp3')
-//   },
-//   {
-//     title: 'singo_req', // 5
-//     isRequire: true,
-//     url: require('./singo_req.mp3')
-//   },
-//   {
-//     title: 'cancel', // 6
-//     isRequire: true,
-//     url: require('./cancel.mp3')
-//   },
-//   {
-//     title: 'singogo', // 7
-//     isRequire: true,
-//     url: require('./singogo.mp3')
-//   },
-//   {
-//     title: 'lookfront_eye', // 8
-//     isRequire: true,
-//     url: require('./lookfront_eye.mp3')
-//   },
-// ]
-
 const soundList = [
   {
     title: 'alert119', // 0

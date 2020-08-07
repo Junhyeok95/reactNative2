@@ -339,10 +339,10 @@ const resources = {
       longitude: '経度',
       time: '現在時刻',
       singotext:
-        '事故が検知されました。\nキャンセルボタンを\n押さない場合は、\n自動的に申告されます。',
+        '事故が検知されました。\nキャンセルボタンを\n押さない場合は、\n自動的に届出されます。',
       cancel: 'キャンセル',
       reportOKtext2: '位置情報、医療情報　送信',
-      reportOKtext3: '申告が完了しました',
+      reportOKtext3: 'が完了しました',
       // MapData
       // MapMarker
       data: '日付',
@@ -356,7 +356,7 @@ const resources = {
       // MapMarker
       // TtsMapData
       reportrequest:
-        '事故が感知されました。 キャンセルボタンを押さなければ自動届出をします。',
+        '事故が感知されました。 キャンセルボタンを押さない場合は自動届出をします。',
       reportcancel: '自動届出が取り消されました。',
       reporting: '自動届出中です。',
       reportOK:
@@ -377,7 +377,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'kr',
+    lng: 'en',
     fallbackLng: 'en', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome
