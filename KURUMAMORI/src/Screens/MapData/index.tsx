@@ -82,24 +82,30 @@ const CenterRightView = Styled.View`
   position: absolute;
   right: 2%;
   top: 46%;
-  width: 40px;
+  width: 50px;
   height: 12%;
 `;
 const CenterTestTestRightView = Styled.View`
-  position: absolute;
+position: absolute;
   right: 2%;
-  top: 16%;
-  width: 40px;
-  height: 12%;
+  top: 20%;
+  width: 50px;
+  height: 6%;
 `;
 const CenterTestRightView = Styled.View`
   position: absolute;
   right: 2%;
   top: 30%;
-  width: 40px;
+  width: 50px;
   height: 12%;
 `;
-
+const CenterTestTestTestRightView = Styled.View`
+  position: absolute;
+  right: 2%;
+  top: 62%;
+  width: 50px;
+  height: 12%;
+`;
 const BottomLeftViewGPS = Styled.View`
   position: absolute;
   background-color: #FFFFFF;
@@ -1089,6 +1095,25 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </TopRightView>
 
+      {driving == true && infoTouch == true ? (
+        <CenterTestTestRightView>
+          <IconButton
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderColor: '#AAA',
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="ambulance"
+            color="red"
+            onPress={() => {
+              console.log('report');
+              setLinkInfo([-1, -1, -1, 151, 10, 1, -1, 0, 0, -1]);
+            }}
+          />
+        </CenterTestTestRightView>
+      ) : null}
+
       <CenterRightView>
         <IconButton
           style={{
@@ -1137,21 +1162,7 @@ const MapData = ({navigation}: DrawerProp) => {
       </CenterRightView>
 
       {driving == true && infoTouch == true ? (
-        <CenterTestTestRightView>
-          <IconButton
-            style={{
-              backgroundColor: '#FFFFFF',
-              borderColor: '#AAA',
-              borderRadius: 10,
-              borderWidth: 1,
-            }}
-            icon="alarm-light"
-            color="#BB0000"
-            onPress={() => {
-              console.log('report');
-              setLinkInfo([-1, -1, -1, 151, 10, 1, -1, 0, 0, -1]);
-            }}
-          />
+        <CenterTestRightView>
           <IconButton
             style={{
               backgroundColor: '#FFFFFF',
@@ -1160,7 +1171,7 @@ const MapData = ({navigation}: DrawerProp) => {
               borderWidth: 1,
             }}
             icon="sleep"
-            color="#000000"
+            color="#AA0000"
             onPress={() => {
               if (alert119) {
                 alert119.play();
@@ -1193,11 +1204,24 @@ const MapData = ({navigation}: DrawerProp) => {
               }
             }}
           />
-        </CenterTestTestRightView>
+          <IconButton
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderColor: '#AAA',
+              borderRadius: 10,
+              borderWidth: 1,
+            }}
+            icon="whistle"
+            color="#000000"
+            onPress={() => {
+              myTts(t('sensedfocus'));
+            }}
+          />
+        </CenterTestRightView>
       ) : null}
 
       {driving == true && infoTouch == true ? (
-        <CenterTestRightView>
+        <CenterTestTestTestRightView>
           {/* 급가속 */}
           <IconButton
             style={{
@@ -1207,8 +1231,8 @@ const MapData = ({navigation}: DrawerProp) => {
               borderWidth: 1,
             }}
             size="32"
-            icon="car-electric"
-            color="#000000"
+            icon="speedometer"
+            color="blue"
             onPress={() => {
               setPushNum(20);
               setInterPlus(true);
@@ -1255,8 +1279,8 @@ const MapData = ({navigation}: DrawerProp) => {
               borderWidth: 1,
             }}
             size="32"
-            icon="car-off"
-            color="#000000"
+            icon="speedometer-slow"
+            color="green"
             onPress={() => {
               setPushNum(80);
               setInterMinus(true);
@@ -1294,7 +1318,7 @@ const MapData = ({navigation}: DrawerProp) => {
               }, 1500);
             }}
           />
-        </CenterTestRightView>
+        </CenterTestTestTestRightView>
       ) : null}
 
       <BottomLeftViewGPS>

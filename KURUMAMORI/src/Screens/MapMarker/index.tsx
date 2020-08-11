@@ -68,14 +68,14 @@ const CenterRightView = Styled.View`
   position: absolute;
   right: 2%;
   top: 46%;
-  width: 40px;
+  width: 50px;
   height: 12%;
 `;
 const CenterTestRightView = Styled.View`
   position: absolute;
   right: 2%;
   top: 30%;
-  width: 40px;
+  width: 50px;
   height: 12%;
 `;
 const BottomLeftView = Styled.View`
