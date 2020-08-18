@@ -448,6 +448,7 @@ const MapData = ({navigation}: DrawerProp) => {
     altitude: 0,
   });
 
+  const [hidden, setHidden] = useState<boolean>(false);
   const [locations, setLocations] = useState<Array<IGeolocation>>([]);
   // 사고감지 locations
   const [markerLocations, setMarkerLocations] = useState<
@@ -962,6 +963,8 @@ const MapData = ({navigation}: DrawerProp) => {
           <TopLeftViewTouch
             onPress={() => {
               setInfoTouch(!infoTouch);
+              if (infoTouch) setHidden(true);
+              if (infoTouch && hidden) setHidden(false);
             }}>
             <TopLeftViewBasic>
               <TopLeftViewLeft>
@@ -1095,8 +1098,9 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </TopRightView>
 
-      {driving == true && infoTouch == true ? (
-        <CenterTestTestRightView>
+      {(driving == true && infoTouch == true) || hidden == true ? (
+        <CenterTestTestRightView
+          style={infoTouch == false && hidden == true ? {opacity: 0} : {}}>
           <IconButton
             style={{
               backgroundColor: '#FFFFFF',
@@ -1161,8 +1165,9 @@ const MapData = ({navigation}: DrawerProp) => {
         />
       </CenterRightView>
 
-      {driving == true && infoTouch == true ? (
-        <CenterTestRightView>
+      {(driving == true && infoTouch == true) || hidden == true ? (
+        <CenterTestRightView
+          style={infoTouch == false && hidden == true ? {opacity: 0} : {}}>
           <IconButton
             style={{
               backgroundColor: '#FFFFFF',
@@ -1220,8 +1225,9 @@ const MapData = ({navigation}: DrawerProp) => {
         </CenterTestRightView>
       ) : null}
 
-      {driving == true && infoTouch == true ? (
-        <CenterTestTestTestRightView>
+      {(driving == true && infoTouch == true) || hidden == true ? (
+        <CenterTestTestTestRightView
+          style={infoTouch == false && hidden == true ? {opacity: 0} : {}}>
           {/* 급가속 */}
           <IconButton
             style={{

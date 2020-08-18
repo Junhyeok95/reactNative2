@@ -339,7 +339,7 @@ const resources = {
       longitude: '経度',
       time: '現在時刻',
       singotext:
-        '事故が検知されました。\nキャンセルボタンを\n押さない場合は、\n自動的に届出されます。',
+        '事故が検知されました。\nキャンセルボタンを\n押さない場合は、\n自動的に通報されます。',
       cancel: 'キャンセル',
       reportOKtext2: '位置情報、医療情報　送信',
       reportOKtext3: 'が完了しました',
@@ -356,12 +356,12 @@ const resources = {
       // MapMarker
       // TtsMapData
       reportrequest:
-        '事故が感知されました。 キャンセルボタンを押さない場合は自動届出をします。',
-      reportcancel: '自動届出が取り消されました。',
-      reporting: '自動届出中です。',
+        '事故が感知されました。 キャンセルボタンを押さない場合は自動通報をします。',
+      reportcancel: '自動通報が取り消されました。',
+      reporting: '自動通報中です。',
       reportOK:
-        '現在位置情報と、登録された医療情報を含む自動届出が完了しました。',
-      reportstopdriving: '自動届出により運転が中止されました。',
+        '現在位置情報と、登録された医療情報を含む自動通報が完了しました。',
+      reportstopdriving: '自動通報により運転が中止されました。',
       sensedsuddenstop: '急停車を感知しました。',
       sensedsuddenacceleration: '急加速を感知しました。',
       sensedfocus: '運転に集中してください。',
