@@ -342,7 +342,7 @@ const resources = {
         '事故が検知されました。\nキャンセルボタンを\n押さない場合は、\n自動的に通報されます。',
       cancel: 'キャンセル',
       reportOKtext2: '位置情報、医療情報　送信',
-      reportOKtext3: 'が完了しました',
+      reportOKtext3: '通報が完了しました',
       // MapData
       // MapMarker
       data: '日付',
@@ -377,8 +377,8 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'en',
-    fallbackLng: 'en', // lng 오류 시
+    lng: 'jp',
+    fallbackLng: 'jp', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome
 
