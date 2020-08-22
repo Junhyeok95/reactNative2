@@ -16,6 +16,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* KURUMAMORITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* KURUMAMORITests.m */; };
+		40267B7624F12B2E0050D984 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40267B7524F12B2E0050D984 /* SplashScreen.storyboard */; };
 		795426040FE150078DBB3786 /* libPods-KURUMAMORI-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97542A65492E0DDB92B5A321 /* libPods-KURUMAMORI-tvOSTests.a */; };
 		90B898A640FEAA59AE0E6EAB /* libPods-KURUMAMORI-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E320489071593DFBC7AC2300 /* libPods-KURUMAMORI-tvOS.a */; };
 		A729D535009B0DED0DCC86CF /* libPods-KURUMAMORI-KURUMAMORITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 691F53456E8FE156D6F401DD /* libPods-KURUMAMORI-KURUMAMORITests.a */; };
@@ -54,6 +55,7 @@
 		2D02E47B1E0B4A5D006451C7 /* KURUMAMORI-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KURUMAMORI-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* KURUMAMORI-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KURUMAMORI-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		31C3CDFB11B6B49F168B7136 /* Pods-KURUMAMORI-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KURUMAMORI-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-KURUMAMORI-tvOS/Pods-KURUMAMORI-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		40267B7524F12B2E0050D984 /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		4067585E24C72B520037C89B /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = ../../android/app/src/main/assets/fonts/SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		4067585F24C72B520037C89B /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Entypo.ttf; path = ../../android/app/src/main/assets/fonts/Entypo.ttf; sourceTree = "<group>"; };
 		4067586024C72B520037C89B /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = ../../android/app/src/main/assets/fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				40267B7524F12B2E0050D984 /* SplashScreen.storyboard */,
 				4067584D24C7298D0037C89B /* Fonts */,
 				13B07FAE1A68108700A75B9A /* KURUMAMORI */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -382,6 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				40267B7624F12B2E0050D984 /* SplashScreen.storyboard in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

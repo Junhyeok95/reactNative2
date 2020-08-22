@@ -54,8 +54,8 @@ android -> app -> build.gradle
 apply from: "../../node_modules/react-native/react.gradle" // 중복주의
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
-react-native set-icon --path ./src/Assets/images/app_icon.png --background "#FFFFFF"
-react-native set-splash --path ./src/Assets/images/splash.png --resize cover --background "#FFFFFF"
+react-native set-icon --path ./src/Assets/Images/app_icon.png --background "#FFFFFF"
+react-native set-splash --path ./src/Assets/Images/app_splash.png --resize cover --background "#FFFFFF"
 #import "RNSplashScreen.h"  // here
 [RNSplashScreen show];  // here  + 스토리보드 생성 SplashScreen
 
