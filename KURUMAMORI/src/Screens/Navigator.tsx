@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -53,6 +53,7 @@ const LoginStackNavi = () => {
 };
 
 const MainFirstStackNavi = ({navigation}: DrawerProp) => {
+  const {t} = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -77,7 +78,7 @@ const MainFirstStackNavi = ({navigation}: DrawerProp) => {
         name="Driving"
         component={Driving}
         options={{
-          headerTitle: 'クルマモリ9',
+          headerTitle: t('headerTitle'),
           headerBackTitleVisible: false,
         }}
       />
@@ -86,6 +87,7 @@ const MainFirstStackNavi = ({navigation}: DrawerProp) => {
 };
 
 const MainSecondStackNavi = ({navigation}: DrawerProp) => {
+  const {t} = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -110,7 +112,7 @@ const MainSecondStackNavi = ({navigation}: DrawerProp) => {
         name="Profile"
         component={Profile}
         options={{
-          headerTitle: 'クルマモリ9',
+          headerTitle: t('headerTitle'),
           headerBackTitleVisible: false,
         }}
       />
@@ -118,6 +120,7 @@ const MainSecondStackNavi = ({navigation}: DrawerProp) => {
   );
 };
 const MainThirdStackNavi = ({navigation}: DrawerProp) => {
+  const {t} = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -142,7 +145,7 @@ const MainThirdStackNavi = ({navigation}: DrawerProp) => {
         name="Bluetooth"
         component={Bluetooth}
         options={{
-          headerTitle: 'クルマモリ9',
+          headerTitle: t('headerTitle'),
           headerBackTitleVisible: false,
         }}
       />
@@ -151,6 +154,7 @@ const MainThirdStackNavi = ({navigation}: DrawerProp) => {
 };
 
 const MainFourthStackNavi = ({navigation}: DrawerProp) => {
+  const {t} = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -175,7 +179,7 @@ const MainFourthStackNavi = ({navigation}: DrawerProp) => {
         name="Configure"
         component={Configure}
         options={{
-          headerTitle: 'クルマモリ9',
+          headerTitle: t('headerTitle'),
           headerBackTitleVisible: false,
         }}
       />

@@ -9,7 +9,6 @@ import {initReactI18next} from 'react-i18next';
 const resources = {
   en: {
     translation: {
-      // SignIn
       newURL: 'new URL input (ex) -> http://0.0.0.0:80',
       kurumamo: ' クルマモ',
       ri9: 'リ9 ',
@@ -127,6 +126,7 @@ const resources = {
       test: 'test',
       hello: 'hello',
       home: 'home',
+      headerTitle: 'KURUMAMORI119',
     },
   },
   kr: {
@@ -248,11 +248,11 @@ const resources = {
       test: '테스트',
       hello: '안녕',
       home: '집',
+      headerTitle: 'KURUMAMORI119',
     },
   },
   jp: {
     translation: {
-      // SignIn
       newURL: '新しい URL 入力 (例) -> http://0.0.0.0:80',
       kurumamo: ' クルマモ',
       ri9: 'リ9 ',
@@ -261,8 +261,6 @@ const resources = {
       singin: 'ログイン',
       singup: '新規登録',
       incorrectlyentered: '入力ミスです',
-      // SignIn
-      // Navigator + Drawer
       main: 'メーン',
       map: '地図',
       statistics: '統計',
@@ -271,8 +269,6 @@ const resources = {
       information: '情報',
       configure: '設定',
       singout: 'ログアウト',
-      // Navigator + Drawer
-      // Driving
       pairingPlease: 'ペアリングをつなげてください',
       pairingOK: '安全運転してください ~!',
       lefticon: 'ペアリング',
@@ -280,14 +276,10 @@ const resources = {
       righticon: '信号なし',
       rightOKicon: '運転する',
       rightOKingicon: '運転中',
-      // Driving
-      // Bluetooth
       bluetoothONalert: 'ブルートゥースをつけてください',
       bluetooth: 'ブルートゥース',
       list: '周辺装置リスト',
       scan: '検索',
-      // Bluetooth
-      // Profile
       memberinformation: '会員情報',
       membername: '名前',
       membergender: '性別',
@@ -305,8 +297,6 @@ const resources = {
       insurancecompanyphone: '連絡先',
       subscriptiondate: '加入日',
       maturitydate: '満期日',
-      // Profile
-      // Configure
       deviceinformation: '装置情報',
       devicecode: '装置コード',
       purchasedate: '購入日付',
@@ -319,8 +309,6 @@ const resources = {
       languageinformation: '言語情報',
       currentlanguage: '現在',
       change: '変更する',
-      // Configure
-      // MapData
       startdriving: '運転開始',
       startdrivingmodal: '運転を始めます',
       stopdriving: '運転中止',
@@ -343,18 +331,12 @@ const resources = {
       cancel: 'キャンセル',
       reportOKtext2: '位置情報、医療情報　送信',
       reportOKtext3: '通報が完了しました',
-      // MapData
-      // MapMarker
       data: '日付',
-      // drivingtime: '',
       suddenacceleration: '急加速',
       suddenacceleration2: '急加速',
       suddenstop: '急停車',
       suddenstop2: '急停車',
-      // dozeoff: '',
       count: ' 回',
-      // MapMarker
-      // TtsMapData
       reportrequest:
         '事故が感知されました。 キャンセルボタンを押さない場合は自動通報をします。',
       reportcancel: '自動通報が取り消されました。',
@@ -365,10 +347,10 @@ const resources = {
       sensedsuddenstop: '急停車を感知しました。',
       sensedsuddenacceleration: '急加速を感知しました。',
       sensedfocus: '運転に集中してください。',
-      // TtsMapData
       test: 'テスト',
       hello: 'こんにちは',
       home: '家',
+      headerTitle: 'クルマモリ9',
     },
   },
 };

@@ -25,7 +25,9 @@ const View = Styled.View`
 const TextRowView = Styled.View`
   flex-direction: row;
 `;
-
+const TextRowViewTouchableOpacity = Styled.TouchableOpacity`
+  flex-direction: row;
+`;
 const KrumamoText = Styled.Text`
   font-size: 66px;
   color: #000000;
@@ -33,6 +35,16 @@ const KrumamoText = Styled.Text`
 `;
 const Ri9Text = Styled.Text`
   font-size: 66px;
+  color: #FF0000;
+  font-weight: bold;
+`;
+const KrumamoTextEn = Styled.Text`
+  font-size: 40px;
+  color: #000000;
+  font-weight: bold;
+`;
+const Ri9TextEn = Styled.Text`
+  font-size: 40px;
   color: #FF0000;
   font-weight: bold;
 `;
@@ -46,10 +58,6 @@ const ButtonContainer = Styled.View`
   flex: 1;
   flex-direction: row;
 `;
-const ButtonMargin = Styled.View`
-  width: 16px;
-`;
-
 const TouchableOpacityView = Styled.View`
 `;
 const TouchableOpacity = Styled.TouchableOpacity`
@@ -105,13 +113,26 @@ const SignIn = ({navigation}: Props) => {
   const [showInput, setShowInput] = useState<boolean>(false);
   const {t} = useTranslation();
 
+  const [touch, setTouch] = useState(true);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <View>
           <TextRowView>
-            <KrumamoText>{t('kurumamo')}</KrumamoText>
-            <Ri9Text>{t('ri9')}</Ri9Text>
+            <TextRowViewTouchableOpacity onPress={() => setTouch(!touch)}>
+              {touch == true ? (
+                <>
+                  <KrumamoText>{t('kurumamo')}</KrumamoText>
+                  <Ri9Text>{t('ri9')}</Ri9Text>
+                </>
+              ) : (
+                <>
+                  <KrumamoTextEn>KURUMAMORI</KrumamoTextEn>
+                  <Ri9TextEn>119</Ri9TextEn>
+                </>
+              )}
+            </TextRowViewTouchableOpacity>
           </TextRowView>
           <Icon
             style={{margin: 36}}
