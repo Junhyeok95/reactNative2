@@ -10,7 +10,9 @@ import {
 
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 
-const App = () => {
+interface Props {}
+
+const App = ({}: Props) => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
