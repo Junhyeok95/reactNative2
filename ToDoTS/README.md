@@ -19,6 +19,12 @@ npm i
 npm i -D typescript @types/react @types/react-native
 ```
 
+> babel.config.js 수정, tsconfig.json 수정
+
+```
+npm i -D babel-plugin-root-import
+```
+
 > RN은 기본적으로 ESLint가 설치되어 있음
 
 ```
