@@ -1,9 +1,13 @@
 # TEST
 
-react-native run-ios
---simulator="iPhone X"
+```
+npx react-native run-ios
+npx react-native run-android
+```
 
 ## library
+
+---
 
 ```
 npm i -D typescript @types/react @types/react-native
@@ -34,6 +38,8 @@ npm i -S react-native-sound
 
 ## clean
 
+---
+
 ```
 cd ios
 xcodebuild clean
@@ -50,6 +56,18 @@ rm -rf node_modules
 watchman watch-del-all
 
 cd ios && pod install && cd ..
+```
+
+## ERROR
+
+---
+
+```
+watchman watch-del-all
+cd ios && xcodebuild clean && cd ..
+cd android && ./gradlew cleanBuildCache && cd ..
+
+rm -rf node_modules/ && npm cache clean --force && yarn cache clean && npm install && cd ios && pod install && cd .. && npm start -- --reset-cache
 ```
 
 ### tip

@@ -359,8 +359,8 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'jp',
-    fallbackLng: 'jp', // lng 오류 시
+    lng: 'kr',
+    fallbackLng: 'kr', // lng 오류 시
 
     keySeparator: false, // we do not use keys in form messages.welcome
 
